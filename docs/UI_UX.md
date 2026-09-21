@@ -7,3 +7,5 @@ Build reusable navigation, buttons, section headings, product cards and loading/
 Check widths 320, 375, 390, 768, 1024, 1440 and 1920 pixels. Prevent overflow, overlapping text, unusable controls and layout shifts. Reserve image dimensions.
 
 Respect prefers-reduced-motion: minimize camera travel, smooth scrolling and loops while preserving information and configuration. Use static content when WebGL fails. Pause offscreen animation and cap rendering cost on mobile.
+
+Phase 2 implementation and component usage are documented in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md). Review the isolated reference at /design-system. Full navigation behavior remains Phase 3.

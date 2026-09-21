@@ -2,7 +2,7 @@
 
 A premium, accessible 3D watch experience built in phases.
 
-Phase 1 provides Next.js App Router, React, strict TypeScript, Tailwind CSS and ESLint. The homepage is a foundation placeholder; the design system, watch model, 3D story and commerce features follow in later phases.
+Phase 1 provides Next.js App Router, React, strict TypeScript, Tailwind CSS and ESLint. Phase 2 adds the shared design system. The homepage remains a foundation placeholder; navigation, watch models, 3D storytelling and commerce follow in later phases.
 
 ## Development
 
@@ -34,3 +34,7 @@ CI installs Chromium and runs the browser tests against both development and pro
 Read [the product brief](docs/PRD.md), [task sequence](docs/TASKS.md), [coding rules](docs/CODING_RULES.md), [GitHub checks](docs/GITHUB_CHECKS.md) and [test plan](docs/TEST_PLAN.md).
 
 If Playwright browser downloads are unavailable locally, set PLAYWRIGHT_CHANNEL=chrome to use an installed Chrome browser. CI uses the default Playwright Chromium. See docs/SECURITY.md for the temporary ESLint compatibility limitation.
+
+## Design system
+
+Visit /design-system for the component reference. See [component usage and tokens](docs/DESIGN_SYSTEM.md). The homepage and 404 page share these styles; product examples in the reference are illustrative.
