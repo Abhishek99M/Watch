@@ -1,0 +1,25 @@
+# Tasks
+
+- [x] Phase 0: documentation and architecture
+- [ ] Phase 1: Next.js foundation and runnable lint/type/test/build checks
+- [ ] Phase 2: design system
+- [ ] Phase 3: navigation
+- [ ] Phase 4: 3D canvas and fallback
+- [ ] Phase 5: placeholder watch
+- [ ] Phase 6: real GLB model pipeline
+- [ ] Phase 7: exploded-view architecture
+- [ ] Phase 8: cinematic scroll timeline
+- [ ] Phase 9: movement scene
+- [ ] Phase 10: materials/craftsmanship
+- [ ] Phase 11: reassembly
+- [ ] Phase 12: watch configuration
+- [ ] Phase 13: approved product information
+- [ ] Phase 14: cart
+- [ ] Phase 15: server-validated checkout/payment
+- [ ] Phase 16: security hardening
+- [ ] Phase 17: accessibility
+- [ ] Phase 18: performance
+- [ ] Phase 19: SEO
+- [ ] Phase 20: cross-browser QA
+- [ ] Phase 21: production deployment after release gates
+- [ ] Phase 22: final security/regression audit
