@@ -1,0 +1,68 @@
+name: CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 5 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Repository and application checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: '22'
+      - run: node scripts/check-repository.mjs
+      - name: Install and validate application when present
+        shell: bash
+        run: |
+          if [ -f package.json ]; then
+            npm ci
+            npm run lint
+            npm run typecheck
+            npm test
+            npm run build
+            npm audit --audit-level=high
+          else
+            echo 'Documentation phase: application has not been created.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_COMMENTS: 'false'
+
+  gate:
+    name: Required checks
+    if: always()
+    needs: [quality, secrets]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require every check to succeed
+        env:
+          QUALITY: ${{ needs.quality.result }}
+          SECRETS: ${{ needs.secrets.result }}
+        run: test "$QUALITY" = success && test "$SECRETS" = success
