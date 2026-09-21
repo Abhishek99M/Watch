@@ -25,3 +25,18 @@ Once package.json exists, require package-lock.json and scripts `lint`, `typeche
 - Chrome, Firefox, Safari, Android Chrome and iOS Safari; record actual device/browser results.
 
 Do not deploy with failing builds, unresolved high/critical security issues, exposed secrets, unvalidated checkout, major broken features, missing 3D fallback or unchecked accessibility. Record manual evidence before marking phases complete.
+
+## Phase 1 validation evidence
+
+On 2026-09-21, Windows / installed Chrome:
+- Repository contract, ESLint and strict TypeScript checks: passed.
+- Development browser suite: 10 passed.
+- Production build: passed, with static homepage, not-found route and icon.
+- Production browser suite: 10 passed.
+- npm audit: zero vulnerabilities.
+
+Browser coverage includes homepage HTTP 200, title and heading, refresh without browser errors, keyboard skip link, missing-route HTTP 404 and return-home navigation, and no horizontal overflow at all seven documented widths under reduced motion.
+
+Local Playwright Chromium download timed out; installed Chrome was selected through PLAYWRIGHT_CHANNEL=chrome. CI installs its own Chromium and repeats development and production tests. This does not certify Safari, Firefox, physical mobile hardware or the later 3D and commerce features.
+
+Manual review: run npm run dev, open http://localhost:3000, refresh, use Tab/Enter on Skip to content, visit /missing-page and Return home, and inspect the page on a real mobile device. Broader browser and accessibility audits remain later-phase requirements.

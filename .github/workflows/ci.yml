@@ -33,8 +33,10 @@ jobs:
             npm ci
             npm run lint
             npm run typecheck
+            npx playwright install --with-deps chromium
             npm test
             npm run build
+            TEST_PRODUCTION=1 npm test
             npm audit --audit-level=high
           else
             echo 'Documentation phase: application has not been created.' >> "$GITHUB_STEP_SUMMARY"

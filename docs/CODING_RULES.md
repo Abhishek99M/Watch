@@ -10,3 +10,7 @@
 - Never commit credentials or expose server-only secrets to the browser.
 - Include accessibility, reduced motion and non-3D fallbacks in feature design.
 - Do not deploy until the release gates in TEST_PLAN.md are satisfied.
+
+## Phase branch workflow
+
+Update local main, create a new phase branch before implementation, validate the phase and update documentation, then commit, push and open a PR. Do not merge without user authorization. Use ✅ for completed phases and ⬜ for pending phases in TASKS.md.

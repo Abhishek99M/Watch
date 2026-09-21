@@ -11,3 +11,7 @@ Configure and test CSP against actual 3D, font and payment dependencies. Add con
 CI has read-only repository permissions by default and no deployment credentials. Pull request jobs must not use privileged pull_request_target execution. Protect main with passing checks, resolved conversations and no force pushes/deletion where the GitHub plan allows.
 
 This project is not guaranteed unhackable. Production readiness requires failure and abuse testing and continued maintenance.
+
+## Phase 1 dependency exception
+
+ESLint 9.39.5 is deprecated upstream but remains required by the React, accessibility and import plugins shipped with eslint-config-next 16.3.5. ESLint 10 failed peer validation and runtime rule loading. Keep the compatible version until those plugins support ESLint 10; do not force peer overrides. The current npm audit reports zero vulnerabilities. Dependabot remains enabled.
