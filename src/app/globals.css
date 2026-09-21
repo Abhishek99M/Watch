@@ -104,3 +104,27 @@ button { font: inherit; }
 .swatch code { display: block; color: var(--color-muted); font-size: 0.75rem; }
 @media (max-width: 42rem) { .preview-grid { grid-template-columns: 1fr; } .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* Phase 3: the mobile disclosure is nonmodal and retains native keyboard behavior. */
+:root { --header-height: 5rem; }
+.site-header { position: sticky; top: 0; z-index: 20; background: var(--color-canvas); border-bottom: 1px solid var(--color-rule); }
+.site-header__inner { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: var(--header-height); position: relative; }
+.site-brand { display: inline-flex; align-items: center; gap: var(--space-3); min-height: 48px; color: var(--color-accent); text-decoration: none; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; }
+.desktop-navigation { display: flex; gap: var(--space-4); }
+.mobile-navigation { display: none; }
+.mobile-navigation summary { display: flex; align-items: center; justify-content: center; gap: var(--space-3); min-height: 48px; min-width: 88px; padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); cursor: pointer; list-style: none; font-size: var(--text-small); }
+.mobile-navigation summary::-webkit-details-marker { display: none; }
+.menu-symbol { width: 12px; height: 12px; position: relative; }
+.menu-symbol::before, .menu-symbol::after { content: ''; position: absolute; background: currentColor; }
+.menu-symbol::before { width: 12px; height: 1px; top: 5px; left: 0; }
+.menu-symbol::after { height: 12px; width: 1px; top: 0; left: 5px; }
+.mobile-navigation[open] .menu-symbol::after { display: none; }
+.mobile-navigation nav { position: absolute; inset: 100% 0 auto; display: grid; gap: var(--space-2); padding: var(--space-4); border: 1px solid var(--color-border); background: var(--color-surface); }
+.mobile-navigation .nav-link { padding-inline: var(--space-4); }
+.skip-link { z-index: 30; }
+#main-content, [id] { scroll-margin-top: calc(var(--header-height) + var(--space-6)); }
+.home { min-height: calc(100svh - var(--header-height)); }
+@media (max-width: 47.999rem) {
+  .desktop-navigation { display: none; }
+  .mobile-navigation { display: block; }
+}
