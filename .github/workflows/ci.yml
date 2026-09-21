@@ -49,10 +49,19 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_ENABLE_COMMENTS: 'false'
+      - name: Install versioned Gitleaks and verify release checksum
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/watch-gitleaks"
+          cd "$RUNNER_TEMP/watch-gitleaks"
+          base=https://github.com/gitleaks/gitleaks/releases/download/v8.24.3
+          curl --fail --silent --show-error --location "$base/gitleaks_8.24.3_linux_x64.tar.gz" -o gitleaks_8.24.3_linux_x64.tar.gz
+          curl --fail --silent --show-error --location "$base/gitleaks_8.24.3_checksums.txt" -o checksums.txt
+          grep ' gitleaks_8.24.3_linux_x64.tar.gz$' checksums.txt > selected-checksum.txt
+          sha256sum --check selected-checksum.txt
+          tar -xzf gitleaks_8.24.3_linux_x64.tar.gz gitleaks
+      - name: Scan full Git history including the initial commit
+        run: '"$RUNNER_TEMP/watch-gitleaks/gitleaks" git --redact --log-opts="--all" .'
 
   gate:
     name: Required checks
