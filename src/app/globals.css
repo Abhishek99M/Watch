@@ -1,0 +1,7 @@
+@import "tailwindcss";
+:root { color-scheme: dark; background: #171715; color: #f5f5f0; font-family: Arial, Helvetica, sans-serif; }
+body { margin: 0; }
+:focus-visible { outline: 2px solid #e2c692; outline-offset: 6px; }
+.skip-link { position: absolute; top: 1rem; left: 1rem; padding: 0.75rem 1rem; background: #f5f5f0; color: #171715; transform: translateY(-200%); }
+.skip-link:focus { transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
