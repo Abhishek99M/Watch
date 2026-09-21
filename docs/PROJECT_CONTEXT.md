@@ -11,3 +11,5 @@ The local Playwright Chromium download timed out, so local tests used PLAYWRIGHT
 Next task: Phase 2, design system. Start it on a new branch from updated main after the Phase 1 PR has been reviewed and merged. Use ✅ for completed phases and ⬜ for pending phases. Do not merge a phase PR without user authorization.
 
 Approved product content, licensed 3D assets, payment integration decisions and a deployment domain remain outstanding.
+
+Vercel preview fix: the project was imported with the Other framework preset and expected public output even though next build succeeded. vercel.json now selects the Next.js preset and resets the output directory to its framework default. Validation of the new preview is required before merging.

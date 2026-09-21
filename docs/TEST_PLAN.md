@@ -40,3 +40,7 @@ Browser coverage includes homepage HTTP 200, title and heading, refresh without 
 Local Playwright Chromium download timed out; installed Chrome was selected through PLAYWRIGHT_CHANNEL=chrome. CI installs its own Chromium and repeats development and production tests. This does not certify Safari, Firefox, physical mobile hardware or the later 3D and commerce features.
 
 Manual review: run npm run dev, open http://localhost:3000, refresh, use Tab/Enter on Skip to content, visit /missing-page and Return home, and inspect the page on a real mobile device. Broader browser and accessibility audits remain later-phase requirements.
+
+## Vercel preview regression
+
+Confirm the preview build uses the Next.js framework, completes output collection without a missing-public-directory error, and reaches Ready. Verify the deployed homepage and the /missing-page recovery flow before merging.
