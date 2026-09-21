@@ -78,3 +78,24 @@ On 2026-09-21, Windows / installed Chrome:
 The existing component target-size test now measures visible controls; hidden responsive navigation variants correctly have no bounding box.
 
 Manual review: run npm run dev. On desktop follow The watch, Our story, Cart and the Watch wordmark; directly open and refresh each destination. At mobile width, Tab to Menu, press Enter, Tab to a link, press Escape and confirm focus returns to Menu. Repeat with touch, follow a link, use Back, and resize while open. Confirm Menu and links still work with JavaScript disabled. Physical-device and screen-reader tests remain pending.
+
+## Phase 4 validation evidence
+
+On 2026-09-21, Windows / installed Chrome with SwiftShader:
+- Repository integrity, lint, strict TypeScript, production build and npm audit passed; zero vulnerabilities.
+- Development browser suite: 46/46 passed.
+- Production browser suite: 46/46 passed.
+- Real WebGL rendering, optional activation and return to static view.
+- Unavailable WebGL, injected draw exceptions, context loss and successful retry.
+- Slow lazy chunks reach a bounded failure state; failed chunks preserve static content and navigation.
+- Static description and navigation work without JavaScript.
+- All seven documented widths; capped canvas pixel density and no horizontal overflow.
+- Reduced-motion scene has no continuous draw calls after settling.
+- Repeated load/static cycles and route exit leave no stale canvas.
+- Desktop and 320px production screenshots reviewed for framing, wrapping and controls.
+
+The first targeted run exposed two test assumptions: the scene uses non-indexed drawArrays, and its always-visible description is the no-JavaScript alternative. Those assertions were corrected. The initial full development run had one navigation timeout; all 17 navigation tests and the subsequent full development/production suites passed without changing navigation behavior. Screenshot capture now scrolls to the page top to avoid a sticky-header capture artifact.
+
+These browser flags are test-only and do not certify physical GPU performance, memory behavior, mobile hardware or Safari/Firefox. A Three.js Clock deprecation warning originates in Fiber internals; the successful rendering path has no console errors.
+
+Manual review: visit /watch, read the static study and activate Load 3D preview. Resize, enable reduced motion, use static view, reload and navigate away. Disable WebGL or interrupt the lazy download and verify the safe fallback; restore support and retry. Model/texture failure testing belongs to the later model pipeline. Physical-device and screen-reader QA remain pending.
