@@ -15,3 +15,7 @@ When supported, protect main with a pull request requirement, resolved conversat
 ## Local use
 
 Run `node scripts/check-repository.mjs` before commits. Once the app exists, also run the application CI commands above. Do not treat automated success as a substitute for the manual release tests.
+
+## Phase 1 implementation
+
+The application CI contract is now active. CI installs Playwright Chromium and runs ten browser tests against the development server, builds the app, and repeats those tests against the production server before the dependency audit. No placeholder test scripts are used.

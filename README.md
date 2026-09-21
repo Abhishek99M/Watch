@@ -1,13 +1,36 @@
 # Watch
 
-A premium, accessible 3D watch experience, planned with Next.js, TypeScript and React Three Fiber.
+A premium, accessible 3D watch experience built in phases.
 
-Current stage: documentation and repository automation. No application has been built yet.
+Phase 1 provides Next.js App Router, React, strict TypeScript, Tailwind CSS and ESLint. The homepage is a foundation placeholder; the design system, watch model, 3D story and commerce features follow in later phases.
 
-Read [the product brief](docs/PRD.md), [task sequence](docs/TASKS.md), and [coding rules](docs/CODING_RULES.md) before implementation.
+## Development
+
+Use Node.js 22 (22.13 or newer) and npm. On Windows PowerShell, use npm.cmd/npx.cmd if script execution policy blocks npm.ps1.
+
+```sh
+npm ci
+npm run dev
+```
+
+Open http://localhost:3000. No environment variables or third-party accounts are required for this phase.
 
 ## Validation
 
-Run `node scripts/check-repository.mjs`. GitHub Actions runs repository validation and secret scanning on every push and pull request. Once `package.json` exists, CI also requires an npm lockfile and lint, typecheck, test and build scripts, and rejects high/critical dependency vulnerabilities.
+```sh
+node scripts/check-repository.mjs
+npm run lint
+npm run typecheck
+npx playwright install chromium
+npm test
+npm run build
+npm audit --audit-level=high
+```
 
-See [GitHub checks](docs/GITHUB_CHECKS.md) for enforcement and [test plan](docs/TEST_PLAN.md) for manual release checks. Passing CI is not a production-readiness claim.
+To exercise the production build, run TEST_PRODUCTION=1 npm test (PowerShell: set $env:TEST_PRODUCTION = '1' first, then remove it after testing). npm start serves the production build.
+
+CI installs Chromium and runs the browser tests against both development and production servers. Tests manage their own server on port 43170, which must be free.
+
+Read [the product brief](docs/PRD.md), [task sequence](docs/TASKS.md), [coding rules](docs/CODING_RULES.md), [GitHub checks](docs/GITHUB_CHECKS.md) and [test plan](docs/TEST_PLAN.md).
+
+If Playwright browser downloads are unavailable locally, set PLAYWRIGHT_CHANNEL=chrome to use an installed Chrome browser. CI uses the default Playwright Chromium. See docs/SECURITY.md for the temporary ESLint compatibility limitation.
