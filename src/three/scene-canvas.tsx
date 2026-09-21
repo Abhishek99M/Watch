@@ -2,7 +2,8 @@
 import { useEffect, useRef } from 'react';
 import { createRoot, type ReconcilerRoot, type RootStore } from '@react-three/fiber';
 import { Color, PerspectiveCamera, WebGLRenderer } from 'three';
-import { LightingStudy } from './lighting-study';
+import { SceneLighting } from './scene-lighting';
+import { PlaceholderWatch } from './placeholder-watch';
 import { SceneBoundary } from './scene-boundary';
 
 export type SceneCanvasProps = { onReady: () => void; onError: () => void };
@@ -71,7 +72,7 @@ export function SceneCanvas({ onReady, onError }: SceneCanvasProps) {
           scene: { background: new Color('#22221f') },
         });
         if (stopped) { root.unmount(); return; }
-        store = root.render(<SceneBoundary onError={fail}><LightingStudy /></SceneBoundary>);
+        store = root.render(<SceneBoundary onError={fail}><SceneLighting /><PlaceholderWatch /></SceneBoundary>);
         resize();
       } catch { fail(); }
     }

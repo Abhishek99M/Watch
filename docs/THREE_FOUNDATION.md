@@ -1,18 +1,18 @@
 # 3D canvas foundation
 
-Visit /watch and select **Load 3D preview**. Phase 4 renders a small faceted lighting study. The placeholder watch belongs to Phase 5; model loading, exploded views, scrolling, configuration and commerce remain later phases.
+Visit /watch and select **Load 3D preview**. Phase 4 introduced the canvas with a faceted lighting study. Phase 5 replaces that geometry with an illustrative procedural watch; see PLACEHOLDER_WATCH.md. Model loading, exploded views, scrolling, configuration and commerce remain later phases.
 
 ## Rendering and lifecycle
 
 - `src/components/three/scene-preview.tsx` serves an inline SVG and description, then imports the scene only on request. No renderer is constructed during server rendering or initial page load.
 - `src/three/scene-canvas.tsx` owns a fresh canvas and React Three Fiber root per mount. Explicit renderer setup catches asynchronous initialization and draw errors as well as React errors.
-- `lighting-study.tsx` supplies one procedural mesh, a perspective camera's subject, ambient/hemisphere lighting and two directional lights. There are no model, texture or HDR downloads.
+- `scene-lighting.tsx` supplies ambient/hemisphere lighting and two directional lights; `placeholder-watch.tsx` supplies the procedural watch. There are no model, texture or HDR downloads.
 - ResizeObserver updates the viewport and camera framing. Pixel density is capped at 1.5. Demand rendering draws on initialization and resize, with no animation loop or camera controls.
 - Cleanup disconnects observers/listeners, unmounts the Fiber scene, disposes the renderer and removes the canvas. Fiber disposes scene resources and releases the context. Retry creates a new instance.
 
 ## Loading and recovery
 
-The static study remains beneath the canvas. Loading has an announced status and a 12-second deadline covering chunk loading through the first successful draw. Chunk failures, unavailable WebGL, renderer errors, React boundary errors and lost graphics contexts lead to a safe error message, static view and retry. Technical error details are not rendered in the page.
+The static watch illustration remains beneath the canvas. Loading has an announced status and a 12-second deadline covering chunk loading through the first successful draw. Chunk failures, unavailable WebGL, renderer errors, React boundary errors and lost graphics contexts lead to a safe error message, static view and retry. Technical error details are not rendered in the page.
 
 **Use static view** unmounts the scene at any point. Without JavaScript, the SVG, description and ordinary page navigation remain available; the load button is omitted. The decorative SVG/canvas are hidden from assistive technology and the figure has a text label and caption.
 
