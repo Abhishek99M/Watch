@@ -53,7 +53,7 @@ for (const width of [320, 375, 390, 768, 1024, 1440, 1920]) {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/design-system');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-    for (const button of await page.locator('.button, .nav-link').all()) {
+    for (const button of await page.locator('.button:visible, .nav-link:visible').all()) {
       const box = await button.boundingBox();
       expect(box?.height).toBeGreaterThanOrEqual(48);
       expect(box?.width).toBeGreaterThanOrEqual(48);

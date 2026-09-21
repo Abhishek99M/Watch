@@ -2,7 +2,7 @@
 
 A premium, accessible 3D watch experience built in phases.
 
-Phase 1 provides Next.js App Router, React, strict TypeScript, Tailwind CSS and ESLint. Phase 2 adds the shared design system. The homepage remains a foundation placeholder; navigation, watch models, 3D storytelling and commerce follow in later phases.
+Phase 1 provides Next.js App Router, React, strict TypeScript, Tailwind CSS and ESLint. Phase 2 adds the shared design system. The homepage remains a foundation placeholder; Phase 3 navigation is available, while watch models, 3D storytelling and commerce follow in later phases.
 
 ## Development
 
@@ -38,3 +38,7 @@ If Playwright browser downloads are unavailable locally, set PLAYWRIGHT_CHANNEL=
 ## Design system
 
 Visit /design-system for the component reference. See [component usage and tokens](docs/DESIGN_SYSTEM.md). The homepage and 404 page share these styles; product examples in the reference are illustrative.
+
+## Navigation
+
+The shared header links to /watch, /story and /cart. These are navigation shells; product storytelling and shopping arrive in later phases. The mobile menu works without JavaScript, with enhanced Escape dismissal and focus return when JavaScript is available. See [navigation behavior](docs/NAVIGATION.md).

@@ -8,4 +8,6 @@ Check widths 320, 375, 390, 768, 1024, 1440 and 1920 pixels. Prevent overflow, o
 
 Respect prefers-reduced-motion: minimize camera travel, smooth scrolling and loops while preserving information and configuration. Use static content when WebGL fails. Pause offscreen animation and cap rendering cost on mobile.
 
-Phase 2 implementation and component usage are documented in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md). Review the isolated reference at /design-system. Full navigation behavior remains Phase 3.
+Phase 2 implementation and component usage are documented in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md). Review the isolated reference at /design-system. Phase 3 navigation behavior is documented below.
+
+Phase 3 navigation behavior, destination scope and progressive enhancement are documented in [NAVIGATION.md](NAVIGATION.md).

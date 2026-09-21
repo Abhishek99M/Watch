@@ -62,3 +62,19 @@ On 2026-09-21, Windows / installed Chrome:
 The first run exposed a test selector collision with Next.js's route announcer; it was scoped to the intended error message. One local browser process crashed under four-worker load; browser concurrency is now two, and both complete suites passed.
 
 Manual review: run npm run dev and visit /design-system. Tab through enabled links/buttons, activate Test action with Enter, use Retry preview and Reset error example, and follow the card/loading anchor links. Enable reduced motion and inspect the static loading skeleton. Review the homepage and /missing-page. Physical-device, screen-reader and non-Chromium testing remain pending.
+
+## Phase 3 validation evidence
+
+On 2026-09-21, Windows / installed Chrome:
+- Repository integrity, lint, strict TypeScript, production build and npm audit passed; zero vulnerabilities.
+- Development browser suite: 37/37 passed.
+- Production browser suite: 37/37 passed.
+- All primary destinations and logo navigation, active-link state, direct URL access and refresh without console errors.
+- Mobile repeated keyboard open/Escape/focus return; link/current-link, outside-click, focus-leave and resize dismissal.
+- Touch and history navigation, native mobile toggling/navigation without JavaScript.
+- All seven documented viewport widths, 48px targets, reduced motion, sticky header and unobscured skip-link target.
+- Desktop and 320px open-menu screenshots reviewed.
+
+The existing component target-size test now measures visible controls; hidden responsive navigation variants correctly have no bounding box.
+
+Manual review: run npm run dev. On desktop follow The watch, Our story, Cart and the Watch wordmark; directly open and refresh each destination. At mobile width, Tab to Menu, press Enter, Tab to a link, press Escape and confirm focus returns to Menu. Repeat with touch, follow a link, use Back, and resize while open. Confirm Menu and links still work with JavaScript disabled. Physical-device and screen-reader tests remain pending.
