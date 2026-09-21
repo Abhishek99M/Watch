@@ -84,10 +84,10 @@ test('mobile disclosure does not trap focus and closes when focus leaves', async
   await expect(menu).toHaveJSProperty('open', false);
 });
 
-test('mobile menu and links work without JavaScript', async ({ browser }) => {
+test('mobile menu and links work without JavaScript', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:43170/');
+  await page.goto(baseURL + '/');
   await page.locator('.mobile-navigation summary').click();
   await page.getByRole('navigation', { name: 'Mobile primary' }).getByRole('link', { name: 'The watch', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('A closer look, soon.');
@@ -96,10 +96,10 @@ test('mobile menu and links work without JavaScript', async ({ browser }) => {
   await context.close();
 });
 
-test('touch menu supports open, route selection and history navigation', async ({ browser }) => {
+test('touch menu supports open, route selection and history navigation', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:43170/');
+  await page.goto(baseURL + '/');
   await page.locator('.mobile-navigation summary').tap();
   await page.getByRole('navigation', { name: 'Mobile primary' }).getByRole('link', { name: 'Our story', exact: true }).tap();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Every detail has a story.');

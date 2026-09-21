@@ -19,7 +19,7 @@ test('3D is opt-in and renders successfully without browser errors', async ({ pa
   await expect(page.locator('.scene-stage canvas')).toHaveCount(1);
   expect(errors).toEqual([]);
   expect(assetRequests).toEqual([]);
-  await expect(page.getByRole('figure', { name: 'Illustrative watch prototype' })).toContainText('Design, materials and proportions are placeholders, not product specifications.');
+  await expect(page.getByRole('figure', { name: 'Watch preview' })).toContainText('Design, materials and proportions are placeholders, not product specifications.');
   await page.getByRole('button', { name: 'Use static view' }).click();
   await expect(page.locator('.scene-stage canvas')).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Load 3D preview' })).toBeVisible();
@@ -92,14 +92,14 @@ test('failed lazy download keeps static content and page navigation available', 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('A study in time.');
 });
 
-test('static description and navigation work without JavaScript', async ({ browser }, testInfo) => {
+test('static description and navigation work without JavaScript', async ({ browser, baseURL }, testInfo) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:43170/watch');
+  await page.goto(baseURL + '/watch');
   await expect(page.locator('.scene-static')).toBeVisible();
   await expect(page.getByText('A round case, dark dial and brown strap. The 3D view is optional and stays still.')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Load 3D preview' })).toHaveCount(0);
-  await expect(page.getByRole('figure', { name: 'Illustrative watch prototype' })).toContainText('Design, materials and proportions are placeholders, not product specifications.');
+  await expect(page.getByRole('figure', { name: 'Watch preview' })).toContainText('Design, materials and proportions are placeholders, not product specifications.');
   for (const width of [320, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.screenshot({ path: testInfo.outputPath('static-watch-' + width + '.png'), fullPage: true });

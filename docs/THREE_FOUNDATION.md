@@ -1,6 +1,6 @@
 # 3D canvas foundation
 
-Visit /watch and select **Load 3D preview**. Phase 4 introduced the canvas with a faceted lighting study. Phase 5 replaces that geometry with an illustrative procedural watch; see PLACEHOLDER_WATCH.md. Model loading, exploded views, scrolling, configuration and commerce remain later phases.
+Visit /watch and select **Load 3D preview**. Phase 4 introduced the canvas with a faceted lighting study. Phase 5 replaces that geometry with an illustrative procedural watch; see PLACEHOLDER_WATCH.md. The Phase 6 GLB pipeline is implemented behind an empty manifest pending an approved asset; see MODEL_PIPELINE.md. Exploded views, scrolling, configuration and commerce remain later phases.
 
 ## Rendering and lifecycle
 

@@ -114,3 +114,19 @@ On 2026-09-21, Windows / installed Chrome with SwiftShader:
 - Production 1440px and 320px screenshots reviewed for the full watch, strap framing, dial/hand visibility, static alternative and readable caption.
 
 Manual review: visit /watch, read the prototype caption, activate Load 3D preview, resize and select Use static view. Repeat with reduced motion and JavaScript/WebGL disabled. Verify the round case, dial, crown and both strap segments remain visible. Interrupt loading or lose the context to check the safe fallback and retry. These checks cover the placeholder only; licensed assets, real-model failures, physical GPU/mobile performance and screen-reader QA remain pending.
+
+## Phase 6 pipeline validation (asset integration still pending)
+
+On 2026-09-21, Windows / installed Chrome with SwiftShader:
+- Repository integrity, lint, strict TypeScript and production build: passed.
+- Development suite against the existing localhost dev server: 60/60 passed.
+- Production suite against a separately started server: 60/60 passed.
+- npm audit: zero vulnerabilities; no dependencies added.
+- Fourteen GLB tests cover a generated embedded texture, explicit index mapping despite duplicate names, preserved local transforms, normalized bounds, idempotent disposal, nested-map rejection, missing/malformed/oversized files, broken/external textures, retry, timeout, request cancellation, responsive rendering, reduced motion and context-loss recovery.
+- Existing placeholder/static fallback and navigation regressions pass.
+- Node inspection command verified against the 2,268-byte authored fixture.
+- Production fixture screenshots at 320px and 1440px reviewed for framing and controls. These are test geometry, not an approved watch asset.
+
+The initial test server start conflicted with an existing server. Local tests now optionally reuse PLAYWRIGHT_BASE_URL; localhost was required by that server's development-origin policy. Initial new error selectors also matched Next.js's route announcer; they were scoped to the preview error. The corrected targeted and full suites passed. Playwright's Node transpilation emits an upstream Three.js CommonJS deprecation warning; browser success paths have no console errors. The existing Fiber Clock warning remains documented.
+
+Phase 6 is not complete: no approved watch GLB or redistribution license has been supplied. Keep the manifest empty and the PR draft. Follow MODEL_PIPELINE.md to inventory and map the actual asset, review materials/textures, size, scale and orientation, and repeat browser/failure checks before marking ✅. Physical-device/GPU and screen-reader QA remain pending.

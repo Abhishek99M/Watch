@@ -17,10 +17,10 @@ test('shared controls preserve keyboard, disabled and recovery behavior', async 
   await expect(page).toHaveURL(/#cards$/);
 });
 
-test('preview is not indexed and remains readable without JavaScript', async ({ browser }) => {
+test('preview is not indexed and remains readable without JavaScript', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:43170/design-system');
+  await page.goto(baseURL + '/design-system');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
   await expect(page.getByRole('heading', { name: 'Space for the object.' })).toBeVisible();
   await page.getByRole('link', { name: 'Return home', exact: true }).click();

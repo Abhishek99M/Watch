@@ -16,6 +16,10 @@ Phase 5 validation: repository integrity, lint, type checks, production build an
 
 Use PLAYWRIGHT_CHANNEL=chrome locally when the Playwright download is unavailable. CI installs Chromium. Browser tests use SwiftShader; physical-device, screen-reader and Safari/Firefox testing remain later-phase QA. React 19.2 is required by Fiber 9.7's peer range; ESLint 9 remains a documented Next.js plugin compatibility exception. The upstream Fiber/Three.js Clock deprecation warning remains documented.
 
-Next task: Phase 6, real GLB model pipeline. Start on a new branch from updated main after the Phase 5 PR is reviewed and merged. Use ✅ for completed phases and ⬜ for pending phases. Do not merge without user authorization.
+Phase 6 pipeline implementation is ready for review, but asset integration is pending. The repository has no approved watch GLB or license evidence; public/models/watch.json deliberately contains a null model. The GLTFLoader pipeline supports bounded self-contained GLB downloads, explicit source-node-index mapping, normalization, imported-resource cleanup, retry and procedural fallback. It adds no dependencies or real product asset. See MODEL_PIPELINE.md.
+
+Pipeline validation: repository checks, lint, strict types, production build and audit pass (zero vulnerabilities). All 60 tests pass in both development and production, including 14 generated-fixture GLB tests. Production fixture screenshots were reviewed at 320px and 1440px; this does not constitute actual watch-model validation. The node-inspection tool was verified on the authored fixture.
+
+Next task: finish Phase 6 on feat/phase-6-glb-pipeline after the user supplies an approved watch GLB and license/ownership permission. Keep Phase 6 pending until the actual model passes integrity validation. Use ✅ for completed phases and ⬜ for pending phases. Do not merge without user authorization.
 
 Approved product content, licensed 3D assets, payment decisions and a deployment domain remain outstanding. Vercel previews use vercel.json's Next.js preset/default output; local .vercel metadata is ignored.
