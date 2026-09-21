@@ -2,7 +2,7 @@
 
 - ✅ Phase 0: documentation and architecture
 - ✅ Phase 1: Next.js foundation and runnable lint/type/test/build checks
-- ⬜ Phase 2: design system
+- ✅ Phase 2: design system
 - ⬜ Phase 3: navigation
 - ⬜ Phase 4: 3D canvas and fallback
 - ⬜ Phase 5: placeholder watch

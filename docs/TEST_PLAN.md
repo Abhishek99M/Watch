@@ -46,3 +46,19 @@ Manual review: run npm run dev, open http://localhost:3000, refresh, use Tab/Ent
 Confirm the preview build uses the Next.js framework, completes output collection without a missing-public-directory error, and reaches Ready. Verify the deployed homepage and the /missing-page recovery flow before merging.
 
 Verified on 2026-09-21 for commit c064f0f: Vercel detected Next.js 16.3.5, completed build output collection and reached Ready. Authenticated preview checks returned / = 200 and /missing-page = 404. Both GitHub CI runs and the Vercel check passed.
+
+## Phase 2 validation evidence
+
+On 2026-09-21, Windows / installed Chrome:
+- Repository integrity, lint, strict TypeScript, production build and npm audit passed; zero vulnerabilities.
+- Development browser suite: 20/20 passed.
+- Production browser suite: 20/20 passed.
+- Shared controls: keyboard activation, native disabled/busy behavior, recovery/reset and real anchor destinations.
+- Text tokens: at least 7:1 contrast on canvas, surface and raised backgrounds.
+- All seven documented viewport widths: no horizontal overflow, targets at least 48px, visible focus and no skeleton animation under reduced motion.
+- Preview noindex metadata and useful content/navigation without JavaScript.
+- Desktop (1440px) and narrow mobile (320px) screenshots reviewed for typography, spacing, wrapping and card stacking.
+
+The first run exposed a test selector collision with Next.js's route announcer; it was scoped to the intended error message. One local browser process crashed under four-worker load; browser concurrency is now two, and both complete suites passed.
+
+Manual review: run npm run dev and visit /design-system. Tab through enabled links/buttons, activate Test action with Enter, use Retry preview and Reset error example, and follow the card/loading anchor links. Enable reduced motion and inspect the static loading skeleton. Review the homepage and /missing-page. Physical-device, screen-reader and non-Chromium testing remain pending.
