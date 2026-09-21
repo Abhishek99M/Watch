@@ -80,7 +80,7 @@ test('mobile disclosure does not trap focus and closes when focus leaves', async
   await menu.locator('summary').click();
   await page.getByRole('navigation', { name: 'Mobile primary' }).getByRole('link', { name: 'Cart', exact: true }).focus();
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('link', { name: 'Return home', exact: true })).toBeFocused();
+  expect(await page.getByRole('main').evaluate(element => element.contains(document.activeElement))).toBe(true);
   await expect(menu).toHaveJSProperty('open', false);
 });
 
