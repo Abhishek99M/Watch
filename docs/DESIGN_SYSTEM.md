@@ -20,7 +20,7 @@ Use semantic tokens when extending styles rather than duplicating palette values
 | --- | --- |
 | Button | Native action button; primary, secondary or quiet. Defaults to type=button. Pass type=submit deliberately for forms. busy disables activation and sets aria-busy; supply meaningful loading text. |
 | ButtonLink | Real Next.js navigation link with button styling. Use for destinations, never for an action handler. |
-| NavLink | 48px navigation primitive with current-page styling and aria-current. Full navigation/menu behavior belongs to Phase 3. |
+| NavLink | 48px navigation primitive with current-page styling and aria-current. Used by the Phase 3 header; see NAVIGATION.md for menu behavior. |
 | SectionHeading | Eyebrow, heading and optional description. Choose level=1 only for the page heading; otherwise use levels 2 or 3. |
 | Badge | Short neutral/accent status labels. Always communicate status in text, not color alone. |
 | ProductCard | Informational title, description and optional label, media and destination. A 4:3 media region reserves space; no price/specification is fabricated. |
@@ -41,4 +41,4 @@ The skip link and visible focus styles remain available. Busy/disabled controls 
 
 Homepage and not-found content now consume the system. The reference page demonstrates working buttons, a simulated retry/reset flow and real anchor navigation. It is not a production product catalogue.
 
-Full navigation, menu focus/Escape handling, 3D scenes, model loading, configuration and commerce remain later phases. Physical-device, screen-reader and non-Chromium audits remain pending.
+Phase 3 supplies full navigation and mobile disclosure behavior (NAVIGATION.md). 3D scenes, model loading, configuration and commerce remain later phases. Physical-device, screen-reader and non-Chromium audits remain pending.
