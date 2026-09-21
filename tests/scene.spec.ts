@@ -5,6 +5,10 @@ const errorTitle = '3D preview unavailable';
 
 test('3D is opt-in and renders successfully without browser errors', async ({ page }) => {
   const errors: string[] = [];
+  const assetRequests: string[] = [];
+  page.on('request', request => {
+    if (/\.(glb|gltf|hdr|ktx2|png|jpe?g|webp)(\?|$)/i.test(request.url())) assetRequests.push(request.url());
+  });
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   await page.goto('/watch');
@@ -14,6 +18,8 @@ test('3D is opt-in and renders successfully without browser errors', async ({ pa
   await expect(page.getByRole('status').filter({ hasText: readyText })).toBeVisible({ timeout: 15_000 });
   await expect(page.locator('.scene-stage canvas')).toHaveCount(1);
   expect(errors).toEqual([]);
+  expect(assetRequests).toEqual([]);
+  await expect(page.getByRole('figure', { name: 'Illustrative watch prototype' })).toContainText('Design, materials and proportions are placeholders, not product specifications.');
   await page.getByRole('button', { name: 'Use static view' }).click();
   await expect(page.locator('.scene-stage canvas')).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Load 3D preview' })).toBeVisible();
@@ -86,13 +92,18 @@ test('failed lazy download keeps static content and page navigation available', 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('A study in time.');
 });
 
-test('static description and navigation work without JavaScript', async ({ browser }) => {
+test('static description and navigation work without JavaScript', async ({ browser }, testInfo) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto('http://127.0.0.1:43170/watch');
   await expect(page.locator('.scene-static')).toBeVisible();
-  await expect(page.getByText('A faceted form in warm light. The 3D view is optional and stays still.')).toBeVisible();
+  await expect(page.getByText('A round case, dark dial and brown strap. The 3D view is optional and stays still.')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Load 3D preview' })).toHaveCount(0);
+  await expect(page.getByRole('figure', { name: 'Illustrative watch prototype' })).toContainText('Design, materials and proportions are placeholders, not product specifications.');
+  for (const width of [320, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.screenshot({ path: testInfo.outputPath('static-watch-' + width + '.png'), fullPage: true });
+  }
   await page.getByRole('link', { name: 'Return home', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('A study in time.');
   await context.close();

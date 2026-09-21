@@ -5,7 +5,7 @@
 - ✅ Phase 2: design system
 - ✅ Phase 3: navigation
 - ✅ Phase 4: 3D canvas and fallback
-- ⬜ Phase 5: placeholder watch
+- ✅ Phase 5: placeholder watch
 - ⬜ Phase 6: real GLB model pipeline
 - ⬜ Phase 7: exploded-view architecture
 - ⬜ Phase 8: cinematic scroll timeline

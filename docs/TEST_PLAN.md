@@ -99,3 +99,18 @@ The first targeted run exposed two test assumptions: the scene uses non-indexed 
 These browser flags are test-only and do not certify physical GPU performance, memory behavior, mobile hardware or Safari/Firefox. A Three.js Clock deprecation warning originates in Fiber internals; the successful rendering path has no console errors.
 
 Manual review: visit /watch, read the static study and activate Load 3D preview. Resize, enable reduced motion, use static view, reload and navigate away. Disable WebGL or interrupt the lazy download and verify the safe fallback; restore support and retry. Model/texture failure testing belongs to the later model pipeline. Physical-device and screen-reader QA remain pending.
+
+## Phase 5 validation evidence
+
+On 2026-09-21, Windows / installed Chrome with SwiftShader:
+- Repository integrity, lint, strict TypeScript and production build: passed.
+- Development browser suite: 46/46 passed.
+- Production browser suite: 46/46 passed.
+- npm audit: zero vulnerabilities; no dependency changes.
+- The procedural watch renders without browser errors or model/image asset requests.
+- Prototype labeling is present in 3D and no-JavaScript views.
+- Existing unavailable-WebGL, draw-error, context-loss/retry, slow/failed-chunk and repeated mount/exit tests pass with the watch.
+- Seven viewport widths retain capped pixel density and no overflow. Reduced-motion rendering remains still after settling.
+- Production 1440px and 320px screenshots reviewed for the full watch, strap framing, dial/hand visibility, static alternative and readable caption.
+
+Manual review: visit /watch, read the prototype caption, activate Load 3D preview, resize and select Use static view. Repeat with reduced motion and JavaScript/WebGL disabled. Verify the round case, dial, crown and both strap segments remain visible. Interrupt loading or lose the context to check the safe fallback and retry. These checks cover the placeholder only; licensed assets, real-model failures, physical GPU/mobile performance and screen-reader QA remain pending.
