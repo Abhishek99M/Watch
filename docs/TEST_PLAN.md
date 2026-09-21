@@ -44,3 +44,5 @@ Manual review: run npm run dev, open http://localhost:3000, refresh, use Tab/Ent
 ## Vercel preview regression
 
 Confirm the preview build uses the Next.js framework, completes output collection without a missing-public-directory error, and reaches Ready. Verify the deployed homepage and the /missing-page recovery flow before merging.
+
+Verified on 2026-09-21 for commit c064f0f: Vercel detected Next.js 16.3.5, completed build output collection and reached Ready. Authenticated preview checks returned / = 200 and /missing-page = 404. Both GitHub CI runs and the Vercel check passed.

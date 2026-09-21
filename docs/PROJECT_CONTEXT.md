@@ -12,4 +12,4 @@ Next task: Phase 2, design system. Start it on a new branch from updated main af
 
 Approved product content, licensed 3D assets, payment integration decisions and a deployment domain remain outstanding.
 
-Vercel preview fix: the project was imported with the Other framework preset and expected public output even though next build succeeded. vercel.json now selects the Next.js preset and resets the output directory to its framework default. Validation of the new preview is required before merging.
+Vercel preview fix: the project was imported with the Other framework preset and expected public output even though next build succeeded. vercel.json now selects the Next.js preset and resets the output directory to its framework default. The corrected preview reached Ready; authenticated route checks returned HTTP 200 for / and HTTP 404 for /missing-page. All GitHub CI and Vercel checks passed.
