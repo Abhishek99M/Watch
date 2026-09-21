@@ -5,11 +5,12 @@ import { Color, PerspectiveCamera, WebGLRenderer } from 'three';
 import { SceneLighting } from './scene-lighting';
 import { PlaceholderWatch } from './placeholder-watch';
 import { SceneBoundary } from './scene-boundary';
+import { loadConfiguredWatch, type LoadedWatch } from './model-loader';
 
-export type SceneCanvasProps = { onReady: () => void; onError: () => void };
+export type SceneCanvasProps = { source: 'configured' | 'placeholder'; onReady: (isModel: boolean) => void; onError: () => void };
 
 /** Own the canvas so asynchronous renderer setup and draw failures are catchable. */
-export function SceneCanvas({ onReady, onError }: SceneCanvasProps) {
+export function SceneCanvas({ source, onReady, onError }: SceneCanvasProps) {
   const host = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const container = host.current;
@@ -24,6 +25,8 @@ export function SceneCanvas({ onReady, onError }: SceneCanvasProps) {
     let renderer: WebGLRenderer | undefined;
     let root: ReconcilerRoot<HTMLCanvasElement> | undefined;
     let store: RootStore | undefined;
+    let asset: LoadedWatch | null = null;
+    const controller = new AbortController();
     const camera = new PerspectiveCamera(40, 1, 0.1, 50);
 
     const fail = () => {
@@ -59,10 +62,12 @@ export function SceneCanvas({ onReady, onError }: SceneCanvasProps) {
             draw(scene, activeCamera);
             if (!rendered) {
               rendered = true;
-              queueMicrotask(() => { if (!stopped && !failed) onReady(); });
+              queueMicrotask(() => { if (!stopped && !failed) onReady(asset !== null); });
             }
           } catch { fail(); }
         };
+        asset = source === 'placeholder' ? null : await loadConfiguredWatch(controller.signal);
+        if (stopped) { asset?.dispose(); return; }
         const { width, height } = container!.getBoundingClientRect();
         root = createRoot(canvas);
         await root.configure({
@@ -72,19 +77,22 @@ export function SceneCanvas({ onReady, onError }: SceneCanvasProps) {
           scene: { background: new Color('#22221f') },
         });
         if (stopped) { root.unmount(); return; }
-        store = root.render(<SceneBoundary onError={fail}><SceneLighting /><PlaceholderWatch /></SceneBoundary>);
+        store = root.render(<SceneBoundary onError={fail}><SceneLighting />{asset ? <primitive object={asset.object} /> : <PlaceholderWatch />}</SceneBoundary>);
         resize();
       } catch { fail(); }
     }
     void initialize();
     return () => {
       stopped = true;
+      controller.abort();
       observer.disconnect();
       canvas.removeEventListener('webglcontextlost', contextLost);
       if (root) root.unmount();
+      else renderer?.forceContextLoss();
       renderer?.dispose();
+      asset?.dispose();
       canvas.remove();
     };
-  }, [onReady, onError]);
+  }, [source, onReady, onError]);
   return <div className="scene-canvas" ref={host} />;
 }
