@@ -26,7 +26,7 @@ Final repository checks, lint, strict types, production build and dependency aud
 
 V1-V10 and historical migration helpers are archived intact in prototypes/atelier/archive/2026-09-24, with an inventory of 6,405 preserved study files. No old study assets were deleted. V11 owns its loader/exporter/controls dependencies; shared Three.js modules remain in atelier/assets/vendor. Reference-watch and comparison links were verified after archiving. Portable Blender remains in archived V3's .tools directory.
 
-Next task: Phase 7, exploded-view architecture using the actual 43-group mapping and preserved home transforms. Phase 8 handles cinematic scroll. Work remains on feat/phase-6-glb-pipeline; no commit, push or merge was performed.
+Next task: Phase 7, exploded-view architecture using the actual 43-group mapping and preserved home transforms. Phase 8 handles cinematic scroll. Phase 6 is published in PR #8 from feat/phase-6-glb-pipeline; complete the checked merge before creating the Phase 7 branch.
 
 Approved product content, payment decisions and a deployment domain remain outstanding. Vercel previews use vercel.json's Next.js preset/default output; local .vercel metadata is ignored.
 

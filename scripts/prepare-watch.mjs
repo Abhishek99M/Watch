@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import sharp from 'sharp';
+import { assertEquivalentGlb } from './lib/assert-equivalent-glb.mjs';
 import { NodeIO, VertexLayout } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import { dedup, weld, quantize } from '@gltf-transform/functions';
@@ -74,8 +75,21 @@ for (const [index, sampler] of animation.listSamplers().entries()) {
   assert.deepEqual(Array.from(sampler.getOutput().getArray()), before.output);
 }
 assert(!json.buffers.some(b => b.uri) && !json.images.some(i => i.uri));
-await fs.writeFile(output, bytes);
-await fs.writeFile('public/models/watch.json', JSON.stringify({model:{url:'/models/aurel-veil.glb', source:'Original Aurel Veil V11 procedural watch; user selected for this project.', license:'Project-authored geometry and textures; retained source in prototypes/atelier/model-study-v11. No third-party watch mesh.', components, rotation:[0,0,0],presentation:'aurel-veil-v11'}}, null, 2)+'\n');
+const manifest = {model:{url:'/models/aurel-veil.glb', source:'Original Aurel Veil V11 procedural watch; user selected for this project.', license:'Project-authored geometry and textures; retained source in prototypes/atelier/model-study-v11. No third-party watch mesh.', components, rotation:[0,0,0],presentation:'aurel-veil-v11'}};
 const report = {source, output, masterSha256:hash(original), webSha256:hash(bytes), masterBytes:original.length, webBytes:bytes.length, triangles:positions.length/9, componentGroups:assembly.length, animation:'Seconds_Sweep_60s', maxPositionErrorMeters, texturePixels:'unchanged', decoder:'none; KHR_mesh_quantization supported by GLTFLoader'};
-await fs.writeFile('docs/WATCH_ASSET_VALIDATION.json', JSON.stringify(report,null,2)+'\n');
-console.log(report);
+if (process.argv.includes('--check')) {
+  const committedBytes = await fs.readFile(output);
+  const committedReport = JSON.parse(await fs.readFile('docs/WATCH_ASSET_VALIDATION.json', 'utf8'));
+  assert.equal(hash(committedBytes), committedReport.webSha256, 'Committed asset checksum mismatch');
+  assert.equal(committedBytes.length, committedReport.webBytes);
+  assert(committedBytes.length <= 8*1024*1024);
+  const comparison = await assertEquivalentGlb(committedBytes, bytes);
+  assert.deepEqual({...report, webSha256:null, webBytes:null}, {...committedReport, webSha256:null, webBytes:null});
+  assert.deepEqual(JSON.parse(await fs.readFile('public/models/watch.json', 'utf8')), manifest);
+  console.log('Committed asset verified against rebuilt content:', comparison);
+} else {
+  await fs.writeFile(output, bytes);
+  await fs.writeFile('public/models/watch.json', JSON.stringify(manifest,null,2)+'\n');
+  await fs.writeFile('docs/WATCH_ASSET_VALIDATION.json', JSON.stringify(report,null,2)+'\n');
+  console.log(report);
+}

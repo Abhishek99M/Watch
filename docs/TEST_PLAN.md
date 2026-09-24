@@ -172,3 +172,11 @@ GLB or advance the project beyond Phase 6.
 
 Final warning-fix validation: 62/62 production browser tests passed (3.7 minutes);
 Timer unit test, build, lint, typecheck, and hardware visual comparison passed.
+
+
+Publication CI exposed a Windows/Linux asset-byte mismatch despite identical
+size and existing geometry/pixel validation. Asset rebuild verification now
+compares full GLB structure, exact non-image buffer contents and decoded image
+pixels, retaining a strict checksum for the committed asset. Regression tests
+accept lossless PNG re-encoding and reject changed pixels, geometry and materials.
+The in-memory check leaves the committed GLB untouched for browser tests.

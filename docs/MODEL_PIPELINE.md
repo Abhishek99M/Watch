@@ -98,5 +98,9 @@ The GitHub change includes the approved V11 master, standalone viewer and source
 scripts, the optimized website asset, required vendor licenses, and validation
 captures. Historical V1-V10 studies and Blender binaries/scenes remain local and
 ignored; they are not required by the website or derivative build. See the V11
-README for rebuild and review commands. CI checks the Timer adapter and rebuilds
-the web derivative, rejecting differences in the committed asset/manifest/report.
+README for rebuild and review commands. CI checks the Timer adapter and rebuilds the web derivative in memory with
+`node scripts/prepare-watch.mjs --check`. It verifies the committed checksum,
+manifest/report, complete GLB structure, exact non-image buffer contents and
+exact decoded texture pixels. Lossless image encoding bytes and resulting buffer
+offsets may differ between native encoders/platforms. CI tests the committed
+asset rather than overwriting it with the runner's encoding.
