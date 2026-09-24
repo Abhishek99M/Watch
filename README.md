@@ -46,3 +46,7 @@ The shared header links to /watch, /story and /cart. The /watch page includes th
 ## 3D foundation
 
 Visit /watch and select Load 3D preview for the motionless placeholder watch. It includes responsive camera framing, lighting, loading/error recovery and an SVG alternative. Use static view to release the renderer. See [the canvas architecture](docs/THREE_FOUNDATION.md) for reduced-motion behavior and dependency compatibility, and [the placeholder watch](docs/PLACEHOLDER_WATCH.md) for model scope.
+
+## GLB pipeline (awaiting approved asset)
+
+The model-loading pipeline is implemented with an empty manifest, so /watch still shows the placeholder. See [asset approval, mapping and failure handling](docs/MODEL_PIPELINE.md). Phase 6 remains pending until the approved watch GLB is integrated and validated.

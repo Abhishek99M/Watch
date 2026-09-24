@@ -1,0 +1,15 @@
+{
+  "embeddedAnimation": true,
+  "duration": 60,
+  "clockwise": true,
+  "seamlessLoop": true,
+  "defaultPaused": true,
+  "playChangesHandOrientation": true,
+  "pivotFixed": true,
+  "pauseFreezes": true,
+  "explosionPauses": true,
+  "reassemblyRequiresManualPlay": true,
+  "reducedMotionNoAutoplay": true,
+  "explicitPlayWithReducedMotion": true,
+  "pageErrors": []
+}

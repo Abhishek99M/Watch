@@ -1,0 +1,80 @@
+{
+  "model": {
+    "url": "/models/aurel-veil.glb",
+    "source": "Original Aurel Veil V11 procedural watch; user selected for this project.",
+    "license": "Project-authored geometry and textures; retained source in prototypes/atelier/model-study-v11. No third-party watch mesh.",
+    "components": {
+      "Case": [
+        2
+      ],
+      "Crown": [
+        5
+      ],
+      "Caseback": [
+        8
+      ],
+      "Movement": [
+        13,
+        20
+      ],
+      "Dial": [
+        27
+      ],
+      "HourHand": [
+        35
+      ],
+      "MinuteHand": [
+        37
+      ],
+      "SecondHand": [
+        39,
+        41
+      ],
+      "Bezel": [
+        44
+      ],
+      "Crystal": [
+        47
+      ],
+      "Strap": [
+        49,
+        52,
+        55,
+        60,
+        65,
+        70,
+        75,
+        80,
+        85,
+        90,
+        95,
+        100,
+        105,
+        110,
+        115,
+        120,
+        125,
+        130,
+        135,
+        140,
+        145,
+        150,
+        155,
+        160,
+        165,
+        170,
+        175,
+        180,
+        185,
+        190,
+        195
+      ]
+    },
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "presentation": "aurel-veil-v11"
+  }
+}

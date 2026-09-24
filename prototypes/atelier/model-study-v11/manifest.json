@@ -1,0 +1,839 @@
+{
+  "name": "Aurel Veil - Steel",
+  "source": "build-model.mjs",
+  "status": "Visual review - Phase 6 pending",
+  "animation": {
+    "name": "Seconds_Sweep_60s",
+    "duration": 60,
+    "direction": "clockwise",
+    "target": "seconds_hand"
+  },
+  "bytes": 13618624,
+  "triangles": 291094,
+  "meshes": 155,
+  "components": [
+    {
+      "name": "case",
+      "role": "Case",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "crown",
+      "role": "Crown",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        7,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "caseback",
+      "role": "Caseback",
+      "position": [
+        0,
+        0,
+        -3
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        -23
+      ]
+    },
+    {
+      "name": "movement",
+      "role": "Movement",
+      "position": [
+        0,
+        0,
+        -1.75
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        -13
+      ]
+    },
+    {
+      "name": "bridges",
+      "role": "Movement",
+      "position": [
+        0,
+        0,
+        0.05
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        -5
+      ]
+    },
+    {
+      "name": "dial",
+      "role": "Dial",
+      "position": [
+        0,
+        0,
+        1.75
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        11
+      ]
+    },
+    {
+      "name": "hour_hand",
+      "role": "HourHand",
+      "position": [
+        0,
+        0,
+        2.55
+      ],
+      "rotation": [
+        0,
+        0,
+        0.9599310885968813
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        17
+      ]
+    },
+    {
+      "name": "minute_hand",
+      "role": "MinuteHand",
+      "position": [
+        0,
+        0,
+        2.96
+      ],
+      "rotation": [
+        0,
+        0,
+        -1.0471975511965976
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        20
+      ]
+    },
+    {
+      "name": "seconds_hand",
+      "role": "SecondHand",
+      "position": [
+        0,
+        -8.1,
+        2.03
+      ],
+      "rotation": [
+        0,
+        0,
+        2.356194490192345
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        23
+      ]
+    },
+    {
+      "name": "hand_pin",
+      "role": "SecondHand",
+      "position": [
+        0,
+        0,
+        3.6
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        25
+      ]
+    },
+    {
+      "name": "bezel",
+      "role": "Bezel",
+      "position": [
+        0,
+        0,
+        2.83
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        31
+      ]
+    },
+    {
+      "name": "crystal",
+      "role": "Crystal",
+      "position": [
+        0,
+        0,
+        4.03
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        40
+      ]
+    },
+    {
+      "name": "end_link_lower",
+      "role": "Strap",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "end_link_upper",
+      "role": "Strap",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_01",
+      "role": "Strap",
+      "position": [
+        0,
+        -26.09752166387872,
+        -3.3433015687750647
+      ],
+      "rotation": [
+        0.8415,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_02",
+      "role": "Strap",
+      "position": [
+        0,
+        -29.423085474941686,
+        -7.211518975006637
+      ],
+      "rotation": [
+        0.9985,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_03",
+      "role": "Strap",
+      "position": [
+        0,
+        -32.02488815185064,
+        -11.492706328857073
+      ],
+      "rotation": [
+        1.1555,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_04",
+      "role": "Strap",
+      "position": [
+        0,
+        -33.83892948436631,
+        -16.081553226446836
+      ],
+      "rotation": [
+        1.3125,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_05",
+      "role": "Strap",
+      "position": [
+        0,
+        -34.82058693916049,
+        -20.86518132815083
+      ],
+      "rotation": [
+        1.4695,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_06",
+      "role": "Strap",
+      "position": [
+        0,
+        -34.94571330320764,
+        -25.725920986331012
+      ],
+      "rotation": [
+        1.6265,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_07",
+      "role": "Strap",
+      "position": [
+        0,
+        -34.21123066684282,
+        -30.544205731630253
+      ],
+      "rotation": [
+        1.7835,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_08",
+      "role": "Strap",
+      "position": [
+        0,
+        -32.635206135447106,
+        -35.20151341806543
+      ],
+      "rotation": [
+        1.9405000000000001,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_09",
+      "role": "Strap",
+      "position": [
+        0,
+        -30.256407407373157,
+        -39.58328167942554
+      ],
+      "rotation": [
+        2.0975,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_10",
+      "role": "Strap",
+      "position": [
+        0,
+        -27.13334915018776,
+        -43.58172598138145
+      ],
+      "rotation": [
+        2.2545,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_11",
+      "role": "Strap",
+      "position": [
+        0,
+        -23.342853632859757,
+        -47.09849094970502
+      ],
+      "rotation": [
+        2.4115,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_12",
+      "role": "Strap",
+      "position": [
+        0,
+        -18.97816102005385,
+        -50.04706975613735
+      ],
+      "rotation": [
+        2.5685000000000002,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_13",
+      "role": "Strap",
+      "position": [
+        0,
+        -14.146635812286778,
+        -52.354932048859865
+      ],
+      "rotation": [
+        2.7255,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_lower_14",
+      "role": "Strap",
+      "position": [
+        0,
+        -8.967125849872382,
+        -53.96530808386069
+      ],
+      "rotation": [
+        2.8825,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_01",
+      "role": "Strap",
+      "position": [
+        0,
+        26.09752166387872,
+        -3.3433015687750647
+      ],
+      "rotation": [
+        -0.8415,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_02",
+      "role": "Strap",
+      "position": [
+        0,
+        29.423085474941686,
+        -7.211518975006637
+      ],
+      "rotation": [
+        -0.9985,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_03",
+      "role": "Strap",
+      "position": [
+        0,
+        32.02488815185064,
+        -11.492706328857073
+      ],
+      "rotation": [
+        -1.1555,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_04",
+      "role": "Strap",
+      "position": [
+        0,
+        33.83892948436631,
+        -16.081553226446836
+      ],
+      "rotation": [
+        -1.3125,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_05",
+      "role": "Strap",
+      "position": [
+        0,
+        34.82058693916049,
+        -20.86518132815083
+      ],
+      "rotation": [
+        -1.4695,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_06",
+      "role": "Strap",
+      "position": [
+        0,
+        34.94571330320764,
+        -25.725920986331012
+      ],
+      "rotation": [
+        -1.6265,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_07",
+      "role": "Strap",
+      "position": [
+        0,
+        34.21123066684282,
+        -30.544205731630253
+      ],
+      "rotation": [
+        -1.7835,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_08",
+      "role": "Strap",
+      "position": [
+        0,
+        32.635206135447106,
+        -35.20151341806543
+      ],
+      "rotation": [
+        -1.9405000000000001,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_09",
+      "role": "Strap",
+      "position": [
+        0,
+        30.256407407373157,
+        -39.58328167942554
+      ],
+      "rotation": [
+        -2.0975,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_10",
+      "role": "Strap",
+      "position": [
+        0,
+        27.13334915018776,
+        -43.58172598138145
+      ],
+      "rotation": [
+        -2.2545,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_11",
+      "role": "Strap",
+      "position": [
+        0,
+        23.342853632859757,
+        -47.09849094970502
+      ],
+      "rotation": [
+        -2.4115,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_12",
+      "role": "Strap",
+      "position": [
+        0,
+        18.97816102005385,
+        -50.04706975613735
+      ],
+      "rotation": [
+        -2.5685000000000002,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_13",
+      "role": "Strap",
+      "position": [
+        0,
+        14.146635812286778,
+        -52.354932048859865
+      ],
+      "rotation": [
+        -2.7255,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "bracelet_upper_14",
+      "role": "Strap",
+      "position": [
+        0,
+        8.967125849872382,
+        -53.96530808386069
+      ],
+      "rotation": [
+        -2.8825,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "folding_clasp",
+      "role": "Strap",
+      "position": [
+        0,
+        0,
+        -54.2
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "ownership": "Original authored procedural geometry and texture source retained alongside the asset; no external watch mesh used; external CC0 studio environment credited in ASSET-CREDITS.md",
+  "limitations": [
+    "Illustrative movement, not an engineered caliber",
+    "Visual approval and real-device testing remain pending"
+  ],
+  "materialSource": "bake-materials.js: original embedded radial dial and metal-finishing roughness maps"
+}

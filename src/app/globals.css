@@ -132,10 +132,17 @@ button { font: inherit; }
 /* Phase 4: reserve scene space before importing any WebGL code. */
 .watch-foundation { padding-block: var(--space-section); }
 .scene-preview { margin: var(--space-12) 0; max-width: 60rem; }
-.scene-stage { position: relative; width: 100%; height: clamp(20rem, 50vw, 34rem); background: var(--color-surface); border: 1px solid var(--color-rule); }
-.scene-static { display: block; width: 100%; height: 100%; }
+.scene-stage { position: relative; width: 100%; height: clamp(26rem, 65vw, 48rem); background: var(--color-surface); border: 1px solid var(--color-rule); }
+.scene-static { display: block; width: 100%; height: 100%; object-fit: contain; }
 .scene-canvas { position: absolute; inset: 0; }
 .scene-canvas canvas { display: block; width: 100%; height: 100%; }
 .scene-status { position: absolute; inset: auto var(--space-4) var(--space-4); background: var(--color-canvas); color: var(--color-ink); padding: var(--space-3); }
 .scene-controls { display: grid; justify-items: start; gap: var(--space-4); padding-block: var(--space-6); }
 .scene-preview figcaption { font-size: var(--text-small); border-top: 1px solid var(--color-rule); padding-top: var(--space-4); }
+.scene-render-surface { position: absolute; inset: 0; }
+.scene-render-surface canvas { cursor: grab; }
+.scene-render-surface canvas:active { cursor: grabbing; }
+.scene-render-surface canvas:focus-visible { outline: 2px solid var(--color-ink); outline-offset: -4px; }
+.scene-orbit-controls { position: absolute; bottom: 12px; right: 12px; display: flex; gap: 8px; }
+.scene-orbit-controls button { min-width: 44px; min-height: 44px; padding: 8px 12px; border: 1px solid #666; background: #111e; color: #f5f0e6; cursor: pointer; }
+.scene-orbit-controls button:focus-visible { outline: 2px solid #f5f0e6; outline-offset: 2px; }

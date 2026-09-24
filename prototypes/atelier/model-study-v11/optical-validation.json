@@ -1,0 +1,12 @@
+{
+  "crystalSignedVolumeMm3": 641.9834843894396,
+  "crystalCenterNormalsOutward": true,
+  "modelBytes": 13618624,
+  "triangles": 291094,
+  "notes": [
+    "Crystal IOR 1.46 is an optical-glass approximation, not measured sapphire",
+    "Geometry and materials unchanged between GLB and studio imports"
+  ],
+  "surfaceTrianglesChecked": 289812,
+  "collapsedTextureTriangles": 0
+}

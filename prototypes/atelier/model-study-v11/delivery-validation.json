@@ -1,0 +1,20 @@
+{
+  "bytes": 13618624,
+  "sha256": "f89af1b207e827fe287027b44b2751eec8b648e88a5e81a1f4ed3e9061fce5ae",
+  "animations": [
+    "Seconds_Sweep_60s"
+  ],
+  "renders": {
+    "beauty": true,
+    "bracelet": true,
+    "dial": true
+  },
+  "links": {
+    "index.html": 200,
+    "comparison.html": 200,
+    "aurel-veil.glb": 200,
+    "beauty-final.jpg": 200,
+    "bracelet-final.jpg": 200,
+    "dial-final.jpg": 200
+  }
+}
