@@ -40,17 +40,35 @@ export function createExplodedAssembly(parts: AssemblyPart[]) {
     }
     return progress;
   }
-  function bounds() {
-    const box = new Box3();
-    for (const { object } of homes) box.expandByObject(object, true);
-    return box;
-  }
-  // Endpoint union bounds all monotone translation paths, including staged ones.
   apply(0);
-  const envelope = bounds();
-  apply(1); envelope.union(bounds()); apply(0);
+  // Cache each component's actual world bounds once, not one oversized box for
+  // the entire explosion. Translation preserves these conservative bounds.
+  const frames = homes.map(home => {
+    const box = new Box3().setFromObject(home.object, true);
+    const offset = home.offset.clone();
+    if (home.object.parent) {
+      const matrix = home.object.parent.matrixWorld;
+      offset.applyMatrix4(matrix).sub(new Vector3().applyMatrix4(matrix));
+    }
+    const corners: Vector3[] = [];
+    if (!box.isEmpty()) for (const x of [box.min.x, box.max.x]) for (const y of [box.min.y, box.max.y]) for (const z of [box.min.z, box.max.z]) corners.push(new Vector3(x, y, z));
+    return { corners, offset, interval: home.interval };
+  });
+  const envelope = new Box3();
+  for (const { corners, offset } of frames) for (const corner of corners) {
+    envelope.expandByPoint(corner); envelope.expandByPoint(corner.clone().add(offset));
+  }
+  const points = frames.flatMap(frame => frame.corners.map(point => point.clone()));
+  function framingPoints() {
+    let index = 0;
+    for (const { corners, offset, interval } of frames) {
+      const t = Math.max(0, Math.min(1, (progress - interval[0]) / (interval[1] - interval[0])));
+      for (const corner of corners) points[index++].copy(corner).addScaledVector(offset, t * t * (3 - 2 * t));
+    }
+    return points;
+  }
   return {
-    envelope,
+    envelope, framingPoints,
     get progress() { return progress; },
     apply,
     dispose() { if (!disposed) { apply(0); disposed = true; } },

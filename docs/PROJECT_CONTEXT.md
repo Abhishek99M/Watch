@@ -1,6 +1,6 @@
 # Project context
 
-Phases 0 through 6 are merged. Phase 7 is implemented on feat/phase-7-exploded-view and awaits PR review and explicit merge approval. The project uses Next.js 16.3.5, React 19.2.8, strict TypeScript, Tailwind 4, ESLint and an npm lockfile.
+Phases 0 through 7 are merged (Phase 7: PR #9). Phase 8 is implemented on feat/phase-8-cinematic-scroll; PR review and explicit merge approval remain pending. The project uses Next.js 16.3.5, React 19.2.8, strict TypeScript, Tailwind 4, ESLint and an npm lockfile.
 
 Phase 2 supplies shared tokens, buttons/links, headings, badges, product cards and feedback states. The /design-system reference is noindex and uses illustrative content. See DESIGN_SYSTEM.md.
 
@@ -26,7 +26,7 @@ Final repository checks, lint, strict types, production build and dependency aud
 
 V1-V10 and historical migration helpers are archived intact in prototypes/atelier/archive/2026-09-24, with an inventory of 6,405 preserved study files. No old study assets were deleted. V11 owns its loader/exporter/controls dependencies; shared Three.js modules remain in atelier/assets/vendor. Reference-watch and comparison links were verified after archiving. Portable Blender remains in archived V3's .tools directory.
 
-Phase 6 was merged through PR #8. Phase 7 uses the actual 43-group mapping and preserved home transforms; see EXPLODED_VIEW.md. Phase 8 cinematic scrolling starts only after Phase 7 review. The Phase 7 PR must remain open until the user explicitly authorizes merging.
+Phase 6 was merged through PR #8. Phase 7 uses the actual 43-group mapping and preserved home transforms; see EXPLODED_VIEW.md. Phase 7 was merged through PR #9. Phase 8 adds the cinematic scroll timeline; subsequent phases remain pending.
 
 Approved product content, payment decisions and a deployment domain remain outstanding. Vercel previews use vercel.json's Next.js preset/default output; local .vercel metadata is ignored.
 
@@ -55,3 +55,21 @@ Camera framing is separate and preserves the original assembled V11 view. No
 scroll listeners, autoplay, new dependencies or changes to the approved GLB were
 introduced. Context loss, static view, retry and route exit retain existing recovery.
 See EXPLODED_VIEW.md and assembly-validation/ for implementation and evidence.
+
+
+## Phase 8 implementation
+
+The optional V11 preview offers a native-scroll cinematic mode: camera approach,
+staged separation, then a still inspection hold. The existing absolute assembly
+controller, approved asset and rendering quality are preserved. Scroll owns the
+camera only while active; a persistent Start/Exit button retains keyboard focus.
+Reduced motion uses manual inspection. Exiting, failed cinematic downloads and
+context-loss recovery restore manual assembled access. No later-phase movement,
+material narrative, reassembly section or commerce features were added.
+See CINEMATIC_SCROLL.md and cinematic-validation/ for design and evidence.
+
+
+Phase 8 review refinement: the cinematic watch now approaches before opening.
+Camera rotation and separation overlap; current component bounds replace the
+full explosion envelope for a larger, clipping-safe inspection composition.
+The original manual inspection framing and V11 rendering settings are unchanged.

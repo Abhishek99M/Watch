@@ -6,6 +6,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadStudioEnvironment } from './studio-environment';
 import type { AssemblyPreviewHandle } from '@/components/three/assembly-controls';
 import { createV11Assembly } from './v11-assembly';
+import { watchTimeline } from '@/animations/watch-timeline';
+import { frameCinematic } from './cinematic-camera';
 import { frameAssembly } from './exploded-assembly';
 import { createWatchStudio } from './watch-studio';
 import { SceneLighting } from './scene-lighting';
@@ -34,6 +36,7 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
     let studio: ReturnType<typeof createWatchStudio> | undefined;
     let controls: OrbitControls | undefined;
     let assembly: ReturnType<typeof createV11Assembly> | undefined;
+    let storyProgress: number | null = null;
     const controller = new AbortController();
     const camera = new PerspectiveCamera(40, 1, 0.1, 50);
     const invalidate = () => { if (!stopped && !failed) store?.getState().invalidate(); };
@@ -52,19 +55,21 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
       else { camera.position.set(0, 0.25, 4.8 / Math.min(width / height, 1)); camera.lookAt(0, 0, 0); }
       if (controls) {
         controls.target.copy(studio?.target ?? new Vector3());
-        if (assembly && assembly.progress > 0) frameAssembly(camera, assembly.envelope, controls.target);
+        if (assembly && storyProgress !== null) {
+          frameCinematic(camera, controls.target, assembly.framingPoints(), watchTimeline(storyProgress));
+        } else if (assembly && assembly.progress > 0) frameAssembly(camera, assembly.envelope, controls.target);
         controls.update();
       }
       invalidate();
     };
     const zoom = (factor: number) => {
-      if (!controls) return;
+      if (!controls || storyProgress !== null) return;
       const offset = camera.position.clone().sub(controls.target);
       offset.setLength(Math.max(controls.minDistance, Math.min(controls.maxDistance, offset.length() * factor)));
       camera.position.copy(controls.target).add(offset); controls.update(); invalidate();
     };
     const keyboard = (event: KeyboardEvent) => {
-      if (!controls || !['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','=','-','Home'].includes(event.key)) return;
+      if (!controls || storyProgress !== null || !['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','=','-','Home'].includes(event.key)) return;
       event.preventDefault();
       if (event.key === 'Home') { reset(); return; }
       if (['+','=','-'].includes(event.key)) { zoom(event.key === '-' ? 1.12 : 1 / 1.12); return; }
@@ -138,12 +143,30 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
         store = root.render(<SceneBoundary onError={fail}>{studio ? <primitive object={studio.lights} /> : <SceneLighting studio={Boolean(asset)} />}{asset ? <primitive object={asset.object} /> : <PlaceholderWatch />}</SceneBoundary>);
         resize();
         if (assembly) onAssemblyReady?.({ setProgress(value) {
-          if (stopped || failed || !assembly) return;
+          if (stopped || failed || !assembly || storyProgress !== null) return;
           try {
             const wasAssembled = assembly.progress === 0;
             assembly.apply(value);
             if (wasAssembled !== (assembly.progress === 0)) reset();
             invalidate();
+          } catch { fail(); }
+        }, setStoryProgress(value) {
+          if (stopped || failed || !assembly || !controls) return;
+          try {
+            const pose = watchTimeline(value ?? 0);
+            const previous = storyProgress === null ? null : watchTimeline(storyProgress);
+            const modeChanged = (storyProgress === null) !== (value === null);
+            storyProgress = value === null ? null : pose.progress;
+            controls.enabled = value === null;
+            canvas.style.touchAction = value === null ? 'none' : 'pan-y';
+            canvas.tabIndex = value === null ? 0 : -1;
+            if (modeChanged) setInteractive(value === null);
+            canvas.setAttribute('aria-label', value === null
+              ? 'Interactive watch. Drag to rotate, scroll or pinch to zoom. Arrow keys rotate, plus and minus zoom, Home resets the view.'
+              : 'Watch assembly controlled by page scrolling. Exit cinematic view for manual exploration.');
+            if (!modeChanged && previous?.approach === pose.approach && previous.camera === pose.camera && previous.separation === pose.separation) return;
+            assembly.apply(pose.separation);
+            reset();
           } catch { fail(); }
         } });
       } catch { fail(); }
@@ -163,7 +186,7 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
     <div className="scene-render-surface" ref={host} />
     {interactive && <div className="scene-orbit-controls" aria-label="Watch view controls">
       <button type="button" onClick={() => interaction.current?.zoom(1 / 1.12)} aria-label="Zoom in">+</button>
-      <button type="button" onClick={() => interaction.current?.zoom(1.12)} aria-label="Zoom out">−</button>
+      <button type="button" onClick={() => interaction.current?.zoom(1.12)} aria-label="Zoom out">âˆ’</button>
       <button type="button" onClick={() => interaction.current?.reset()}>Reset view</button>
     </div>}
   </div>;
