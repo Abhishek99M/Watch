@@ -1,7 +1,8 @@
 'use client';
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ComponentType } from 'react';
 import Image from 'next/image';
-import { AssemblyControls, type AssemblyPreviewHandle } from './assembly-controls';
+import type { AssemblyPreviewHandle } from './assembly-controls';
+import { CinematicPreview } from './cinematic-preview';
 import { StaticWatch } from './static-watch';
 import { Button } from '@/components/ui/button';
 import { ErrorState } from '@/components/ui/feedback';
@@ -48,12 +49,13 @@ function SceneAttempt({ source, onRetry, onClose, onPlaceholder }: {
   }, [onError]);
 
   return <>
+    <CinematicPreview controller={ready && !failed ? assembly : null}>
     <div className="scene-stage">
       {source === 'placeholder' ? <StaticWatch /> : <WatchPoster />}
       {!failed && Scene && <SceneBoundary onError={onError}><Scene source={source} onReady={onReady} onError={onError} onAssemblyReady={setAssembly} /></SceneBoundary>}
       {!failed && !ready && <p className="scene-status" role="status">Loading 3D preview…</p>}
     </div>
-    {ready && !failed && assembly && <AssemblyControls controller={assembly} />}
+    </CinematicPreview>
     <div className="scene-controls">
       {failed
         ? <ErrorState title="3D preview unavailable" action={<Button variant="secondary" onClick={onRetry}>Retry 3D preview</Button>}>

@@ -212,3 +212,34 @@ SwiftShader tests: context-loss reloads exceeded readiness timeouts and the long
 assembly test exceeded its total budget. CI now uses one browser worker, matching
 the local production run; local defaults remain two. Rendering quality, the
 application loading deadline, assertions and test timeouts are unchanged.
+
+
+## Phase 8 validation evidence - 2026-09-24
+
+Windows / installed Chrome with SwiftShader:
+- Repository integrity, lint, strict TypeScript and the final production build pass.
+- Rendering compatibility and asset-equivalence unit checks pass; the committed
+  V11 derivative remains equivalent to its rebuilt content, with no reencoded images.
+- Dependency audit: zero vulnerabilities. GSAP 3.15.0 is the only added package.
+- Initial complete production run: 70/71 passed. The new Page Down check failed;
+  the mode toggle now retains its DOM identity/focus, and the keyboard test focuses
+  the visible control before sending Page Down. The final Phase 8 production
+  recheck passes all four tests, including the subsequently added chunk-failure case.
+- Real V11 captures cover forward/reverse visual equivalence, unchanged hold images,
+  pixel-identical assembled restoration on exit, native wheel and explicit touch
+  input, Page Down, focus retention, seven widths, motion-preference changes,
+  refresh, context loss/retry, route exit and failed cinematic chunk downloads.
+- The inspection hold is checked with actual WebGL draw-call counts: scrolling
+  within the hold causes no additional draws. Numerical timeline coverage includes
+  finite input, clamping, 100 repeated reverse traversals and exact endpoints.
+- Desktop and narrow-phone framing/control captures are in cinematic-validation/.
+
+The first development visual test used a five-second polling window that was
+insufficient for full-resolution software WebGL; progress assertions now allow
+20 seconds while preserving the same exact pose assertions. Explicit touch events
+replaced an ineffective browser synthetic gesture command. Application loading
+still has a 12-second deadline. The complete CI job allows 30 minutes for serial
+development and production suites; individual application behavior is unchanged.
+Final full-suite GitHub results are recorded on the Phase 8 PR before handoff.
+Physical-device performance, Safari/Firefox and screen-reader audits remain later
+release gates; the current captures do not certify those environments.

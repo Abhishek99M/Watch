@@ -1,8 +1,8 @@
-﻿'use client';
+'use client';
 import { useId, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
-export type AssemblyPreviewHandle = { setProgress: (value: number) => void };
+export type AssemblyPreviewHandle = { setProgress: (value: number) => void; setStoryProgress: (value: number | null) => void };
 
 export function AssemblyControls({ controller }: { controller: AssemblyPreviewHandle }) {
   const id = useId();

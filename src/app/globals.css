@@ -154,3 +154,17 @@ button { font: inherit; }
 .assembly-controls input[type="range"] { display: block; width: 100%; min-height: 44px; margin: var(--space-2) 0; accent-color: var(--color-ink); cursor: pointer; }
 .assembly-controls input:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
 .assembly-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+/* Phase 8: sticky native-scroll stage; no document scroll interception. */
+.watch-story { --story-top: 88px; }
+.watch-story.is-running { height: 400svh; }
+.is-running .watch-story-sticky { position: sticky; top: var(--story-top); }
+.is-running .scene-stage { height: max(180px, calc(100svh - 300px)); max-height: 48rem; }
+.watch-story-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; padding-block: 1rem; }
+.watch-story-toolbar p { margin: 0; }
+.is-running .watch-story-toolbar > p:first-child { width: 100%; font-family: var(--font-editorial); font-size: clamp(1.25rem, 3vw, 2rem); }
+.is-running .scene-render-surface canvas { cursor: default; }
+@media (max-height: 540px) {
+  .is-running .scene-stage { height: 42svh; min-height: 100px; }
+  .watch-story-toolbar { gap: 0.25rem 1rem; padding-block: 0.25rem; }
+}
