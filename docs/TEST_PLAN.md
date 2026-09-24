@@ -205,3 +205,10 @@ The in-memory check leaves the committed GLB untouched for browser tests.
 Final Phase 7 typecheck passed. Intel Direct3D11 assembled-view comparison passed:
 0.01752/255 mean RGB difference from V11, zero camera Reset difference and no website
 warnings. Existing drag, pinch, keyboard and zoom checks also passed.
+
+
+The first Phase 7 Linux CI run exposed CPU contention between the two full-watch
+SwiftShader tests: context-loss reloads exceeded readiness timeouts and the long
+assembly test exceeded its total budget. CI now uses one browser worker, matching
+the local production run; local defaults remain two. Rendering quality, the
+application loading deadline, assertions and test timeouts are unchanged.

@@ -1,7 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:43170';
 export default defineConfig({
-  testDir: './tests', fullyParallel: true, workers: 2, forbidOnly: !!process.env.CI,
+  // SwiftShader watch scenes saturate shared CI CPUs; concurrent GLB retries
+  // can exceed the real application deadline even though isolated runs pass.
+  testDir: './tests', fullyParallel: true, workers: process.env.CI ? 1 : 2, forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0, reporter: 'list',
   use: { baseURL, trace: 'retain-on-failure', channel: process.env.PLAYWRIGHT_CHANNEL, launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] } },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
