@@ -21,6 +21,7 @@ test('embedded textured GLB loads, labels the model and offers the procedural pl
   await manifest(page);
   await page.route('**/models/test-watch.glb', route => route.fulfill({ body: fixtureGlb({ texture: 'valid' }), contentType: 'model/gltf-binary' }));
   await activate(page);
+  await expect(page.getByText('3D preview ready. Drag to rotate; scroll or pinch to zoom.')).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText(modelCaption)).toBeVisible({ timeout: 15_000 });
   expect(errors).toEqual([]);
   await page.getByRole('button', { name: 'View placeholder watch' }).click();
@@ -86,6 +87,7 @@ test('failed model retries a fresh download successfully', async ({ page }) => {
   await activate(page);
   await expect(page.getByRole('alert').filter({ hasText: '3D preview unavailable' })).toBeVisible();
   await page.getByRole('button', { name: 'Retry 3D preview' }).click();
+  await expect(page.getByText('3D preview ready. Drag to rotate; scroll or pinch to zoom.')).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText(modelCaption)).toBeVisible();
   expect(attempts).toBe(2);
 });
@@ -137,6 +139,7 @@ test('configured model stays still across responsive sizes and recovers from con
   await manifest(page);
   await page.route('**/models/test-watch.glb', route => route.fulfill({ body: fixtureGlb({ texture: 'valid', scale: 1000 }) }));
   await activate(page);
+  await expect(page.getByText('3D preview ready. Drag to rotate; scroll or pinch to zoom.')).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText(modelCaption)).toBeVisible({ timeout: 15_000 });
   for (const width of [320, 375, 390, 768, 1024, 1440, 1920]) {
     await page.setViewportSize({ width, height: 900 });
@@ -162,6 +165,7 @@ test('configured model stays still across responsive sizes and recovers from con
   });
   await expect(page.getByRole('alert').filter({ hasText: '3D preview unavailable' })).toBeVisible();
   await page.getByRole('button', { name: 'Retry 3D preview' }).click();
+  await expect(page.getByText('3D preview ready. Drag to rotate; scroll or pinch to zoom.')).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText(modelCaption)).toBeVisible();
 });
 

@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ComponentType } from 'react';
 import Image from 'next/image';
+import { AssemblyControls, type AssemblyPreviewHandle } from './assembly-controls';
 import { StaticWatch } from './static-watch';
 import { Button } from '@/components/ui/button';
 import { ErrorState } from '@/components/ui/feedback';
@@ -21,6 +22,7 @@ function SceneAttempt({ source, onRetry, onClose, onPlaceholder }: {
 }) {
   const [Scene, setScene] = useState<ComponentType<SceneCanvasProps> | null>(null);
   const [ready, setReady] = useState(false);
+  const [assembly, setAssembly] = useState<AssemblyPreviewHandle | null>(null);
   const [modelLoaded, setModelLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -48,9 +50,10 @@ function SceneAttempt({ source, onRetry, onClose, onPlaceholder }: {
   return <>
     <div className="scene-stage">
       {source === 'placeholder' ? <StaticWatch /> : <WatchPoster />}
-      {!failed && Scene && <SceneBoundary onError={onError}><Scene source={source} onReady={onReady} onError={onError} /></SceneBoundary>}
+      {!failed && Scene && <SceneBoundary onError={onError}><Scene source={source} onReady={onReady} onError={onError} onAssemblyReady={setAssembly} /></SceneBoundary>}
       {!failed && !ready && <p className="scene-status" role="status">Loading 3D preview…</p>}
     </div>
+    {ready && !failed && assembly && <AssemblyControls controller={assembly} />}
     <div className="scene-controls">
       {failed
         ? <ErrorState title="3D preview unavailable" action={<Button variant="secondary" onClick={onRetry}>Retry 3D preview</Button>}>

@@ -1,6 +1,6 @@
 # Project context
 
-Phases 0 through 6 are complete. The project uses Next.js 16.3.5, React 19.2.8, strict TypeScript, Tailwind 4, ESLint and an npm lockfile.
+Phases 0 through 6 are merged. Phase 7 is implemented on feat/phase-7-exploded-view and awaits PR review and explicit merge approval. The project uses Next.js 16.3.5, React 19.2.8, strict TypeScript, Tailwind 4, ESLint and an npm lockfile.
 
 Phase 2 supplies shared tokens, buttons/links, headings, badges, product cards and feedback states. The /design-system reference is noindex and uses illustrative content. See DESIGN_SYSTEM.md.
 
@@ -20,13 +20,13 @@ Phase 6 is complete as of 2026-09-24. The user selected original Aurel Veil V11.
 
 Visual-parity correction: the first integration passed functional tests but missed V11's camera, lighting and resolution. The corrected `aurel-veil-v11` presentation profile now transforms the original studio rig through model normalization, restores V11's 1.5-2 DPR and 1.25 glass transmission resolution, and adds drag/touch/keyboard orbit, zoom and Reset. No automatic motion was added. Controlled captures closely match V11: mean absolute channel difference 0.0184/255; optimized-versus-master 0.0129/255; Reset is pixel-identical. See docs/watch-validation/README.md. The upstream Clock warning remains; the unsupported shadow mode was corrected without hiding warnings.
 
-The opt-in preview now uses a bounded local CC0 studio HDR, area-light fill and explicit environment cleanup. The initial/no-JavaScript view uses the selected-watch studio render; procedural fallback remains available. Responsive canvas sizing, retries, context loss and demand rendering are covered. Website playback, explosion and cinematic scroll remain later phases; the source viewer retains manual playback and assembly inspection.
+The opt-in preview now uses a bounded local CC0 studio HDR, area-light fill and explicit environment cleanup. The initial/no-JavaScript view uses the selected-watch studio render; procedural fallback remains available. Responsive canvas sizing, retries, context loss and demand rendering are covered. Website playback and cinematic scroll remain later phases; the source viewer retains manual playback and assembly inspection.
 
 Final repository checks, lint, strict types, production build and dependency audit pass (zero vulnerabilities). All 62 production browser tests pass in installed Chrome with SwiftShader. Development coverage passed after targeted rechecks of canvas resizing and a transient navigation timeout. Real-model checks cover seven widths, opt-in downloads, reopen/retry, context loss, route exit and failed studio lighting. Desktop/phone captures were reviewed. Physical-device performance and Safari/Firefox/screen-reader QA remain later gates.
 
 V1-V10 and historical migration helpers are archived intact in prototypes/atelier/archive/2026-09-24, with an inventory of 6,405 preserved study files. No old study assets were deleted. V11 owns its loader/exporter/controls dependencies; shared Three.js modules remain in atelier/assets/vendor. Reference-watch and comparison links were verified after archiving. Portable Blender remains in archived V3's .tools directory.
 
-Next task: Phase 7, exploded-view architecture using the actual 43-group mapping and preserved home transforms. Phase 8 handles cinematic scroll. Phase 6 is published in PR #8 from feat/phase-6-glb-pipeline; complete the checked merge before creating the Phase 7 branch.
+Phase 6 was merged through PR #8. Phase 7 uses the actual 43-group mapping and preserved home transforms; see EXPLODED_VIEW.md. Phase 8 cinematic scrolling starts only after Phase 7 review. The Phase 7 PR must remain open until the user explicitly authorizes merging.
 
 Approved product content, payment decisions and a deployment domain remain outstanding. Vercel previews use vercel.json's Next.js preset/default output; local .vercel metadata is ignored.
 
@@ -43,3 +43,15 @@ warnings. The controlled reference/website mean RGB difference was 0.0175 on a
 See [Rendering compatibility](RENDERING_COMPATIBILITY.md) for causes, maintenance,
 tests and the development-server restart requirement. This does not alter the
 GLB or advance the project beyond Phase 6.
+
+
+## Phase 7 implementation
+
+The optional V11 preview has a labeled separation slider and Separate/Reassemble
+buttons below the canvas. A standalone controller evaluates staged translations
+from immutable home transforms. Eleven authored groups move while the case and
+bracelet remain anchored; all 43 mapped groups are validated and restored exactly.
+Camera framing is separate and preserves the original assembled V11 view. No
+scroll listeners, autoplay, new dependencies or changes to the approved GLB were
+introduced. Context loss, static view, retry and route exit retain existing recovery.
+See EXPLODED_VIEW.md and assembly-validation/ for implementation and evidence.

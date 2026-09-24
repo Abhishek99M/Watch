@@ -146,3 +146,11 @@ button { font: inherit; }
 .scene-orbit-controls { position: absolute; bottom: 12px; right: 12px; display: flex; gap: 8px; }
 .scene-orbit-controls button { min-width: 44px; min-height: 44px; padding: 8px 12px; border: 1px solid #666; background: #111e; color: #f5f0e6; cursor: pointer; }
 .scene-orbit-controls button:focus-visible { outline: 2px solid #f5f0e6; outline-offset: 2px; }
+
+.assembly-controls { margin: var(--space-6) 0 0; padding: var(--space-4); border: 1px solid var(--color-rule); min-width: 0; }
+.assembly-controls legend { padding-inline: var(--space-2); }
+.assembly-controls p { margin: 0 0 var(--space-4); font-size: var(--text-small); }
+.assembly-slider-label { display: flex; justify-content: space-between; gap: var(--space-4); }
+.assembly-controls input[type="range"] { display: block; width: 100%; min-height: 44px; margin: var(--space-2) 0; accent-color: var(--color-ink); cursor: pointer; }
+.assembly-controls input:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+.assembly-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }

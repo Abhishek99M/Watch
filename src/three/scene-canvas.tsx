@@ -4,15 +4,18 @@ import { createRoot, type ReconcilerRoot, type RootStore } from '@react-three/fi
 import { ACESFilmicToneMapping, Color, Euler, PCFShadowMap, PerspectiveCamera, Spherical, Vector3, WebGLRenderer, type WebGLRenderTarget } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadStudioEnvironment } from './studio-environment';
+import type { AssemblyPreviewHandle } from '@/components/three/assembly-controls';
+import { createV11Assembly } from './v11-assembly';
+import { frameAssembly } from './exploded-assembly';
 import { createWatchStudio } from './watch-studio';
 import { SceneLighting } from './scene-lighting';
 import { PlaceholderWatch } from './placeholder-watch';
 import { SceneBoundary } from './scene-boundary';
 import { loadConfiguredWatch, type LoadedWatch } from './model-loader';
 
-export type SceneCanvasProps = { source: 'configured' | 'placeholder'; onReady: (isModel: boolean) => void; onError: () => void };
+export type SceneCanvasProps = { source: 'configured' | 'placeholder'; onReady: (isModel: boolean) => void; onError: () => void; onAssemblyReady?: (controller: AssemblyPreviewHandle | null) => void };
 
-export function SceneCanvas({ source, onReady, onError }: SceneCanvasProps) {
+export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: SceneCanvasProps) {
   const host = useRef<HTMLDivElement>(null);
   const interaction = useRef<{ reset: () => void; zoom: (factor: number) => void } | null>(null);
   const [interactive, setInteractive] = useState(false);
@@ -30,6 +33,7 @@ export function SceneCanvas({ source, onReady, onError }: SceneCanvasProps) {
     let environment: WebGLRenderTarget | undefined;
     let studio: ReturnType<typeof createWatchStudio> | undefined;
     let controls: OrbitControls | undefined;
+    let assembly: ReturnType<typeof createV11Assembly> | undefined;
     const controller = new AbortController();
     const camera = new PerspectiveCamera(40, 1, 0.1, 50);
     const invalidate = () => { if (!stopped && !failed) store?.getState().invalidate(); };
@@ -43,9 +47,14 @@ export function SceneCanvas({ source, onReady, onError }: SceneCanvasProps) {
     const pixelRatio = () => studio ? Math.min(Math.max(window.devicePixelRatio || 1, 1.5), 2) : Math.min(window.devicePixelRatio || 1, 1.5);
     const reset = () => {
       const { width, height } = container.getBoundingClientRect();
+      camera.aspect = width / height;
       if (studio) studio.home(camera, width);
       else { camera.position.set(0, 0.25, 4.8 / Math.min(width / height, 1)); camera.lookAt(0, 0, 0); }
-      if (controls) { controls.target.copy(studio?.target ?? new Vector3()); controls.update(); }
+      if (controls) {
+        controls.target.copy(studio?.target ?? new Vector3());
+        if (assembly && assembly.progress > 0) frameAssembly(camera, assembly.envelope, controls.target);
+        controls.update();
+      }
       invalidate();
     };
     const zoom = (factor: number) => {
@@ -95,7 +104,10 @@ export function SceneCanvas({ source, onReady, onError }: SceneCanvasProps) {
           renderer.transmissionResolutionScale = asset.studioTransform ? 1.25 : 1;
           environment = await loadStudioEnvironment(renderer, controller.signal);
           if (stopped) { environment.dispose(); asset.dispose(); return; }
-          if (asset.studioTransform) studio = createWatchStudio(asset, renderer);
+          if (asset.studioTransform) {
+            studio = createWatchStudio(asset, renderer);
+            assembly = createV11Assembly(asset);
+          }
           controls = new OrbitControls(camera, canvas);
           controls.enableDamping = false; controls.enablePan = false; controls.autoRotate = false;
           controls.minDistance = studio?.minDistance ?? 0.8; controls.maxDistance = studio?.maxDistance ?? 12;
@@ -125,6 +137,15 @@ export function SceneCanvas({ source, onReady, onError }: SceneCanvasProps) {
         if (stopped) { root.unmount(); return; }
         store = root.render(<SceneBoundary onError={fail}>{studio ? <primitive object={studio.lights} /> : <SceneLighting studio={Boolean(asset)} />}{asset ? <primitive object={asset.object} /> : <PlaceholderWatch />}</SceneBoundary>);
         resize();
+        if (assembly) onAssemblyReady?.({ setProgress(value) {
+          if (stopped || failed || !assembly) return;
+          try {
+            const wasAssembled = assembly.progress === 0;
+            assembly.apply(value);
+            if (wasAssembled !== (assembly.progress === 0)) reset();
+            invalidate();
+          } catch { fail(); }
+        } });
       } catch { fail(); }
     }
     void initialize();
@@ -134,9 +155,10 @@ export function SceneCanvas({ source, onReady, onError }: SceneCanvasProps) {
       canvas.removeEventListener('webglcontextlost', contextLost); canvas.removeEventListener('keydown', keyboard);
       controls?.removeEventListener('change', invalidate); controls?.dispose();
       if (root) root.unmount(); else renderer?.forceContextLoss();
+      assembly?.dispose(); onAssemblyReady?.(null);
       studio?.dispose(); renderer?.dispose(); asset?.dispose(); environment?.dispose(); canvas.remove();
     };
-  }, [source, onReady, onError]);
+  }, [source, onReady, onError, onAssemblyReady]);
   return <div className="scene-canvas">
     <div className="scene-render-surface" ref={host} />
     {interactive && <div className="scene-orbit-controls" aria-label="Watch view controls">
