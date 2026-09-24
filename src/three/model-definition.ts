@@ -6,6 +6,7 @@ export type ModelDefinition = {
   license: string;
   components: Partial<Record<ComponentRole, number[]>>;
   rotation: [number, number, number];
+  presentation?: 'aurel-veil-v11';
 };
 
 function record(value: unknown): value is Record<string, unknown> {
@@ -33,5 +34,6 @@ export function parseModelDefinition(value: unknown): ModelDefinition | null {
   if (!components.Case || !components.Dial) throw new Error('Case and Dial mappings are required');
   const rotation = model.rotation ?? [0, 0, 0];
   if (!Array.isArray(rotation) || rotation.length !== 3 || !rotation.every(angle => typeof angle === 'number' && Number.isFinite(angle))) throw new Error('Invalid model orientation');
-  return { url: model.url, source: model.source, license: model.license, components, rotation: rotation as [number, number, number] };
+  if (model.presentation !== undefined && model.presentation !== 'aurel-veil-v11') throw new Error('Unknown presentation');
+  return { presentation: model.presentation as ModelDefinition['presentation'], url: model.url, source: model.source, license: model.license, components, rotation: rotation as [number, number, number] };
 }

@@ -1,1 +1,4 @@
 * text=auto eol=lf
+
+# Preserve upstream vendor formatting and collapse it in GitHub reviews.
+prototypes/**/vendor/** linguist-vendored -whitespace

@@ -1,0 +1,8 @@
+{
+  "appliedSignatureGeometry": true,
+  "signatureMeshes": 1,
+  "anisotropicPrimitivesWithTangents": 66,
+  "crystalLocalThickness": 0.65,
+  "rootScale": 0.001,
+  "nominalThicknessMeters": 0.00065
+}

@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: 'The watch | Watch' };
 export default function WatchPage() {
   return <main id="main-content" tabIndex={-1} className="container watch-foundation">
     <SectionHeading level={1} eyebrow="The watch" title="A closer look, soon.">
-      <p>Our watch experience is taking shape. Explore an illustrative watch prototype while the final design and product details are prepared.</p>
+      <p>Our watch experience is taking shape. Explore the Aurel Veil design study in 3D. Product details are still being prepared.</p>
     </SectionHeading>
     <ScenePreview />
     <ButtonLink href="/" variant="secondary">Return home</ButtonLink>

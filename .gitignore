@@ -13,3 +13,17 @@ Thumbs.db
 *.tsbuildinfo
 next-env.d.ts
 .vercel
+
+# Keep only the approved V11 source and its standalone review dependencies.
+/prototypes/*
+!/prototypes/atelier/
+/prototypes/atelier/*
+!/prototypes/atelier/serve.cjs
+!/prototypes/atelier/model-study-v11/
+!/prototypes/atelier/assets/
+/prototypes/atelier/assets/*
+!/prototypes/atelier/assets/vendor/
+/prototypes/atelier/model-study-v11/*.blend*
+/prototypes/atelier/model-study-v11/aurel-veil-base.glb
+/prototypes/atelier/model-study-v11/comparison.html
+**/__pycache__/

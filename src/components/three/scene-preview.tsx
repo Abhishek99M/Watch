@@ -1,5 +1,6 @@
 'use client';
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ComponentType } from 'react';
+import Image from 'next/image';
 import { StaticWatch } from './static-watch';
 import { Button } from '@/components/ui/button';
 import { ErrorState } from '@/components/ui/feedback';
@@ -9,6 +10,10 @@ import type { SceneCanvasProps } from '@/three/scene-canvas';
 const subscribe = () => () => {};
 const clientSnapshot = () => true;
 const serverSnapshot = () => false;
+function WatchPoster() {
+  return <Image className="scene-static" src="/images/aurel-veil.jpg" alt="Aurel Veil design study with a charcoal dial, champagne hands and a steel bracelet" width={1800} height={1350} loading="eager" unoptimized />;
+}
+const modelCaption = 'Aurel Veil design study. Studio image and live 3D use different lighting; the movement is illustrative.';
 const placeholderCaption = 'Illustrative watch prototype. Design, materials and proportions are placeholders, not product specifications.';
 
 function SceneAttempt({ source, onRetry, onClose, onPlaceholder }: {
@@ -42,7 +47,7 @@ function SceneAttempt({ source, onRetry, onClose, onPlaceholder }: {
 
   return <>
     <div className="scene-stage">
-      <StaticWatch />
+      {source === 'placeholder' ? <StaticWatch /> : <WatchPoster />}
       {!failed && Scene && <SceneBoundary onError={onError}><Scene source={source} onReady={onReady} onError={onError} /></SceneBoundary>}
       {!failed && !ready && <p className="scene-status" role="status">Loading 3D preview…</p>}
     </div>
@@ -51,13 +56,13 @@ function SceneAttempt({ source, onRetry, onClose, onPlaceholder }: {
         ? <ErrorState title="3D preview unavailable" action={<Button variant="secondary" onClick={onRetry}>Retry 3D preview</Button>}>
           <p>The static watch and all page information are still available. You can try again or continue without 3D.</p>
         </ErrorState>
-        : <p role="status" className="text-muted">{ready ? '3D preview ready. The scene stays still.' : 'Preparing the watch preview.'}</p>}
+        : <p role="status" className="text-muted">{ready ? (modelLoaded ? '3D preview ready. Drag to rotate; scroll or pinch to zoom.' : '3D preview ready. The scene stays still.') : 'Preparing the watch preview.'}</p>}
       {(failed || modelLoaded) && source !== 'placeholder' && <Button variant="secondary" onClick={onPlaceholder}>View placeholder watch</Button>}
       <Button variant="quiet" onClick={onClose}>Use static view</Button>
     </div>
     <figcaption className="text-muted">{modelLoaded && !failed
-      ? '3D model preview. The static illustration remains an illustrative placeholder.'
-      : placeholderCaption}</figcaption>
+      ? modelCaption
+      : source === 'placeholder' ? placeholderCaption : modelCaption}</figcaption>
   </>;
 }
 
@@ -71,12 +76,12 @@ export function ScenePreview() {
       ? <SceneAttempt key={attempt} source={source} onRetry={() => setAttempt(value => value + 1)} onClose={() => setEnabled(false)}
         onPlaceholder={() => { setSource('placeholder'); setAttempt(value => value + 1); }} />
       : <>
-        <div className="scene-stage"><StaticWatch /></div>
+        <div className="scene-stage"><WatchPoster /></div>
         <div className="scene-controls">
-          <p className="text-muted">A round case, dark dial and brown strap. The 3D view is optional and stays still.</p>
+          <p className="text-muted">A charcoal dial, champagne hands and a steel bracelet. Load the optional 3D view to rotate and explore the watch.</p>
           {hydrated && <Button onClick={() => { setSource('configured'); setEnabled(true); }}>Load 3D preview</Button>}
         </div>
-        <figcaption className="text-muted">{placeholderCaption}</figcaption>
+        <figcaption className="text-muted">{modelCaption}</figcaption>
       </>}
   </figure>;
 }

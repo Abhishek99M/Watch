@@ -1,0 +1,14 @@
+{
+  "source": "prototypes/atelier/model-study-v11/aurel-veil.glb",
+  "output": "public/models/aurel-veil.glb",
+  "masterSha256": "f89af1b207e827fe287027b44b2751eec8b648e88a5e81a1f4ed3e9061fce5ae",
+  "webSha256": "19447c6170a22fa537e6c1e337e704e607350d01f8f382a6c41219bdab16e38d",
+  "masterBytes": 13618624,
+  "webBytes": 8274880,
+  "triangles": 291094,
+  "componentGroups": 43,
+  "animation": "Seconds_Sweep_60s",
+  "maxPositionErrorMeters": 6.083961760347246e-7,
+  "texturePixels": "unchanged",
+  "decoder": "none; KHR_mesh_quantization supported by GLTFLoader"
+}

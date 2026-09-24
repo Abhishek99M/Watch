@@ -33,6 +33,9 @@ jobs:
             npm ci
             npm run lint
             npm run typecheck
+            npm run test:rendering-compat
+            node scripts/prepare-watch.mjs
+            git diff --exit-code -- public/models/aurel-veil.glb public/models/watch.json docs/WATCH_ASSET_VALIDATION.json
             npx playwright install --with-deps chromium
             npm test
             npm run build

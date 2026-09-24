@@ -12,7 +12,7 @@ async function activate(page: Page) {
   await page.goto('/watch');
   await page.getByRole('button', { name: 'Load 3D preview' }).click();
 }
-const modelCaption = '3D model preview. The static illustration remains an illustrative placeholder.';
+const modelCaption = 'Aurel Veil design study. Studio image and live 3D use different lighting; the movement is illustrative.';
 
 test('embedded textured GLB loads, labels the model and offers the procedural placeholder', async ({ page }) => {
   const errors: string[] = [];

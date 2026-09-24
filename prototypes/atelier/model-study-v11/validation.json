@@ -1,0 +1,35 @@
+{
+  "bytes": 13618624,
+  "components": 43,
+  "braceletRows": 28,
+  "meshes": 155,
+  "embeddedImages": 9,
+  "extensions": [
+    "KHR_texture_transform",
+    "KHR_materials_anisotropy",
+    "KHR_materials_transmission",
+    "KHR_materials_volume",
+    "KHR_materials_ior",
+    "KHR_materials_specular"
+  ],
+  "checks": [
+    "GLB 2.0 and byte limit",
+    "Embedded PNG/JPEG textures",
+    "Finite geometry buffers",
+    "No leather material",
+    "Physical crystal",
+    "Actual mesh-node component mapping",
+    "Browser loading",
+    "Supersampled viewport and transmission target",
+    "Correct explosion offsets",
+    "Exact reassembly",
+    "Mobile overflow",
+    "Reduced-motion manual inspection",
+    "No page JavaScript errors"
+  ],
+  "limitations": [
+    "Software WebGL, not physical-device performance QA",
+    "Movement is illustrative",
+    "Website integration and approval pending"
+  ]
+}
