@@ -1,0 +1,31 @@
+{
+  "gpu": "ANGLE (Intel, Intel(R) Iris(R) Xe Graphics (0x00009A49) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "size": {
+    "width": 550,
+    "height": 500
+  },
+  "referenceWarnings": [
+    "THREE.WebGLProgram: Program Info Log: (210,81-129): warning X4122: sum of 0.996094 and -2.98545e-017 cannot be represented accurately in double precision\n(209,37-61): warning X4122: sum of 1 and -1.49272e-017 cannot be represented accurately in double precision\n(210,82-106): warning X4122: sum of 1 and -1.49272e-017 cannot be represented accurately in double precision\n(209,37-61): warning X4122: sum of 1 and -1.66644e-018 cannot be represented accurately in double precision\n(210,82-106): warning X4122: sum of 1 and -1.66644e-018 cannot be represented accurately in double precision",
+    "THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead."
+  ],
+  "masterVsOptimized": {
+    "meanAbsoluteChannelDifference": 0.012505454545454545,
+    "rootMeanSquareChannelDifference": 0.28498378475933955,
+    "channelRange": 255
+  },
+  "referenceVsWebsite": {
+    "meanAbsoluteChannelDifference": 0.017522424242424242,
+    "rootMeanSquareChannelDifference": 0.180302775655537,
+    "channelRange": 255
+  },
+  "resetVsInitial": {
+    "meanAbsoluteChannelDifference": 0,
+    "rootMeanSquareChannelDifference": 0,
+    "channelRange": 255
+  },
+  "mouseDrag": true,
+  "touchPinch": true,
+  "keyboardRotation": true,
+  "buttonZoom": true,
+  "warnings": []
+}

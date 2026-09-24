@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import {chromium} from '@playwright/test';
 import sharp from 'sharp';
-const destination='docs/watch-validation';
+const destination=process.env.WATCH_VALIDATION_DIR ?? 'docs/watch-validation';
 await fs.mkdir(destination,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true,args:process.env.WATCH_NATIVE_GPU === '1' ? [] : ['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const warnings=[];

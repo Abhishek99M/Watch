@@ -180,3 +180,35 @@ compares full GLB structure, exact non-image buffer contents and decoded image
 pixels, retaining a strict checksum for the committed asset. Regression tests
 accept lossless PNG re-encoding and reject changed pixels, geometry and materials.
 The in-memory check leaves the committed GLB untouched for browser tests.
+
+
+## Phase 7 validation (2026-09-24)
+
+- Production build and lint passed. Four numerical assembly tests passed using
+  all 43 actual V11 node transforms/metadata, including quarter progress, reverse,
+  100 repeated cycles, exact local/world restoration, input validation, disposal
+  and portrait/desktop envelope framing.
+- Both new browser tests passed in production: real V11 forward/reverse screenshot
+  equivalence, pixel-identical reassembly, keyboard endpoints, seven widths,
+  reduced-motion idle rendering, static/reopen, context-loss/retry and route exit;
+  invalid V11 metadata recovers to the placeholder without assembly controls.
+- Full local production run: 67/68 passed. The existing retry test raced by using
+  the always-visible poster caption as renderer readiness. After changing these
+  assertions to the actual ready status, all 14 affected GLB tests passed.
+- Initial development stress run passed visual checks but timed out reopening
+  after the largest viewport. Production re-entry is tested at the original
+  viewport after the same seven-width pass; the runtime deadline is unchanged.
+- Software-rendered desktop/mobile inspection images are in assembly-validation/.
+  The approved GLB SHA-256 remains unchanged. Physical-phone performance,
+  Safari/Firefox and screen-reader QA remain later work.
+
+Final Phase 7 typecheck passed. Intel Direct3D11 assembled-view comparison passed:
+0.01752/255 mean RGB difference from V11, zero camera Reset difference and no website
+warnings. Existing drag, pinch, keyboard and zoom checks also passed.
+
+
+The first Phase 7 Linux CI run exposed CPU contention between the two full-watch
+SwiftShader tests: context-loss reloads exceeded readiness timeouts and the long
+assembly test exceeded its total budget. CI now uses one browser worker, matching
+the local production run; local defaults remain two. Rendering quality, the
+application loading deadline, assertions and test timeouts are unchanged.
