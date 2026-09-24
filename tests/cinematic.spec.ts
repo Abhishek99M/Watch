@@ -1,4 +1,15 @@
 import { expect, test, type Page } from '@playwright/test';
+import sharp from 'sharp';
+
+async function visibleHeight(image: Buffer) {
+  const { data, info } = await sharp(image).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  let top = info.height, bottom = 0;
+  for (let y = 0; y < info.height; y++) for (let x = 0; x < info.width; x++) {
+    const i = (y * info.width + x) * info.channels;
+    if (Math.max(data[i], data[i + 1], data[i + 2]) > 45) { top = Math.min(top, y); bottom = Math.max(bottom, y); }
+  }
+  return bottom - top;
+}
 
 async function seek(page: Page, progress: number) {
   await expect(page.locator('.watch-story')).toHaveAttribute('data-progress', /.+/);
@@ -23,6 +34,11 @@ test('V11 cinematic scroll reverses, holds, releases controls and restores the a
   const style = await page.addStyleTag({ content: '.scene-orbit-controls{visibility:hidden}header{visibility:hidden}' });
   const home = await canvas.screenshot();
   await page.getByRole('button', { name: 'Start cinematic view' }).click();
+  await seek(page, 0);
+  const start = await canvas.screenshot({ path: testInfo.outputPath('cinematic-start.png') });
+  await seek(page, 0.18);
+  const approach = await canvas.screenshot({ path: testInfo.outputPath('cinematic-approach.png') });
+  expect(await visibleHeight(approach)).toBeGreaterThan(await visibleHeight(start) * 1.03);
   await seek(page, 0.55);
   const middle = await canvas.screenshot({ path: testInfo.outputPath('cinematic-middle.png') });
   await seek(page, 0.85);
@@ -30,6 +46,7 @@ test('V11 cinematic scroll reverses, holds, releases controls and restores the a
   expect(hold.equals(middle)).toBe(false);
   await seek(page, 0.95); expect((await canvas.screenshot()).equals(hold)).toBe(true);
   await seek(page, 0.55); expect((await canvas.screenshot()).equals(middle)).toBe(true);
+  await seek(page, 0.18); expect((await canvas.screenshot()).equals(approach)).toBe(true);
   await seek(page, 0);
   await style.evaluate(element => element.parentNode?.removeChild(element));
   await canvas.hover(); const before = await page.evaluate(() => scrollY);
@@ -37,7 +54,8 @@ test('V11 cinematic scroll reverses, holds, releases controls and restores the a
   await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before);
   await page.getByRole('button', { name: 'Exit cinematic view' }).focus();
   const wheelPosition = await page.evaluate(() => scrollY);
-  await page.keyboard.press('PageDown');
+  await canvas.screenshot(); // Settle the preceding wheel-driven WebGL frame.
+  await page.keyboard.press('PageDown', { delay: 100 });
   await expect.poll(() => page.evaluate(() => scrollY), { timeout: 20_000 }).toBeGreaterThan(wheelPosition);
   await page.getByRole('button', { name: 'Exit cinematic view' }).click();
   await expect(page.getByRole('slider')).toHaveValue('0');
@@ -45,6 +63,16 @@ test('V11 cinematic scroll reverses, holds, releases controls and restores the a
   const hide = await page.addStyleTag({ content: '.scene-orbit-controls{visibility:hidden}header{visibility:hidden}' });
   expect((await canvas.screenshot()).equals(home)).toBe(true);
   await hide.evaluate(element => element.parentNode?.removeChild(element));
+  expect(errors).toEqual([]);
+});
+
+test('cinematic framing remains usable across seven widths, reduced motion and refresh', async ({ page }, testInfo) => {
+  test.setTimeout(180_000);
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.setViewportSize({ width: 1000, height: 900 });
+  await page.goto('/watch'); await page.getByRole('button', { name: 'Load 3D preview' }).click();
+  await expect(page.getByRole('slider')).toBeVisible({ timeout: 15_000 });
   await page.getByRole('button', { name: 'Start cinematic view' }).click();
   for (const width of [320, 375, 390, 768, 1024, 1440, 1920]) {
     await page.setViewportSize({ width, height: 900 }); await seek(page, 0.85);
@@ -79,7 +107,8 @@ test('cinematic touch scrolling, idle rendering and context-loss recovery retain
   });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/watch'); await page.getByRole('button', { name: 'Load 3D preview' }).click();
-  await page.getByRole('button', { name: 'Start cinematic view' }).click({ timeout: 15_000 });
+  await expect(page.getByRole('slider')).toBeVisible({ timeout: 15_000 });
+  await page.getByRole('button', { name: 'Start cinematic view' }).click();
   await seek(page, 0.4);
   const session = await context.newCDPSession(page);
   await session.send('Emulation.setTouchEmulationEnabled', { enabled: true });

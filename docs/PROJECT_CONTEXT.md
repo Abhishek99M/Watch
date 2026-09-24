@@ -67,3 +67,9 @@ Reduced motion uses manual inspection. Exiting, failed cinematic downloads and
 context-loss recovery restore manual assembled access. No later-phase movement,
 material narrative, reassembly section or commerce features were added.
 See CINEMATIC_SCROLL.md and cinematic-validation/ for design and evidence.
+
+
+Phase 8 review refinement: the cinematic watch now approaches before opening.
+Camera rotation and separation overlap; current component bounds replace the
+full explosion envelope for a larger, clipping-safe inspection composition.
+The original manual inspection framing and V11 rendering settings are unchanged.

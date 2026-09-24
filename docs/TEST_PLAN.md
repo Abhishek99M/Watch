@@ -129,7 +129,7 @@ On 2026-09-21, Windows / installed Chrome with SwiftShader:
 
 The initial test server start conflicted with an existing server. Local tests now optionally reuse PLAYWRIGHT_BASE_URL; localhost was required by that server's development-origin policy. Initial new error selectors also matched Next.js's route announcer; they were scoped to the preview error. The corrected targeted and full suites passed. Playwright's Node transpilation emits an upstream Three.js CommonJS deprecation warning; browser success paths have no console errors. The existing Fiber Clock warning remains documented.
 
-At the 2026-09-21 checkpoint, Phase 6 was incomplete because no approved asset was available. That empty-manifest requirement is superseded by the V11 integration below. Follow MODEL_PIPELINE.md to inventory and map the actual asset, review materials/textures, size, scale and orientation, and repeat browser/failure checks before marking ✅. Physical-device/GPU and screen-reader QA remain pending.
+At the 2026-09-21 checkpoint, Phase 6 was incomplete because no approved asset was available. That empty-manifest requirement is superseded by the V11 integration below. Follow MODEL_PIPELINE.md to inventory and map the actual asset, review materials/textures, size, scale and orientation, and repeat browser/failure checks before marking âœ…. Physical-device/GPU and screen-reader QA remain pending.
 
 ## Phase 6 selected-asset integration, 2026-09-24
 
@@ -243,3 +243,33 @@ development and production suites; individual application behavior is unchanged.
 Final full-suite GitHub results are recorded on the Phase 8 PR before handoff.
 Physical-device performance, Safari/Firefox and screen-reader audits remain later
 release gates; the current captures do not certify those environments.
+
+
+## Phase 8 review refinement - approach before separation
+
+The initial camera retreat was replaced by an approach of up to 8% over the first
+18% of scroll, followed by coordinated separation/camera travel through 80% and a
+stationary hold. Per-component current bounds and perspective centering keep the
+inspection view larger without altering the approved GLB, lens or rendering quality.
+
+Validation on Windows / installed Chrome:
+- Lint, strict types and the production build pass.
+- Six assembly/timeline numerical tests pass. Camera checks use independently
+  transformed mesh vertices across portrait and wide aspects, verify forward
+  approach, and require exact camera restoration and reverse evaluation.
+- All four production cinematic scenarios pass across the focused runs: measured
+  approach growth, reverse/hold image equivalence, exact assembled restoration,
+  keyboard/wheel/touch, seven widths, motion preferences, refresh, idle rendering,
+  context loss/retry, route exit and failed cinematic downloads.
+- The measured desktop approach grows the visible watch height from 482 to 525
+  pixels (about 9%). Updated desktop/mobile and four sequence captures are in
+  cinematic-validation/; these are rendering evidence, not physical-device FPS data.
+- The expanded visual and seven-width checks were split into independent scenarios
+  after their combined software-rendering workload exceeded the overall test budget.
+  Assertions and application loading deadlines remain intact. Keyboard testing lets
+  the preceding wheel frame finish; the touch test waits for model readiness before
+  timing the click, avoiding a combined loading/actionability deadline.
+
+The refined branch now contains 74 tests. Final complete development/production
+results are recorded on PR #10 before handoff. Physical-device and broader browser
+QA remain later release gates.

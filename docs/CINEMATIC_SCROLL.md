@@ -8,12 +8,21 @@ are unchanged. Manual Phase 7 separation and orbit controls remain available.
 ## Sequence and ownership
 
 `src/animations/watch-timeline.ts` defines one normalized clock:
-- 0-30%: assembled watch; smoothstep camera travel from V11 home to the inspection framing.
-- 30-80%: staged separation through the existing `createV11Assembly` controller.
+- 0-18%: the assembled watch approaches by up to 8%, limited by available framing room.
+- 18-80%: components separate while the camera turns gently toward a three-quarter inspection angle.
 - 80-100%: fixed separated pose and camera, giving the viewer time to inspect.
 
-The camera reaches the full assembly envelope before any parts move. Reverse
-scrolling evaluates the same absolute values. Zero restores every saved component
+The initial retreat has been removed. `frameCinematic` fits the current positions
+of the individual components, with an 8% projected framing margin. It no longer
+frames the oversized union of all possible positions before the reveal begins.
+Camera travel and separation share the same smoothstep progress. The camera eases
+back only as needed to keep the opening watch visible, ending with a tighter hold.
+
+Each component's assembled world bounds and world translation are cached once.
+The controller evaluates their corners using the same stages as the actual parts;
+there is no per-frame vertex scan. The original full-envelope camera remains in
+use for manual Phase 7 inspection. Assembly parent transforms remain fixed.
+Reverse scrolling evaluates the same absolute values. Zero restores every saved component
 transform. Exiting cinematic mode restores the original V11 camera and assembled
 pose. This does not implement the later narrative reassembly or movement scenes.
 

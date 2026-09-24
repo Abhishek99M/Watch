@@ -7,6 +7,7 @@ import { loadStudioEnvironment } from './studio-environment';
 import type { AssemblyPreviewHandle } from '@/components/three/assembly-controls';
 import { createV11Assembly } from './v11-assembly';
 import { watchTimeline } from '@/animations/watch-timeline';
+import { frameCinematic } from './cinematic-camera';
 import { frameAssembly } from './exploded-assembly';
 import { createWatchStudio } from './watch-studio';
 import { SceneLighting } from './scene-lighting';
@@ -55,11 +56,7 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
       if (controls) {
         controls.target.copy(studio?.target ?? new Vector3());
         if (assembly && storyProgress !== null) {
-          const homePosition = camera.position.clone(), homeTarget = controls.target.clone();
-          frameAssembly(camera, assembly.envelope, controls.target);
-          const amount = watchTimeline(storyProgress).camera;
-          camera.position.lerpVectors(homePosition, camera.position.clone(), amount);
-          controls.target.lerpVectors(homeTarget, controls.target.clone(), amount);
+          frameCinematic(camera, controls.target, assembly.framingPoints(), watchTimeline(storyProgress));
         } else if (assembly && assembly.progress > 0) frameAssembly(camera, assembly.envelope, controls.target);
         controls.update();
       }
@@ -167,7 +164,7 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
             canvas.setAttribute('aria-label', value === null
               ? 'Interactive watch. Drag to rotate, scroll or pinch to zoom. Arrow keys rotate, plus and minus zoom, Home resets the view.'
               : 'Watch assembly controlled by page scrolling. Exit cinematic view for manual exploration.');
-            if (!modeChanged && previous?.camera === pose.camera && previous.separation === pose.separation) return;
+            if (!modeChanged && previous?.approach === pose.approach && previous.camera === pose.camera && previous.separation === pose.separation) return;
             assembly.apply(pose.separation);
             reset();
           } catch { fail(); }
@@ -189,7 +186,7 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
     <div className="scene-render-surface" ref={host} />
     {interactive && <div className="scene-orbit-controls" aria-label="Watch view controls">
       <button type="button" onClick={() => interaction.current?.zoom(1 / 1.12)} aria-label="Zoom in">+</button>
-      <button type="button" onClick={() => interaction.current?.zoom(1.12)} aria-label="Zoom out">−</button>
+      <button type="button" onClick={() => interaction.current?.zoom(1.12)} aria-label="Zoom out">âˆ’</button>
       <button type="button" onClick={() => interaction.current?.reset()}>Reset view</button>
     </div>}
   </div>;
