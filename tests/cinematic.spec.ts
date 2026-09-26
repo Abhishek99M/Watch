@@ -1,3 +1,4 @@
+import { captureCanvas } from './helpers/canvas-capture';
 import { expect, test, type Page } from '@playwright/test';
 import sharp from 'sharp';
 
@@ -32,21 +33,21 @@ test('V11 cinematic scroll reverses, holds, releases controls and restores the a
   await expect(page.getByRole('slider')).toBeVisible({ timeout: 15_000 });
   const canvas = page.locator('canvas');
   const style = await page.addStyleTag({ content: '.scene-orbit-controls{visibility:hidden}header{visibility:hidden}' });
-  const home = await canvas.screenshot();
+  const home = await captureCanvas(canvas, { path: testInfo.outputPath('home.png') });
   await page.getByRole('button', { name: 'Start cinematic view' }).click();
   await seek(page, 0);
-  const start = await canvas.screenshot({ path: testInfo.outputPath('cinematic-start.png') });
+  const start = await captureCanvas(canvas, { path: testInfo.outputPath('cinematic-start.png') });
   await seek(page, 0.18);
-  const approach = await canvas.screenshot({ path: testInfo.outputPath('cinematic-approach.png') });
+  const approach = await captureCanvas(canvas, { path: testInfo.outputPath('cinematic-approach.png') });
   expect(await visibleHeight(approach)).toBeGreaterThan(await visibleHeight(start) * 1.03);
   await seek(page, 0.55);
-  const middle = await canvas.screenshot({ path: testInfo.outputPath('cinematic-middle.png') });
+  const middle = await captureCanvas(canvas, { path: testInfo.outputPath('cinematic-middle.png') });
   await seek(page, 0.85);
-  const hold = await canvas.screenshot({ path: testInfo.outputPath('cinematic-hold.png') });
+  const hold = await captureCanvas(canvas, { path: testInfo.outputPath('cinematic-hold.png') });
   expect(hold.equals(middle)).toBe(false);
-  await seek(page, 0.95); expect((await canvas.screenshot()).equals(hold)).toBe(true);
-  await seek(page, 0.55); expect((await canvas.screenshot()).equals(middle)).toBe(true);
-  await seek(page, 0.18); expect((await canvas.screenshot()).equals(approach)).toBe(true);
+  await seek(page, 0.95); expect((await captureCanvas(canvas)).equals(hold)).toBe(true);
+  await seek(page, 0.55); expect((await captureCanvas(canvas)).equals(middle)).toBe(true);
+  await seek(page, 0.18); expect((await captureCanvas(canvas)).equals(approach)).toBe(true);
   await seek(page, 0);
   await style.evaluate(element => element.parentNode?.removeChild(element));
   await canvas.hover(); const before = await page.evaluate(() => scrollY);
@@ -54,14 +55,14 @@ test('V11 cinematic scroll reverses, holds, releases controls and restores the a
   await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before);
   await page.getByRole('button', { name: 'Exit cinematic view' }).focus();
   const wheelPosition = await page.evaluate(() => scrollY);
-  await canvas.screenshot(); // Settle the preceding wheel-driven WebGL frame.
+  await captureCanvas(canvas); // Settle the preceding wheel-driven WebGL frame.
   await page.keyboard.press('PageDown', { delay: 100 });
   await expect.poll(() => page.evaluate(() => scrollY), { timeout: 20_000 }).toBeGreaterThan(wheelPosition);
   await page.getByRole('button', { name: 'Exit cinematic view' }).click();
   await expect(page.getByRole('slider')).toHaveValue('0');
   await expect(page.getByRole('button', { name: 'Start cinematic view' })).toBeFocused();
   const hide = await page.addStyleTag({ content: '.scene-orbit-controls{visibility:hidden}header{visibility:hidden}' });
-  expect((await canvas.screenshot()).equals(home)).toBe(true);
+  expect((await captureCanvas(canvas)).equals(home)).toBe(true);
   await hide.evaluate(element => element.parentNode?.removeChild(element));
   expect(errors).toEqual([]);
 });

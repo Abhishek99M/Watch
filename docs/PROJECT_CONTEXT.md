@@ -1,6 +1,6 @@
 # Project context
 
-Phases 0 through 7 are merged (Phase 7: PR #9). Phase 8 is implemented on feat/phase-8-cinematic-scroll; PR review and explicit merge approval remain pending. The project uses Next.js 16.3.5, React 19.2.8, strict TypeScript, Tailwind 4, ESLint and an npm lockfile.
+Phases 0 through 8 are merged (Phase 7: PR #9; Phase 8: PR #10). Phase 9 movement inspection is implemented on feat/phase-9-movement-scene; see MOVEMENT_SCENE.md for scope and validation. The project uses Next.js 16.3.5, React 19.2.8, strict TypeScript, Tailwind 4, ESLint and an npm lockfile.
 
 Phase 2 supplies shared tokens, buttons/links, headings, badges, product cards and feedback states. The /design-system reference is noindex and uses illustrative content. See DESIGN_SYSTEM.md.
 
@@ -73,3 +73,19 @@ Phase 8 review refinement: the cinematic watch now approaches before opening.
 Camera rotation and separation overlap; current component bounds replace the
 full explosion envelope for a larger, clipping-safe inspection composition.
 The original manual inspection framing and V11 rendering settings are unchanged.
+
+
+## Phase 9 implementation - 2026-09-27
+
+Manual movement/bridge isolation and an assembled dial close-up share the existing
+canvas. Only V11's actual Seconds_Sweep_60s quaternion track is played, with explicit
+Play/Pause/Reset and manual seeking. The mechanism remains clearly illustrative.
+An exclusive detail owner snapshots manual assembly/camera state and restores it
+on exit; cinematic activation resets detail state before taking ownership. A compact
+sticky preview leaves room for the controls. Reduced motion disables playback;
+hidden tabs, offscreen views and cleanup stop it. Source GLB, materials, lights and
+Phase 8 timeline remain unchanged. No later narrative phases were implemented.
+
+Production build, type checks, lint and repository checks pass. All 15 relevant
+production tests passed in Chrome/SwiftShader; desktop and phone captures were
+reviewed. See MOVEMENT_SCENE.md, TEST_PLAN.md and movement-validation/. The Phase 9 changes are prepared for the authorized GitHub review and release workflow.

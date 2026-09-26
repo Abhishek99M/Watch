@@ -2,7 +2,7 @@
 import { useId, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
-export type AssemblyPreviewHandle = { setProgress: (value: number) => void; setStoryProgress: (value: number | null) => void };
+export type AssemblyPreviewHandle = { movement?: { supported: boolean; select: (view: 'movement' | 'seconds' | null) => void; seek: (seconds: number) => void };  setProgress: (value: number) => void; setStoryProgress: (value: number | null) => void };
 
 export function AssemblyControls({ controller }: { controller: AssemblyPreviewHandle }) {
   const id = useId();

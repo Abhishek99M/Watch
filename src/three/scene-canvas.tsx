@@ -7,6 +7,7 @@ import { loadStudioEnvironment } from './studio-environment';
 import type { AssemblyPreviewHandle } from '@/components/three/assembly-controls';
 import { createV11Assembly } from './v11-assembly';
 import { watchTimeline } from '@/animations/watch-timeline';
+import { createMovementInspection, type MovementView } from './movement-inspection';
 import { frameCinematic } from './cinematic-camera';
 import { frameAssembly } from './exploded-assembly';
 import { createWatchStudio } from './watch-studio';
@@ -37,6 +38,29 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
     let controls: OrbitControls | undefined;
     let assembly: ReturnType<typeof createV11Assembly> | undefined;
     let storyProgress: number | null = null;
+    let movement: ReturnType<typeof createMovementInspection> = null;
+    let detail: MovementView | null = null;
+    type SavedInspection = { progress: number; position: Vector3; target: Vector3; width: number; height: number };
+    let saved: SavedInspection | null = null, restoreFrame: SavedInspection | null = null;
+    const selectDetail = (value: MovementView | null) => {
+      if (!movement || !assembly || !controls || stopped || failed || storyProgress !== null) return;
+      if (value === null && detail === null) return;
+      if (value && !detail) {
+        const { width, height } = container.getBoundingClientRect();
+        saved = { progress: assembly.progress, position: camera.position.clone(), target: controls.target.clone(), width, height };
+      }
+      movement.select(null);
+      detail = value;
+      assembly.apply(value === 'movement' ? 1 : value === 'seconds' ? 0 : saved?.progress ?? 0);
+      movement.select(value);
+      if (value) reset();
+      else if (saved) {
+        const { width, height } = container.getBoundingClientRect();
+        restoreFrame = width !== saved.width || height !== saved.height ? saved : null;
+        camera.position.copy(saved.position); controls.target.copy(saved.target);
+        controls.update(); saved = null; invalidate();
+      }
+    };
     const controller = new AbortController();
     const camera = new PerspectiveCamera(40, 1, 0.1, 50);
     const invalidate = () => { if (!stopped && !failed) store?.getState().invalidate(); };
@@ -55,7 +79,11 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
       else { camera.position.set(0, 0.25, 4.8 / Math.min(width / height, 1)); camera.lookAt(0, 0, 0); }
       if (controls) {
         controls.target.copy(studio?.target ?? new Vector3());
-        if (assembly && storyProgress !== null) {
+        const restored = restoreFrame; restoreFrame = null;
+        if (restored && width === restored.width && height === restored.height) {
+          camera.position.copy(restored.position); controls.target.copy(restored.target);
+        } else if (detail && movement) movement.frame(camera, controls.target);
+        else if (assembly && storyProgress !== null) {
           frameCinematic(camera, controls.target, assembly.framingPoints(), watchTimeline(storyProgress));
         } else if (assembly && assembly.progress > 0) frameAssembly(camera, assembly.envelope, controls.target);
         controls.update();
@@ -112,6 +140,7 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
           if (asset.studioTransform) {
             studio = createWatchStudio(asset, renderer);
             assembly = createV11Assembly(asset);
+            movement = createMovementInspection(asset);
           }
           controls = new OrbitControls(camera, canvas);
           controls.enableDamping = false; controls.enablePan = false; controls.autoRotate = false;
@@ -142,8 +171,12 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
         if (stopped) { root.unmount(); return; }
         store = root.render(<SceneBoundary onError={fail}>{studio ? <primitive object={studio.lights} /> : <SceneLighting studio={Boolean(asset)} />}{asset ? <primitive object={asset.object} /> : <PlaceholderWatch />}</SceneBoundary>);
         resize();
-        if (assembly) onAssemblyReady?.({ setProgress(value) {
-          if (stopped || failed || !assembly || storyProgress !== null) return;
+        if (assembly) onAssemblyReady?.({ movement: movement ? {
+          supported: movement.supported,
+          select: selectDetail,
+          seek(seconds) { if (!stopped && !failed && storyProgress === null && detail === 'seconds') { movement?.seek(seconds); invalidate(); } },
+        } : undefined, setProgress(value) {
+          if (stopped || failed || !assembly || storyProgress !== null || detail !== null) return;
           try {
             const wasAssembled = assembly.progress === 0;
             assembly.apply(value);
@@ -153,6 +186,8 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
         }, setStoryProgress(value) {
           if (stopped || failed || !assembly || !controls) return;
           try {
+            if (detail) selectDetail(null);
+            restoreFrame = null;
             const pose = watchTimeline(value ?? 0);
             const previous = storyProgress === null ? null : watchTimeline(storyProgress);
             const modeChanged = (storyProgress === null) !== (value === null);
@@ -178,7 +213,7 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
       canvas.removeEventListener('webglcontextlost', contextLost); canvas.removeEventListener('keydown', keyboard);
       controls?.removeEventListener('change', invalidate); controls?.dispose();
       if (root) root.unmount(); else renderer?.forceContextLoss();
-      assembly?.dispose(); onAssemblyReady?.(null);
+      movement?.dispose(); assembly?.dispose(); onAssemblyReady?.(null);
       studio?.dispose(); renderer?.dispose(); asset?.dispose(); environment?.dispose(); canvas.remove();
     };
   }, [source, onReady, onError, onAssemblyReady]);
