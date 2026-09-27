@@ -10,7 +10,7 @@
 - ✅ Phase 7: exploded-view architecture (merged via PR #9)
 - ✅ Phase 8: cinematic scroll timeline (merged via PR #10)
 - ✅ Phase 9: movement scene (implemented and validated)
-- ⬜ Phase 10: materials/craftsmanship
+- ✅ Phase 10: materials/craftsmanship (implemented and validated; awaiting PR review)
 - ⬜ Phase 11: reassembly
 - ⬜ Phase 12: watch configuration
 - ⬜ Phase 13: approved product information

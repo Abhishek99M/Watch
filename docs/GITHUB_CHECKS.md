@@ -42,3 +42,13 @@ Each browser job keeps one CI worker, existing retries and a 30-minute budget.
 Production jobs build before testing. Matrix fail-fast is disabled; failures retain
 Playwright traces in seven-day artifacts. The required gate depends on every job.
 No application code, render quality, model asset or loading deadline changed.
+
+
+## Phase 10 browser partition
+
+The original core and movement isolation is preserved. A third `craftsmanship`
+partition runs the five Phase 10 tests in its own browser process for each mode.
+Each full development/production run now contains 83 tests: 75 core, 3 movement
+and 5 craftsmanship. The six browser jobs share the same 30-minute individual
+budget, one worker, existing retries and failure artifacts; every job is required
+by the unchanged aggregate gate. Default local `npm test` still selects all tests.

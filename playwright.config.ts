@@ -1,13 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:43170';
 const suite = process.env.PLAYWRIGHT_SUITE;
-if (suite !== undefined && suite !== 'core' && suite !== 'movement') {
-  throw new Error('PLAYWRIGHT_SUITE must be core or movement, or unset for all tests.');
+if (suite !== undefined && suite !== 'core' && suite !== 'movement' && suite !== 'craftsmanship') {
+  throw new Error('PLAYWRIGHT_SUITE must be core, movement or craftsmanship, or unset for all tests.');
 }
 export default defineConfig({
-  // Movement gets a fresh browser process in CI; the two suites are disjoint.
+  // Detail suites get fresh browser processes in CI; all partitions are disjoint.
   ...(suite === 'movement' ? { testMatch: '**/movement.spec.ts' } : {}),
-  ...(suite === 'core' ? { testIgnore: '**/movement.spec.ts' } : {}),
+  ...(suite === 'craftsmanship' ? { testMatch: '**/craftsmanship.spec.ts' } : {}),
+  ...(suite === 'core' ? { testIgnore: ['**/movement.spec.ts', '**/craftsmanship.spec.ts'] } : {}),
   // SwiftShader watch scenes saturate shared CI CPUs; concurrent GLB retries
   // can exceed the real application deadline even though isolated runs pass.
   testDir: './tests', fullyParallel: true, workers: process.env.CI ? 1 : 2, forbidOnly: !!process.env.CI,

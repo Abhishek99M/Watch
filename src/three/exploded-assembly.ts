@@ -76,9 +76,9 @@ export function createExplodedAssembly(parts: AssemblyPart[]) {
 }
 
 /** Camera framing is separate from component evaluation and never changes lights. */
-export function frameAssembly(camera: PerspectiveCamera, box: Box3, target: Vector3) {
+export function frameAssembly(camera: PerspectiveCamera, box: Box3, target: Vector3, viewDirection = new Vector3(0.8, 0.45, 1.4)) {
   target.copy(box.getCenter(new Vector3()));
-  const direction = new Vector3(0.8, 0.45, 1.4).normalize();
+  const direction = viewDirection.clone().normalize();
   camera.position.copy(target).add(direction); camera.lookAt(target);
   camera.updateMatrixWorld(true);
   const right = new Vector3().setFromMatrixColumn(camera.matrixWorld, 0);

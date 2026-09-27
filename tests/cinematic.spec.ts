@@ -20,7 +20,17 @@ async function seek(page: Page, progress: number) {
     const distance = (element as HTMLElement).offsetHeight - (element.firstElementChild as HTMLElement).offsetHeight;
     window.scrollTo(0, start + distance * value);
   }, progress);
-  await expect.poll(async () => Number(await page.locator('.watch-story').getAttribute('data-progress')), { timeout: 20_000 }).toBeCloseTo(progress, 2);
+  try {
+    await expect.poll(async () => Number(await page.locator('.watch-story').getAttribute('data-progress')), { timeout: 20_000 }).toBeCloseTo(progress, 2);
+  } catch (error) {
+    const geometry = await page.locator('.watch-story').evaluate(element => ({
+      scrollY, top: element.getBoundingClientRect().top, height: (element as HTMLElement).offsetHeight,
+      stickyHeight: (element.firstElementChild as HTMLElement).offsetHeight,
+      inset: getComputedStyle(element).getPropertyValue('--story-top'), progress: (element as HTMLElement).dataset.progress,
+    }));
+    await test.info().attach('cinematic-seek-geometry', { body: JSON.stringify({ requested: progress, ...geometry }), contentType: 'application/json' });
+    throw error;
+  }
 }
 
 test('V11 cinematic scroll reverses, holds, releases controls and restores the assembled image', async ({ page }, testInfo) => {
@@ -95,17 +105,8 @@ test('cinematic framing remains usable across seven widths, reduced motion and r
 });
 
 
-test('cinematic touch scrolling, idle rendering and context-loss recovery retain manual access', async ({ page, context }) => {
+test('cinematic touch scrolling drives the timeline and returns to manual access', async ({ page, context }) => {
   test.setTimeout(180_000);
-  await page.addInitScript(() => {
-    const scope = window as unknown as { cinematicDraws: number }; scope.cinematicDraws = 0;
-    for (const key of ['drawArrays', 'drawElements'] as const) {
-      const original = WebGL2RenderingContext.prototype[key];
-      WebGL2RenderingContext.prototype[key] = function (...args: Parameters<typeof original>) {
-        scope.cinematicDraws++; return Reflect.apply(original, this, args);
-      };
-    }
-  });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/watch'); await page.getByRole('button', { name: 'Load 3D preview' }).click();
   await expect(page.getByRole('slider')).toBeVisible({ timeout: 15_000 });
@@ -121,7 +122,29 @@ test('cinematic touch scrolling, idle rendering and context-loss recovery retain
   }
   await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
   await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before);
+  await expect.poll(async () => Number(await page.locator('.watch-story').getAttribute('data-progress')), { timeout: 20_000 }).toBeGreaterThan(0.4);
   await session.send('Emulation.setTouchEmulationEnabled', { enabled: false });
+  await page.getByRole('button', { name: 'Exit cinematic view' }).click();
+  await expect(page.getByRole('slider')).toHaveValue('0');
+});
+
+test('cinematic inspection holds idle and recovers manual access after context loss', async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.addInitScript(() => {
+    const scope = window as unknown as { cinematicDraws: number }; scope.cinematicDraws = 0;
+    for (const key of ['drawArrays', 'drawElements'] as const) {
+      const original = WebGL2RenderingContext.prototype[key];
+      WebGL2RenderingContext.prototype[key] = function (...args: Parameters<typeof original>) {
+        scope.cinematicDraws++; return Reflect.apply(original, this, args);
+      };
+    }
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/watch'); await page.getByRole('button', { name: 'Load 3D preview' }).click();
+  await expect(page.getByRole('slider')).toBeVisible({ timeout: 15_000 });
+  await page.getByRole('button', { name: 'Start cinematic view' }).click();
+  // This absolute hold check has its own page: native touch momentum from a
+  // different scenario must not compete with the scripted progress clock.
   await seek(page, 0.85); await page.locator('canvas').screenshot();
   await page.waitForTimeout(300);
   const draws = await page.evaluate(() => (window as unknown as { cinematicDraws: number }).cinematicDraws);

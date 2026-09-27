@@ -89,3 +89,21 @@ Phase 8 timeline remain unchanged. No later narrative phases were implemented.
 Production build, type checks, lint and repository checks pass. All 15 relevant
 production tests passed in Chrome/SwiftShader; desktop and phone captures were
 reviewed. See MOVEMENT_SCENE.md, TEST_PLAN.md and movement-validation/. The Phase 9 changes are prepared for the authorized GitHub review and release workflow.
+
+
+## Phase 10 implementation - 2026-09-27
+
+Dial, case and bracelet close-ups now share the existing detail owner and canvas.
+The model stays assembled and fully present; each study uses its mapped geometry
+and a deliberate camera angle. Exiting restores the previous assembly and camera.
+Craftsmanship, movement and cinematic controls have exclusive ownership, preserving
+the Phase 8 timeline. Static editorial descriptions remain available without 3D or
+JavaScript and explicitly distinguish visible finishes from unconfirmed physical
+product specifications. No asset, material, lighting or rendering-quality changes.
+
+All four Phase 10 development tests and ten relevant production tests passed
+(Phase 10 plus assembly/timeline numerical regressions). Lint, types, production
+build, rendering compatibility and asset-equivalence validation passed. The browser
+inventory is 83 tests per mode, split into core/movement/craftsmanship jobs. See
+CRAFTSMANSHIP.md and TEST_PLAN.md. Phase 11 narrative reassembly and later
+configuration remain pending; GitHub review does not authorize merging.
