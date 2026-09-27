@@ -104,6 +104,6 @@ product specifications. No asset, material, lighting or rendering-quality change
 All four Phase 10 development tests and ten relevant production tests passed
 (Phase 10 plus assembly/timeline numerical regressions). Lint, types, production
 build, rendering compatibility and asset-equivalence validation passed. The browser
-inventory is 81 tests per mode, split into core/movement/craftsmanship jobs. See
+inventory is 82 tests per mode, split into core/movement/craftsmanship jobs. See
 CRAFTSMANSHIP.md and TEST_PLAN.md. Phase 11 narrative reassembly and later
 configuration remain pending; GitHub review does not authorize merging.

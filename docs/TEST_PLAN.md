@@ -321,8 +321,8 @@ assertions and application deadlines are unchanged. Failed browser jobs upload
 
 ## Phase 10 validation
 
-Phase 10 adds four craftsmanship tests and an isolated CI partition in both modes.
-The full inventory is 81 tests (74 core, 3 movement, 4 craftsmanship). No existing
+Phase 10 adds five craftsmanship tests and an isolated CI partition in both modes.
+The full inventory is 82 tests (74 core, 3 movement, 5 craftsmanship). No existing
 test, assertion, render quality setting or application loading deadline is removed.
 
 Coverage includes camera projection at portrait/wide aspects without changes to
@@ -344,6 +344,20 @@ passed; all 10 relevant production tests passed (4 craftsmanship, 4 assembly,
 rebuilt asset equivalence passed. The original GLB SHA-256 remains
 19447c6170a22fa537e6c1e337e704e607350d01f8f382a6c41219bdab16e38d.
 Desktop and mobile captures are retained in craftsmanship-validation/. Full
-81-test development and production results are recorded in the Phase 10 PR checks.
+82-test development and production results are recorded in the Phase 10 PR checks.
 Physical hardware performance, Safari/Firefox and assistive-technology audits
 remain later release checks.
+
+
+CI follow-up: two of the initial craftsmanship jobs stalled at retry after the
+seven-width capture/cinematic scenario; the other two passed. The failed trace
+remained at the loading view rather than showing a transform assertion failure.
+Recovery now has its own mobile browser test with a fresh page, retaining
+craftsmanship-to-cinematic handoff, context loss, retry and assembled restoration.
+The responsive/capture test retains all seven widths and its cinematic checks.
+No assertion, quality setting or application loading deadline was relaxed. There
+are now five craftsmanship tests and 82 total tests per mode. Earlier local
+4/4 and 10/10 results above describe the pre-split inventory.
+
+The isolated production mobile recovery test passed locally in 44 seconds, with
+the unchanged 15-second readiness assertion and 12-second application deadline.

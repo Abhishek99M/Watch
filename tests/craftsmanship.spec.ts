@@ -74,7 +74,7 @@ test('V11 surface studies reverse exactly and restore an orbited, separated watc
   await expect(canvas).toHaveCount(0); expect(errors).toEqual([]);
 });
 
-test('surface studies stay usable across sizes, reduced motion, cinematic handoff and recovery', async ({ page }, info) => {
+test('surface studies stay usable across sizes, reduced motion and cinematic handoff', async ({ page }, info) => {
   test.setTimeout(240_000);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/watch'); await page.getByRole('button', { name: 'Load 3D preview' }).click();
@@ -102,6 +102,18 @@ test('surface studies stay usable across sizes, reduced motion, cinematic handof
   await page.getByRole('button', { name: 'Exit cinematic view' }).click();
   await expect(page.getByRole('slider', { name: 'Component separation' })).toHaveValue('0');
   await expect(page.getByRole('button', { name: 'Return to watch' })).toBeHidden();
+  await page.getByRole('button', { name: 'Use static view' }).click(); await expect(canvas).toHaveCount(0);
+});
+
+test('craftsmanship recovers after cinematic handoff and context loss on mobile', async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/watch'); await page.getByRole('button', { name: 'Load 3D preview' }).click();
+  const canvas = page.locator('canvas');
+  await expect(page.getByRole('button', { name: 'Inspect case', exact: true })).toBeVisible({ timeout: 15_000 });
+  await page.getByRole('button', { name: 'Inspect case', exact: true }).click();
+  await page.getByRole('button', { name: 'Start cinematic view' }).click();
+  await page.getByRole('button', { name: 'Exit cinematic view' }).click();
   await page.getByRole('button', { name: 'Inspect case', exact: true }).click();
   await canvas.evaluate(element => element.dispatchEvent(new Event('webglcontextlost', { cancelable: true })));
   await expect(page.getByText('3D preview unavailable', { exact: true })).toBeVisible();

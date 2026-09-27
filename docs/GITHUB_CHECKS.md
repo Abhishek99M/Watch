@@ -47,8 +47,8 @@ No application code, render quality, model asset or loading deadline changed.
 ## Phase 10 browser partition
 
 The original core and movement isolation is preserved. A third `craftsmanship`
-partition runs the four Phase 10 tests in its own browser process for each mode.
-Each full development/production run now contains 81 tests: 74 core, 3 movement
-and 4 craftsmanship. The six browser jobs share the same 30-minute individual
+partition runs the five Phase 10 tests in its own browser process for each mode.
+Each full development/production run now contains 82 tests: 74 core, 3 movement
+and 5 craftsmanship. The six browser jobs share the same 30-minute individual
 budget, one worker, existing retries and failure artifacts; every job is required
 by the unchanged aggregate gate. Default local `npm test` still selects all tests.
