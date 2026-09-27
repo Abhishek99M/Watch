@@ -6,9 +6,12 @@ import { watchTimeline } from '../src/animations/watch-timeline';
 
 test('timeline approaches before coordinated separation and holds an exact endpoint in either direction', () => {
   expect(watchTimeline(0)).toMatchObject({ camera: 0, separation: 0 });
-  expect(watchTimeline(0.18)).toMatchObject({ approach: 1, camera: 0, separation: 0 });
-  expect(watchTimeline(0.8)).toMatchObject({ camera: 1, separation: 1 });
-  expect(watchTimeline(1)).toMatchObject({ camera: 1, separation: 1 });
+  expect(watchTimeline(0.12)).toMatchObject({ approach: 1, camera: 0, separation: 0 });
+  expect(watchTimeline(0.52)).toMatchObject({ camera: 1, separation: 1 });
+  expect(watchTimeline(0.66)).toMatchObject({ camera: 1, separation: 1 });
+  expect(watchTimeline(0.8).separation).toBeCloseTo(0.5);
+  expect(watchTimeline(0.94)).toMatchObject({ approach: 0, camera: 0, separation: 0 });
+  expect(watchTimeline(1)).toMatchObject({ approach: 0, camera: 0, separation: 0 });
   expect(watchTimeline(-1)).toEqual(watchTimeline(0));
   expect(watchTimeline(2)).toEqual(watchTimeline(1));
   for (const value of [NaN, Infinity, -Infinity]) expect(() => watchTimeline(value)).toThrow();
@@ -39,13 +42,13 @@ test('cinematic camera approaches, fits moving components and reverses without d
       return [...camera.position.toArray(), ...camera.quaternion.toArray(), ...target.toArray()];
     };
     const initial = evaluate(0);
-    evaluate(0.18); expect(camera.position.distanceTo(target)).toBeLessThan(home.length());
+    evaluate(0.12); expect(camera.position.distanceTo(target)).toBeLessThan(home.length());
     expect(assembly.progress).toBe(0);
     const forward = [];
     for (let i = 0; i <= 100; i++) {
       forward.push(evaluate(i / 100));
       // Check actual transformed geometry, independently of the cached fitting points.
-      if (i % 10 === 0 || i === 18) for (const mesh of [body, face]) {
+      if (i % 10 === 0 || i === 12) for (const mesh of [body, face]) {
         const positions = mesh.geometry.getAttribute('position');
         for (let vertex = 0; vertex < positions.count; vertex++) {
           const projected = new Vector3().fromBufferAttribute(positions, vertex).applyMatrix4(mesh.matrixWorld).project(camera);
@@ -57,8 +60,25 @@ test('cinematic camera approaches, fits moving components and reverses without d
     }
     for (let i = 100; i >= 0; i--) expect(evaluate(i / 100)).toEqual(forward[i]);
     expect(evaluate(0)).toEqual(initial);
-    expect(evaluate(0.8)).toEqual(evaluate(1));
+    expect(evaluate(0.52)).toEqual(evaluate(0.66));
+    expect(evaluate(0.94)).toEqual(initial);
+    expect(evaluate(1)).toEqual(initial);
   }
   assembly.dispose();
   for (const mesh of [body, face]) { mesh.geometry.dispose(); (mesh.material as MeshBasicMaterial).dispose(); }
+});
+
+test('closing stages are monotone and continuous with still endpoints', () => {
+  let previous = 1;
+  for (let i = 660; i <= 940; i++) {
+    const pose = watchTimeline(i / 1000);
+    expect(pose.separation).toBeLessThanOrEqual(previous);
+    expect(pose.separation).toBeGreaterThanOrEqual(0);
+    previous = pose.separation;
+  }
+  for (const boundary of [0.12, 0.52, 0.66, 0.94]) {
+    for (const key of ['approach', 'camera', 'separation'] as const) {
+      expect(Math.abs(watchTimeline(boundary - 1e-6)[key] - watchTimeline(boundary + 1e-6)[key])).toBeLessThan(1e-8);
+    }
+  }
 });

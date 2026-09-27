@@ -52,3 +52,13 @@ Each full development/production run now contains 83 tests: 75 core, 3 movement
 and 5 craftsmanship. The six browser jobs share the same 30-minute individual
 budget, one worker, existing retries and failure artifacts; every job is required
 by the unchanged aggregate gate. Default local `npm test` still selects all tests.
+
+
+## Phase 11 regression inventory
+
+The existing six browser jobs and aggregate gate are unchanged. Reassembly adds
+three tests to core: two real-GLB browser scenarios and one timeline continuity
+check. Each mode now contains 86 tests: 78 core, 3 movement, 5 craftsmanship.
+Existing assembly and cinematic tests also exercise final restoration, closing
+recovery and idle rendering; no existing assertion or application deadline was
+removed. Movement and craftsmanship still run in fresh isolated processes.

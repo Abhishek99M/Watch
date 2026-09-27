@@ -361,3 +361,41 @@ the original exact interior-pixel comparison is preserved.
 
 Physical-device performance, Safari/Firefox and assistive-technology audits remain
 later release gates; software-rendered screenshots do not certify those platforms.
+
+
+## Phase 11 validation
+
+Current inventory: 86 tests per mode (78 core, 3 movement, 5 craftsmanship).
+Reassembly uses the same isolated CI partitions and required aggregate gate.
+
+Completed local checks:
+- Seven numerical assembly/timeline tests passed, including all 43 actual V11
+  local/world transforms at final assembly, monotone closing, continuous stage
+  boundaries, responsive camera projection and exact forward/reverse sampling.
+- Lint, strict types, repository checks and production build passed.
+- Rendering compatibility and all four asset-equivalence tests passed.
+- Approved GLB SHA-256 remains
+  19447c6170a22fa537e6c1e337e704e607350d01f8f382a6c41219bdab16e38d.
+
+The first browser run against the already-running localhost:3000 development
+server never reached 3D activation: the hydrated load button did not appear and
+the trace recorded repeated HMR WebSocket handshake failures. No reassembly
+assertion ran in those two timed-out cases. Validation moved to a fresh isolated
+production server; the existing user server was not stopped or modified.
+
+Production validation on an isolated localhost:43170 server:
+- All five existing cinematic browser tests passed, including the new final idle
+  hold and context-loss interruption during closing.
+- Both reassembly browser tests passed after normalizing screenshot placement:
+  exact initial/final/100% pixels, exact reverse closing/inspection images,
+  movement/craftsmanship handoffs, seven widths, and reduced-motion restoration.
+- Sticky-boundary captures initially differed because of fractional compositor
+  placement (including a 699 versus 698 pixel height). The capture helper fixes
+  only the screenshot origin at unchanged dimensions; no render tolerance or
+  application change was used. Unmodified mobile page images remain separate.
+- Desktop/mobile captures were reviewed and retained in reassembly-validation/.
+- Dependency audit found zero vulnerabilities.
+
+GitHub CI runs all 86 tests in each mode; the PR records its final results.
+Physical-device performance, Safari/Firefox and assistive-technology checks remain
+later release gates.

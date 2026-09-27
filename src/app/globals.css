@@ -157,7 +157,7 @@ button { font: inherit; }
 
 /* Phase 8: sticky native-scroll stage; no document scroll interception. */
 .watch-story { --story-top: 88px; }
-.watch-story.is-running { height: 400svh; }
+.watch-story.is-running { height: 600svh; }
 .is-running .watch-story-sticky { position: sticky; top: var(--story-top); }
 .is-running .scene-stage { height: max(180px, calc(100svh - 300px)); max-height: 48rem; }
 .watch-story-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; padding-block: 1rem; }

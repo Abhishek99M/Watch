@@ -1,3 +1,4 @@
+import { watchTimeline } from '../src/animations/watch-timeline';
 import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { Box3, BoxGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, PerspectiveCamera, Vector3 } from 'three';
@@ -45,6 +46,14 @@ test('all 43 actual V11 transforms evaluate absolutely and restore exactly after
   objects.forEach((object,index) => expect(object.position.toArray()).toEqual(original[index].position.map((value,axis) => value + object.userData.explodeOffset[axis])));
   for(let i=0;i<100;i++) { assembly.apply((i%17)/16); assembly.apply(1-(i%13)/12); assembly.apply(0); }
   expect(snapshot(asset)).toEqual(original);
+  // Run the complete story, including its closing stages, on all actual V11 nodes.
+  const story = Array.from({ length: 101 }, (_, i) => {
+    assembly.apply(watchTimeline(i / 100).separation); return snapshot(asset);
+  });
+  expect(story[94]).toEqual(original); expect(story[100]).toEqual(original);
+  for (let i = 100; i >= 0; i--) {
+    assembly.apply(watchTimeline(i / 100).separation); expect(snapshot(asset)).toEqual(story[i]);
+  }
   assembly.apply(1); assembly.dispose(); assembly.dispose(); expect(snapshot(asset)).toEqual(original);
   expect(()=>assembly.apply(0.5)).toThrow('disposed');
 });
