@@ -306,3 +306,14 @@ QA remain later release gates.
 - No dependency or asset changes. Phase 10 craftsmanship and Phase 11 narrative
   reassembly remain separate. Physical-device performance, Safari/Firefox and
   assistive-technology audits remain later QA gates.
+
+
+### Phase 9 CI execution
+
+CI runs the full suite in both development and production, partitioned into
+`PLAYWRIGHT_SUITE=core` (74 tests) and `PLAYWRIGHT_SUITE=movement` (3 tests)
+on separate runners. Unset the variable to run all 77 locally. Invalid suite names
+fail configuration loading. Use `npx playwright test --list` with each selection
+to verify their disjoint union matches the default inventory. Rendering settings,
+assertions and application deadlines are unchanged. Failed browser jobs upload
+`test-results/` traces for diagnosis; all four jobs must pass the required gate.
