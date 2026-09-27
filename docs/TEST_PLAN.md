@@ -321,54 +321,43 @@ assertions and application deadlines are unchanged. Failed browser jobs upload
 
 ## Phase 10 validation
 
-Phase 10 adds five craftsmanship tests and an isolated CI partition in both modes.
-The full inventory is 82 tests (74 core, 3 movement, 5 craftsmanship). No existing
-test, assertion, render quality setting or application loading deadline is removed.
+The full inventory is 83 tests per mode: 75 core, 3 movement and 5 craftsmanship.
+The isolated development/production CI partitions retain every existing assertion,
+render-quality setting and application deadline. Full results are tracked on
+Phase 10 PR #12; no merge is authorized by passing checks alone.
 
-Coverage includes camera projection at portrait/wide aspects without changes to
-model matrices, visibility or material identity; exact round-trip detail images;
-restoration of a manually orbited 65%-separated pose; keyboard selection; all seven
-responsive widths; reduced motion; movement and cinematic handoff; context-loss
-retry; failed GLB and server-rendered copy without JavaScript.
+Craftsmanship coverage includes camera projection bounds without changes to model
+matrices, visibility or materials; exact reverse-view images and restoration of
+an orbited 65%-separated pose; keyboard selection/focus; seven responsive widths;
+reduced motion; movement/cinematic handoff; context-loss retry; failed GLB and
+server-rendered copy without JavaScript. Recovery has its own mobile page rather
+than running after seven full-resolution resize captures. Two initial CI jobs
+stalled at retry after that combined workload; the isolated recovery passed in
+all four subsequent development/production jobs.
 
-The initial exact-return image comparison included the canvas keyboard focus ring
-only in the before image. Pixel analysis localized every difference to that ring.
-The test now blurs the canvas after keyboard rotation before capturing, preserving
-the same focus conditions and the existing exact interior-pixel assertion. No
-camera behavior or comparison tolerance was changed to resolve the test.
+The original cinematic touch/hold/recovery scenario is now two tests. Real touch
+events must scroll the page, advance the timeline and allow manual exit. A separate
+page verifies exact 85%/95% inspection positions, no extra draws in the hold,
+context-loss retry and route exit. This prevents asynchronous touch momentum from
+competing with the absolute seek clock. Polling a stable JavaScript scroll position
+alone did not reliably settle Chromium's gesture/render work. Exact assertions
+and their precision remain unchanged; failed seeks attach measured page geometry.
 
+Local validation on Windows / installed Chrome with SwiftShader:
+- All four original Phase 10 development tests passed.
+- Ten relevant production tests passed (4 original craftsmanship, 4 assembly,
+  2 timeline); the final UI polish also passed the four craftsmanship tests again.
+- After splitting recovery, its focused production test passed in 44 seconds.
+- Both independent touch and hold/recovery tests passed twice: 4/4 in 3.3 minutes.
+- Lint, strict types, production build, rendering compatibility, repository checks
+  and rebuilt asset equivalence passed. The approved GLB SHA-256 remains
+  19447c6170a22fa537e6c1e337e704e607350d01f8f382a6c41219bdab16e38d.
+- Desktop/mobile browser captures were reviewed and saved in craftsmanship-validation/.
 
-Windows / installed Chrome with SwiftShader: all 4 Phase 10 development tests
-passed; all 10 relevant production tests passed (4 craftsmanship, 4 assembly,
-2 timeline). Lint, strict types, production build, rendering compatibility and
-rebuilt asset equivalence passed. The original GLB SHA-256 remains
-19447c6170a22fa537e6c1e337e704e607350d01f8f382a6c41219bdab16e38d.
-Desktop and mobile captures are retained in craftsmanship-validation/. Full
-82-test development and production results are recorded in the Phase 10 PR checks.
-Physical hardware performance, Safari/Firefox and assistive-technology audits
-remain later release checks.
+The first image comparison included a keyboard focus ring only in the before
+capture. Pixel analysis localized every difference to that ring. The test blurs
+the canvas after keyboard rotation so both captures share the same focus state;
+the original exact interior-pixel comparison is preserved.
 
-
-CI follow-up: two of the initial craftsmanship jobs stalled at retry after the
-seven-width capture/cinematic scenario; the other two passed. The failed trace
-remained at the loading view rather than showing a transform assertion failure.
-Recovery now has its own mobile browser test with a fresh page, retaining
-craftsmanship-to-cinematic handoff, context loss, retry and assembled restoration.
-The responsive/capture test retains all seven widths and its cinematic checks.
-No assertion, quality setting or application loading deadline was relaxed. There
-are now five craftsmanship tests and 82 total tests per mode. Earlier local
-4/4 and 10/10 results above describe the pre-split inventory.
-
-The isolated production mobile recovery test passed locally in 44 seconds, with
-the unchanged 15-second readiness assertion and 12-second application deadline.
-
-
-The full production core suite also exposed an existing touch-test race: native
-fling inertia continued after touchEnd and moved the subsequent absolute 85% seek
-to 86.9-88.5%. The test now waits for a measured stable scroll position before
-switching from touch to programmatic seeking. The original exact progress and
-idle-rendering assertions remain unchanged; application scrolling is untouched.
-
-The corrected production touch/idle-rendering/context-recovery test passed locally
-in 1.3 minutes. It waits for 500ms of measured stable scroll, with a bounded
-10-second settling check; the existing target-progress precision is unchanged.
+Physical-device performance, Safari/Firefox and assistive-technology audits remain
+later release gates; software-rendered screenshots do not certify those platforms.
