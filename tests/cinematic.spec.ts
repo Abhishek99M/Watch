@@ -121,6 +121,14 @@ test('cinematic touch scrolling, idle rendering and context-loss recovery retain
   }
   await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
   await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before);
+  // TouchEnd can leave a native fling running. Let it settle before switching
+  // to absolute seeking, otherwise momentum moves the page past that target.
+  let lastScroll = -1, stableSince = Date.now();
+  await expect.poll(async () => {
+    const current = await page.evaluate(() => scrollY);
+    if (current !== lastScroll) { lastScroll = current; stableSince = Date.now(); }
+    return Date.now() - stableSince;
+  }, { timeout: 10_000, intervals: [100] }).toBeGreaterThanOrEqual(500);
   await session.send('Emulation.setTouchEmulationEnabled', { enabled: false });
   await seek(page, 0.85); await page.locator('canvas').screenshot();
   await page.waitForTimeout(300);

@@ -361,3 +361,14 @@ are now five craftsmanship tests and 82 total tests per mode. Earlier local
 
 The isolated production mobile recovery test passed locally in 44 seconds, with
 the unchanged 15-second readiness assertion and 12-second application deadline.
+
+
+The full production core suite also exposed an existing touch-test race: native
+fling inertia continued after touchEnd and moved the subsequent absolute 85% seek
+to 86.9-88.5%. The test now waits for a measured stable scroll position before
+switching from touch to programmatic seeking. The original exact progress and
+idle-rendering assertions remain unchanged; application scrolling is untouched.
+
+The corrected production touch/idle-rendering/context-recovery test passed locally
+in 1.3 minutes. It waits for 500ms of measured stable scroll, with a bounded
+10-second settling check; the existing target-progress precision is unchanged.
