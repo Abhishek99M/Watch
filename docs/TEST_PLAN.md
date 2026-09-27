@@ -317,3 +317,33 @@ fail configuration loading. Use `npx playwright test --list` with each selection
 to verify their disjoint union matches the default inventory. Rendering settings,
 assertions and application deadlines are unchanged. Failed browser jobs upload
 `test-results/` traces for diagnosis; all four jobs must pass the required gate.
+
+
+## Phase 10 validation
+
+Phase 10 adds four craftsmanship tests and an isolated CI partition in both modes.
+The full inventory is 81 tests (74 core, 3 movement, 4 craftsmanship). No existing
+test, assertion, render quality setting or application loading deadline is removed.
+
+Coverage includes camera projection at portrait/wide aspects without changes to
+model matrices, visibility or material identity; exact round-trip detail images;
+restoration of a manually orbited 65%-separated pose; keyboard selection; all seven
+responsive widths; reduced motion; movement and cinematic handoff; context-loss
+retry; failed GLB and server-rendered copy without JavaScript.
+
+The initial exact-return image comparison included the canvas keyboard focus ring
+only in the before image. Pixel analysis localized every difference to that ring.
+The test now blurs the canvas after keyboard rotation before capturing, preserving
+the same focus conditions and the existing exact interior-pixel assertion. No
+camera behavior or comparison tolerance was changed to resolve the test.
+
+
+Windows / installed Chrome with SwiftShader: all 4 Phase 10 development tests
+passed; all 10 relevant production tests passed (4 craftsmanship, 4 assembly,
+2 timeline). Lint, strict types, production build, rendering compatibility and
+rebuilt asset equivalence passed. The original GLB SHA-256 remains
+19447c6170a22fa537e6c1e337e704e607350d01f8f382a6c41219bdab16e38d.
+Desktop and mobile captures are retained in craftsmanship-validation/. Full
+81-test development and production results are recorded in the Phase 10 PR checks.
+Physical hardware performance, Safari/Firefox and assistive-technology audits
+remain later release checks.
