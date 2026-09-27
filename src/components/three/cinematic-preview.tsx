@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { AssemblyPreviewHandle } from './assembly-controls';
+import { MovementControls } from './movement-controls';
 import { AssemblyControls } from './assembly-controls';
 import { Button } from '@/components/ui/button';
 import { watchTimeline } from '@/animations/watch-timeline';
@@ -16,6 +17,8 @@ export function CinematicPreview({ controller, children }: { controller: Assembl
     update(); media.addEventListener('change', update);
     return () => media.removeEventListener('change', update);
   }, []);
+  const [inspection, setInspection] = useState<{ owner: AssemblyPreviewHandle; view: 'movement' | 'seconds' | null } | null>(null);
+  const detail = inspection?.owner === controller ? inspection?.view : null;
   const running = active && !reduced && Boolean(controller);
   useEffect(() => {
     if (!running || !controller || !host.current) return;
@@ -48,7 +51,7 @@ export function CinematicPreview({ controller, children }: { controller: Assembl
     return () => { disposed = true; clearTimeout(deadline); cleanup?.(); controller.setStoryProgress(null); delete element.dataset.progress; };
   }, [running, controller]);
   return <>
-    <div ref={host} className={running ? 'watch-story is-running' : 'watch-story'}>
+    <div ref={host} className={running ? 'watch-story is-running' : detail ? 'watch-story is-inspecting' : 'watch-story'}>
       <div className="watch-story-sticky">
         {children}
         {controller && <div className="watch-story-toolbar">
@@ -56,14 +59,16 @@ export function CinematicPreview({ controller, children }: { controller: Assembl
             <p ref={caption}>Preparing cinematic view...</p>
             <p className="text-muted">Scroll to reveal the layers. Scroll back to assemble.</p>
           </>}
-          {!reduced && !unavailable && <Button variant="secondary" onClick={() => setActive(value => !value)}>
+          {!reduced && !unavailable && <Button variant="secondary" onClick={() => { controller.movement?.select(null); setInspection(null); setActive(value => !value); }}>
             {running ? 'Exit cinematic view' : 'Start cinematic view'}
           </Button>}
           {reduced && <p className="text-muted">Reduced motion is on. Explore the layers with the controls below.</p>}
           {unavailable && <p role="status">Cinematic view is unavailable. Manual exploration is still available.</p>}
         </div>}
+        {controller?.movement && !running && <MovementControls controller={controller.movement} reduced={reduced}
+          view={detail ?? null} onView={view => setInspection({ owner: controller, view })} />}
       </div>
     </div>
-    {controller && !running && <AssemblyControls key={String(active)} controller={controller} />}
+    {controller && !running && <div hidden={Boolean(detail)}><AssemblyControls key={String(active)} controller={controller} /></div>}
   </>;
 }

@@ -1,6 +1,6 @@
 # GitHub checks and enforcement
 
-CI runs on every push, pull request, manual dispatch and weekly schedule. The stable aggregate check is `Required checks`; it fails if repository/application validation or secret scanning fails or is skipped.
+CI runs on every push, pull request, manual dispatch and weekly schedule. The stable aggregate check is `Required checks`; it fails if repository/application validation, any browser matrix job or secret scanning fails, is cancelled or is skipped.
 
 Actions are pinned to immutable commits, permissions default to read-only, checkout does not retain credentials, and full history is scanned for secrets. Dependabot checks Actions and npm weekly (npm becomes applicable when its manifest exists).
 
@@ -19,3 +19,26 @@ Run `node scripts/check-repository.mjs` before commits. Once the app exists, als
 ## Phase 1 implementation
 
 The application CI contract is now active. CI installs Playwright Chromium and runs ten browser tests against the development server, builds the app, and repeats those tests against the production server before the dependency audit. No placeholder test scripts are used.
+
+
+## Phase 9 CI isolation
+
+The first Phase 9 runs reached the 30-minute application job limit while running
+all development and production tests sequentially. Development completed with
+76 passes and one retried browser-context setup failure; production was cancelled
+near its end. The required gate correctly rejected the cancelled job.
+
+Static validation and the dependency audit now run separately from four browser
+jobs: development/core, development/movement, production/core and
+production/movement. Core runs all tests except movement.spec.ts (currently 74);
+movement runs that file (currently 3). Each mode still covers all 77 tests.
+Default local `npm test` continues to run the entire suite.
+
+The movement workload has a fresh browser process rather than sharing Chromium
+with the following navigation test. In the failed runs, that test timed out during
+browser.newContext after movement and passed immediately on retry. Browser
+resource pressure is suspected, not proven; no navigation assertion was weakened.
+Each browser job keeps one CI worker, existing retries and a 30-minute budget.
+Production jobs build before testing. Matrix fail-fast is disabled; failures retain
+Playwright traces in seven-day artifacts. The required gate depends on every job.
+No application code, render quality, model asset or loading deadline changed.

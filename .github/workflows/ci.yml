@@ -17,8 +17,7 @@ jobs:
   quality:
     name: Repository and application checks
     runs-on: ubuntu-latest
-    # Two complete suites include serial, full-resolution software WebGL captures.
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -38,14 +37,46 @@ jobs:
             node --test scripts/asset-equivalence.test.mjs
             node scripts/prepare-watch.mjs --check
             git diff --exit-code -- public/models/aurel-veil.glb public/models/watch.json docs/WATCH_ASSET_VALIDATION.json
-            npx playwright install --with-deps chromium
-            npm test
-            npm run build
-            TEST_PRODUCTION=1 npm test
             npm audit --audit-level=high
           else
             echo 'Documentation phase: application has not been created.' >> "$GITHUB_STEP_SUMMARY"
           fi
+
+  browser:
+    name: Browser (${{ matrix.mode }}, ${{ matrix.suite }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [development, production]
+        suite: [core, movement]
+    env:
+      PLAYWRIGHT_SUITE: ${{ matrix.suite }}
+      TEST_PRODUCTION: ${{ matrix.mode == 'production' && '1' || '0' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Build production application
+        if: matrix.mode == 'production'
+        run: npm run build
+      - name: Run browser suite
+        run: npm test
+      - name: Retain failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: browser-${{ matrix.mode }}-${{ matrix.suite }}-${{ github.run_id }}
+          path: test-results/
+          retention-days: 7
+          if-no-files-found: ignore
 
   secrets:
     name: Secret scan
@@ -73,12 +104,13 @@ jobs:
   gate:
     name: Required checks
     if: always()
-    needs: [quality, secrets]
+    needs: [quality, browser, secrets]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
       - name: Require every check to succeed
         env:
           QUALITY: ${{ needs.quality.result }}
+          BROWSER: ${{ needs.browser.result }}
           SECRETS: ${{ needs.secrets.result }}
-        run: test "$QUALITY" = success && test "$SECRETS" = success
+        run: test "$QUALITY" = success && test "$BROWSER" = success && test "$SECRETS" = success

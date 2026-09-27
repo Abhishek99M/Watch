@@ -8,8 +8,8 @@
 - ✅ Phase 5: placeholder watch
 - ✅ Phase 6: real GLB model pipeline - selected V11 integrated, optimized and validated
 - ✅ Phase 7: exploded-view architecture (merged via PR #9)
-- ✅ Phase 8: cinematic scroll timeline (implemented; PR review pending)
-- ⬜ Phase 9: movement scene
+- ✅ Phase 8: cinematic scroll timeline (merged via PR #10)
+- ✅ Phase 9: movement scene (implemented and validated)
 - ⬜ Phase 10: materials/craftsmanship
 - ⬜ Phase 11: reassembly
 - ⬜ Phase 12: watch configuration

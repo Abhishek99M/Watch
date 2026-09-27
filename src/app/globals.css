@@ -168,3 +168,14 @@ button { font: inherit; }
   .is-running .scene-stage { height: 42svh; min-height: 100px; }
   .watch-story-toolbar { gap: 0.25rem 1rem; padding-block: 0.25rem; }
 }
+
+.movement-controls { min-width: 0; border: 1px solid var(--color-rule); border-radius: 0.5rem; padding: clamp(1rem, 3vw, 2rem); margin-block: 1rem; }
+.movement-controls legend { font-family: var(--font-editorial); font-size: clamp(1.35rem, 3vw, 1.8rem); padding-inline: 0.5rem; }
+.movement-controls p { max-width: 65ch; margin-block: 0.75rem; }
+.movement-controls input[type="range"] { display: block; width: 100%; min-height: 44px; accent-color: var(--color-ink); }
+.movement-controls input:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+
+/* Match the live canvas surround, including subpixel border compositing. */
+.scene-stage:has(canvas) { background: #08090b; border-color: #08090b; }
+/* Keep the detail visible while its controls below the image are used. */
+.is-inspecting .scene-stage { position: sticky; top: var(--story-top); z-index: 2; height: clamp(160px, 42svh, 540px); }

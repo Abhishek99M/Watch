@@ -273,3 +273,47 @@ Validation on Windows / installed Chrome:
 The refined branch now contains 74 tests. Final complete development/production
 results are recorded on PR #10 before handoff. Physical-device and broader browser
 QA remain later release gates.
+
+
+## Phase 9 movement scene - 2026-09-27
+
+- Production build (Next.js 16.3.5), TypeScript, ESLint and repository checks pass.
+- Final production run: **15/15 passed**, 11.6 minutes, installed Chrome with
+  SwiftShader, one worker. Files: assembly.spec.ts, assembly-browser.spec.ts,
+  timeline.spec.ts, cinematic.spec.ts and movement.spec.ts. This is the relevant
+  phase regression set, not a claim that the complete 77-test suite was rerun.
+- Coverage includes all 43 V11 component transforms; absolute camera/assembly
+  reversal; seven cinematic/manual widths; reduced motion; idle rendering;
+  failed chunks/invalid metadata; context loss/retry; manual movement isolation;
+  actual authored hand playback, pause/reset and reverse seeking; exact rendered
+  return to assembled and partially separated poses; and offscreen playback stop.
+- Development checks were run in focused passes against the existing port-3000
+  server. Intermediate failures were resolved before the final production run:
+  quaternion tests now compare numeric values rather than Three.js callbacks;
+  sticky inspection is height-limited so it cannot cover its controls; saved
+  camera restoration survives the inspection layout resize; manual captures use
+  a consistent scroll position. A measured one-row CSS/compositor edge artifact
+  is excluded from comparisons; every interior pixel still matches exactly.
+- The software renderer sometimes delivered its first playback frame after the
+  original five-second assertion window (the failure snapshot already showed
+  11.4 seconds of advancement). Playback/offscreen assertions now allow 20 seconds.
+  Application load deadlines and rendering quality were not relaxed.
+- Original production desktop/mobile captures were reviewed and retained in
+  movement-validation/. Numerical framing checks use actual transformed mesh
+  vertices; the real-asset browser cases cover 320, 768 and 1440px detail framing.
+- Approved web GLB SHA-256 remains
+  19447c6170a22fa537e6c1e337e704e607350d01f8f382a6c41219bdab16e38d.
+- No dependency or asset changes. Phase 10 craftsmanship and Phase 11 narrative
+  reassembly remain separate. Physical-device performance, Safari/Firefox and
+  assistive-technology audits remain later QA gates.
+
+
+### Phase 9 CI execution
+
+CI runs the full suite in both development and production, partitioned into
+`PLAYWRIGHT_SUITE=core` (74 tests) and `PLAYWRIGHT_SUITE=movement` (3 tests)
+on separate runners. Unset the variable to run all 77 locally. Invalid suite names
+fail configuration loading. Use `npx playwright test --list` with each selection
+to verify their disjoint union matches the default inventory. Rendering settings,
+assertions and application deadlines are unchanged. Failed browser jobs upload
+`test-results/` traces for diagnosis; all four jobs must pass the required gate.

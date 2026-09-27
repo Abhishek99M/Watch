@@ -1,4 +1,4 @@
-import { Box3, Group, LoadingManager, Mesh, SkinnedMesh, Texture, Vector3, type Skeleton, type Material, type Object3D, type Matrix4 } from 'three';
+import { Box3, Group, LoadingManager, Mesh, SkinnedMesh, Texture, Vector3, type AnimationClip, type Skeleton, type Material, type Object3D, type Matrix4 } from 'three';
 import { GLTFLoader, type GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { parseModelDefinition, type ComponentRole, type ModelDefinition } from './model-definition';
 
@@ -6,6 +6,7 @@ export const MAX_MODEL_BYTES = 8 * 1024 * 1024;
 
 export type LoadedWatch = {
   object: Group;
+  animations?: AnimationClip[];
   studioTransform?: Matrix4;
   components: Partial<Record<ComponentRole, Object3D[]>>;
   dispose: () => void;
@@ -121,7 +122,7 @@ export async function prepareWatch(gltf: GLTF, definition: ModelDefinition): Pro
   centered.updateMatrixWorld(true);
   const studioTransform = definition.presentation === 'aurel-veil-v11' ? oriented.matrixWorld.clone() : undefined;
   let disposed = false;
-  return { object: centered, studioTransform, components, dispose: () => {
+  return { object: centered, animations: gltf.animations, studioTransform, components, dispose: () => {
     if (!disposed) { disposed = true; disposeScenes(gltf.scenes); }
   } };
 }
