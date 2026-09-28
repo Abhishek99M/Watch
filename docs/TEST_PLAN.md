@@ -129,7 +129,7 @@ On 2026-09-21, Windows / installed Chrome with SwiftShader:
 
 The initial test server start conflicted with an existing server. Local tests now optionally reuse PLAYWRIGHT_BASE_URL; localhost was required by that server's development-origin policy. Initial new error selectors also matched Next.js's route announcer; they were scoped to the preview error. The corrected targeted and full suites passed. Playwright's Node transpilation emits an upstream Three.js CommonJS deprecation warning; browser success paths have no console errors. The existing Fiber Clock warning remains documented.
 
-At the 2026-09-21 checkpoint, Phase 6 was incomplete because no approved asset was available. That empty-manifest requirement is superseded by the V11 integration below. Follow MODEL_PIPELINE.md to inventory and map the actual asset, review materials/textures, size, scale and orientation, and repeat browser/failure checks before marking Ã¢Å“â€¦. Physical-device/GPU and screen-reader QA remain pending.
+At the 2026-09-21 checkpoint, Phase 6 was incomplete because no approved asset was available. That empty-manifest requirement is superseded by the V11 integration below. Follow MODEL_PIPELINE.md to inventory and map the actual asset, review materials/textures, size, scale and orientation, and repeat browser/failure checks before marking ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦. Physical-device/GPU and screen-reader QA remain pending.
 
 ## Phase 6 selected-asset integration, 2026-09-24
 
@@ -428,3 +428,13 @@ Local production validation on Windows / installed Chrome with SwiftShader:
 
 GitHub runs all 93 tests in each mode; its PR records final results. Physical-phone,
 Safari/Firefox and assistive-technology checks remain later release gates.
+
+
+Phase 12 CI follow-up: one production craftsmanship job failed its synthetic
+context-loss retry while the parallel PR job and both development jobs passed.
+The failed traces show a 14.7-18.8s main-thread gap between a successful manifest
+response and the aborted GLB fetch, exceeding the unchanged 12-second load limit.
+The craftsmanship recovery test now uses WEBGL_lose_context to invalidate the
+actual GPU context instead of dispatching an event while leaving GPU work alive.
+Assertions, retries, application deadline and rendering quality are unchanged.
+The corrected real-context craftsmanship recovery test passed twice locally in production (43.9s and 46.4s); focused lint and diff checks passed.
