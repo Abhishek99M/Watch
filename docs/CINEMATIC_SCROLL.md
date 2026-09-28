@@ -7,10 +7,13 @@ are unchanged. Manual Phase 7 separation and orbit controls remain available.
 
 ## Sequence and ownership
 
-`src/animations/watch-timeline.ts` defines one normalized clock:
-- 0-18%: the assembled watch approaches by up to 8%, limited by available framing room.
-- 18-80%: components separate while the camera turns gently toward a three-quarter inspection angle.
-- 80-100%: fixed separated pose and camera, giving the viewer time to inspect.
+`src/animations/watch-timeline.ts` defines one normalized clock. Phase 11 extends
+its original approach/reveal/inspection flow with closing and a final hold:
+- 0-12%: the assembled watch approaches by up to 8%, limited by available framing room.
+- 12-52%: components separate with the existing three-quarter inspection camera.
+- 52-66%: fixed separated pose and camera for inspection.
+- 66-94%: the same component stages close and the camera returns home.
+- 94-100%: exact original assembled pose and camera. See REASSEMBLY.md.
 
 The initial retreat has been removed. `frameCinematic` fits the current positions
 of the individual components, with an 8% projected framing margin. It no longer
@@ -24,7 +27,7 @@ there is no per-frame vertex scan. The original full-envelope camera remains in
 use for manual Phase 7 inspection. Assembly parent transforms remain fixed.
 Reverse scrolling evaluates the same absolute values. Zero restores every saved component
 transform. Exiting cinematic mode restores the original V11 camera and assembled
-pose. This does not implement the later narrative reassembly or movement scenes.
+pose. Phase 11 now also provides narrative reassembly; movement inspection remains a manual detail mode.
 
 The scene owns rendering and component transforms; the UI owns the scroll trigger.
 During cinematic mode, OrbitControls and manual zoom controls are disabled, the

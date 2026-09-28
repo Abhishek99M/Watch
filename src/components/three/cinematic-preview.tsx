@@ -61,7 +61,7 @@ export function CinematicPreview({ controller, children }: { controller: Assembl
         {controller && <div className="watch-story-toolbar">
           {running && <>
             <p ref={caption}>Preparing cinematic view...</p>
-            <p className="text-muted">Scroll to reveal the layers. Scroll back to assemble.</p>
+            <p className="text-muted">Scroll to reveal, inspect, and reassemble. Scroll back to retrace.</p>
           </>}
           {!reduced && !unavailable && <Button variant="secondary" onClick={() => { controller.movement?.select(null); controller.craftsmanship?.select(null); setInspection(null); setActive(value => !value); }}>
             {running ? 'Exit cinematic view' : 'Start cinematic view'}

@@ -107,3 +107,15 @@ build, rendering compatibility and asset-equivalence validation passed. The brow
 inventory is 83 tests per mode, split into core/movement/craftsmanship jobs. See
 CRAFTSMANSHIP.md and TEST_PLAN.md. Phase 11 narrative reassembly and later
 configuration remain pending; GitHub review does not authorize merging.
+
+
+## Phase 11 implementation
+
+The native-scroll cinematic story now closes through the same absolute assembly
+controller, followed by an exact assembled/studio-camera hold. A 600svh section
+allocates room for the return while preserving approach, reveal and inspection.
+No model, material, light, lens, quality or dependency changes. Existing manual
+movement/craftsmanship controls retain exclusive ownership and exact restoration.
+Phase 10 is merged through PR #12. See REASSEMBLY.md for current timeline timings;
+this supersedes earlier notes that narrative reassembly is pending. Phase 12
+configuration and later product/commerce work remain pending.

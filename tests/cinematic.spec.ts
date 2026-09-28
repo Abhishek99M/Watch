@@ -1,5 +1,6 @@
+import { seek } from './helpers/cinematic-scroll';
 import { captureCanvas } from './helpers/canvas-capture';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import sharp from 'sharp';
 
 async function visibleHeight(image: Buffer) {
@@ -10,27 +11,6 @@ async function visibleHeight(image: Buffer) {
     if (Math.max(data[i], data[i + 1], data[i + 2]) > 45) { top = Math.min(top, y); bottom = Math.max(bottom, y); }
   }
   return bottom - top;
-}
-
-async function seek(page: Page, progress: number) {
-  await expect(page.locator('.watch-story')).toHaveAttribute('data-progress', /.+/);
-  await page.locator('.watch-story.is-running').evaluate((element, value) => {
-    const top = parseFloat(getComputedStyle(element).getPropertyValue('--story-top'));
-    const start = element.getBoundingClientRect().top + scrollY - top;
-    const distance = (element as HTMLElement).offsetHeight - (element.firstElementChild as HTMLElement).offsetHeight;
-    window.scrollTo(0, start + distance * value);
-  }, progress);
-  try {
-    await expect.poll(async () => Number(await page.locator('.watch-story').getAttribute('data-progress')), { timeout: 20_000 }).toBeCloseTo(progress, 2);
-  } catch (error) {
-    const geometry = await page.locator('.watch-story').evaluate(element => ({
-      scrollY, top: element.getBoundingClientRect().top, height: (element as HTMLElement).offsetHeight,
-      stickyHeight: (element.firstElementChild as HTMLElement).offsetHeight,
-      inset: getComputedStyle(element).getPropertyValue('--story-top'), progress: (element as HTMLElement).dataset.progress,
-    }));
-    await test.info().attach('cinematic-seek-geometry', { body: JSON.stringify({ requested: progress, ...geometry }), contentType: 'application/json' });
-    throw error;
-  }
 }
 
 test('V11 cinematic scroll reverses, holds, releases controls and restores the assembled image', async ({ page }, testInfo) => {
@@ -47,17 +27,17 @@ test('V11 cinematic scroll reverses, holds, releases controls and restores the a
   await page.getByRole('button', { name: 'Start cinematic view' }).click();
   await seek(page, 0);
   const start = await captureCanvas(canvas, { path: testInfo.outputPath('cinematic-start.png') });
-  await seek(page, 0.18);
+  await seek(page, 0.12);
   const approach = await captureCanvas(canvas, { path: testInfo.outputPath('cinematic-approach.png') });
   expect(await visibleHeight(approach)).toBeGreaterThan(await visibleHeight(start) * 1.03);
-  await seek(page, 0.55);
+  await seek(page, 0.34);
   const middle = await captureCanvas(canvas, { path: testInfo.outputPath('cinematic-middle.png') });
-  await seek(page, 0.85);
+  await seek(page, 0.56);
   const hold = await captureCanvas(canvas, { path: testInfo.outputPath('cinematic-hold.png') });
   expect(hold.equals(middle)).toBe(false);
-  await seek(page, 0.95); expect((await captureCanvas(canvas)).equals(hold)).toBe(true);
-  await seek(page, 0.55); expect((await captureCanvas(canvas)).equals(middle)).toBe(true);
-  await seek(page, 0.18); expect((await captureCanvas(canvas)).equals(approach)).toBe(true);
+  await seek(page, 0.64); expect((await captureCanvas(canvas)).equals(hold)).toBe(true);
+  await seek(page, 0.34); expect((await captureCanvas(canvas)).equals(middle)).toBe(true);
+  await seek(page, 0.12); expect((await captureCanvas(canvas)).equals(approach)).toBe(true);
   await seek(page, 0);
   await style.evaluate(element => element.parentNode?.removeChild(element));
   await canvas.hover(); const before = await page.evaluate(() => scrollY);
@@ -86,7 +66,7 @@ test('cinematic framing remains usable across seven widths, reduced motion and r
   await expect(page.getByRole('slider')).toBeVisible({ timeout: 15_000 });
   await page.getByRole('button', { name: 'Start cinematic view' }).click();
   for (const width of [320, 375, 390, 768, 1024, 1440, 1920]) {
-    await page.setViewportSize({ width, height: 900 }); await seek(page, 0.85);
+    await page.setViewportSize({ width, height: 900 }); await seek(page, 0.56);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await expect(page.getByRole('button', { name: 'Exit cinematic view' })).toBeInViewport();
     if (width === 320 || width === 1440) await page.screenshot({ path: testInfo.outputPath(`cinematic-${width}.png`) });
@@ -97,7 +77,7 @@ test('cinematic framing remains usable across seven widths, reduced motion and r
   await expect(page.getByRole('button', { name: 'Start cinematic view' })).toHaveCount(0);
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.getByRole('button', { name: 'Start cinematic view' }).click();
-  await seek(page, 0.55);
+  await seek(page, 0.34);
   await page.reload();
   await expect(page.locator('canvas')).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Load 3D preview' })).toBeVisible();
@@ -145,11 +125,18 @@ test('cinematic inspection holds idle and recovers manual access after context l
   await page.getByRole('button', { name: 'Start cinematic view' }).click();
   // This absolute hold check has its own page: native touch momentum from a
   // different scenario must not compete with the scripted progress clock.
-  await seek(page, 0.85); await page.locator('canvas').screenshot();
+  await seek(page, 0.56); await page.locator('canvas').screenshot();
   await page.waitForTimeout(300);
   const draws = await page.evaluate(() => (window as unknown as { cinematicDraws: number }).cinematicDraws);
-  await seek(page, 0.95); await page.waitForTimeout(350);
+  await seek(page, 0.64); await page.waitForTimeout(350);
   expect(await page.evaluate(() => (window as unknown as { cinematicDraws: number }).cinematicDraws)).toBe(draws);
+  await seek(page, 0.96); await page.locator('canvas').screenshot();
+  await page.waitForTimeout(300);
+  const finalDraws = await page.evaluate(() => (window as unknown as { cinematicDraws: number }).cinematicDraws);
+  await seek(page, 0.99); await page.waitForTimeout(350);
+  expect(await page.evaluate(() => (window as unknown as { cinematicDraws: number }).cinematicDraws)).toBe(finalDraws);
+  // Recovery also interrupts an unfinished closing sequence safely.
+  await seek(page, 0.8);
   await page.locator('canvas').evaluate(canvas => canvas.dispatchEvent(new Event('webglcontextlost', { cancelable: true })));
   await expect(page.locator('.is-running')).toHaveCount(0);
   await expect(page.getByRole('alert').filter({ hasText: '3D preview unavailable' })).toBeVisible();

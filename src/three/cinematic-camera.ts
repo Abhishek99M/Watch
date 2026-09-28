@@ -4,7 +4,7 @@ import type { watchTimeline } from '@/animations/watch-timeline';
 /** Tight per-component fitting. No material, model scale or lens changes. */
 export function frameCinematic(camera: PerspectiveCamera, target: Vector3, points: readonly Vector3[], pose: ReturnType<typeof watchTimeline>) {
   // Caller first restores studio.home, guaranteeing the original pose at zero.
-  if (pose.progress === 0 || !points.length) return;
+  if ((pose.approach === 0 && pose.camera === 0) || !points.length) return;
   const homeTarget = target.clone();
   const homeRay = camera.position.clone().sub(homeTarget);
   const homeDistance = homeRay.length();
