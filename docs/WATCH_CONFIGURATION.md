@@ -76,7 +76,8 @@ Physical-phone performance, Safari/Firefox and assistive-technology audits remai
 later release gates. Software WebGL captures do not certify those platforms.
 
 
-Same-context image resets remain pixel-exact. A freshly rebuilt WebGL context
-showed 44 channel differences of at most 2/255 in the unchanged seconds subdial;
-recovery therefore checks that bound over every interior pixel, followed by exact
-reset/reselection in the recovered context. See TEST_PLAN.md for measurements.
+Image reset and reselection comparisons remain pixel-exact. After actual WebGL
+context loss, the automatically restored colour must differ from an explicit
+Charcoal reset and exactly match explicitly selecting the saved colour again in
+the recovered context. This validates the restored appearance without comparing
+pixels across independently initialized GPU contexts. See TEST_PLAN.md.

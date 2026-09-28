@@ -15,11 +15,11 @@ Reviewed surface detail, unchanged surrounding materials, readable selected stat
 control wrapping and visibility alongside the sticky detail canvas. Automated
 checks also cover 320, 375, 768, 1024 and 1920px widths.
 
-Same-context colour reset and reselection require exact interior-pixel equality.
-Fresh context recovery permits at most 2/255 per channel over every interior pixel:
-44 channel values differed in the untouched seconds subdial in the observed
-432,216-value mobile comparison. No image region is excluded beyond the established
-one-pixel compositor perimeter. Model/material identity tests remain exact.
+Colour reset and reselection require exact interior-pixel equality. Recovery also
+compares within the recovered GPU context: its automatic saved colour must differ
+from a Charcoal reset and exactly match explicitly selecting the saved tone again.
+This avoids platform-dependent differences between independent GPU contexts. No
+pixel tolerance is used. Numerical material identity checks remain exact.
 
 Physical-phone performance, Safari/Firefox and assistive-technology validation
 remain later release gates.

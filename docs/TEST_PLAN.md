@@ -129,7 +129,7 @@ On 2026-09-21, Windows / installed Chrome with SwiftShader:
 
 The initial test server start conflicted with an existing server. Local tests now optionally reuse PLAYWRIGHT_BASE_URL; localhost was required by that server's development-origin policy. Initial new error selectors also matched Next.js's route announcer; they were scoped to the preview error. The corrected targeted and full suites passed. Playwright's Node transpilation emits an upstream Three.js CommonJS deprecation warning; browser success paths have no console errors. The existing Fiber Clock warning remains documented.
 
-At the 2026-09-21 checkpoint, Phase 6 was incomplete because no approved asset was available. That empty-manifest requirement is superseded by the V11 integration below. Follow MODEL_PIPELINE.md to inventory and map the actual asset, review materials/textures, size, scale and orientation, and repeat browser/failure checks before marking ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦. Physical-device/GPU and screen-reader QA remain pending.
+At the 2026-09-21 checkpoint, Phase 6 was incomplete because no approved asset was available. That empty-manifest requirement is superseded by the V11 integration below. Follow MODEL_PIPELINE.md to inventory and map the actual asset, review materials/textures, size, scale and orientation, and repeat browser/failure checks before marking ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦. Physical-device/GPU and screen-reader QA remain pending.
 
 ## Phase 6 selected-asset integration, 2026-09-24
 
@@ -438,3 +438,14 @@ The craftsmanship recovery test now uses WEBGL_lose_context to invalidate the
 actual GPU context instead of dispatching an event while leaving GPU work alive.
 Assertions, retries, application deadline and rendering quality are unchanged.
 The corrected real-context craftsmanship recovery test passed twice locally in production (43.9s and 46.4s); focused lint and diff checks passed.
+
+
+Phase 12 recovery assertion refinement: CI measured a maximum fresh-context
+channel difference of 8, so the earlier local 2/255 bound was not portable. The
+final test removes cross-context pixel comparison altogether. After real
+WEBGL_lose_context recovery it captures the automatically restored Forest green
+appearance, verifies that explicit Charcoal reset changes it, then requires exact
+pixel equality when Forest green is explicitly selected again in that recovered
+context. Thus saved-state application is verified without any pixel tolerance;
+numerical material identity and other exact reset assertions remain unchanged.
+This supersedes the earlier cross-context bound described above.

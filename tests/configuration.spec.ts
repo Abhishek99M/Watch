@@ -1,4 +1,3 @@
-import sharp from 'sharp';
 import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { BoxGeometry, Group, Matrix4, Mesh, MeshPhysicalMaterial, Texture } from 'three';
@@ -138,19 +137,17 @@ test('saved selection recovers after context loss and static exit without colour
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/watch'); await page.getByRole('button', { name: 'Load 3D preview' }).click();
   const forest = page.getByRole('radio', { name: 'Forest green' }); await expect(forest).toBeVisible({ timeout: 15_000 }); await forest.check();
-  const selectedImage = await captureCinematicCanvas(page.locator('canvas'), { path: info.outputPath('before-retry.png') });
-  await page.locator('canvas').evaluate(canvas => canvas.dispatchEvent(new Event('webglcontextlost', { cancelable: true })));
+  await page.locator('canvas').evaluate(element => {
+    const extension = (element as HTMLCanvasElement).getContext('webgl2')?.getExtension('WEBGL_lose_context');
+    if (!extension) throw new Error('Context-loss simulation is unavailable');
+    extension.loseContext();
+  });
   await expect(page.getByRole('radio')).toHaveCount(0);
   await expect(page.locator('.configuration-saved')).toContainText('Forest green');
   await page.getByRole('button', { name: 'Retry 3D preview' }).click(); await expect(forest).toBeChecked({ timeout: 15_000 });
   const recovered = await captureCinematicCanvas(page.locator('canvas'), { path: info.outputPath('after-retry.png') });
-  // A new WebGL context differs by up to two channel levels in the unchanged
-  // seconds subdial on SwiftShader. Check every channel, not a masked region.
-  const before = await sharp(selectedImage).raw().toBuffer(), after = await sharp(recovered).raw().toBuffer();
-  expect(after.length).toBe(before.length);
-  let maxDifference = 0;
-  for (let i = 0; i < before.length; i++) maxDifference = Math.max(maxDifference, Math.abs(before[i] - after[i]));
-  expect(maxDifference).toBeLessThanOrEqual(2);
+  // Compare against explicitly selecting the saved tone in this same recovered
+  // context. Separate GPU contexts can differ even on untouched surfaces.
   await page.getByRole('button', { name: 'Reset appearance' }).click();
   expect((await captureCinematicCanvas(page.locator('canvas'))).equals(recovered)).toBe(false);
   await forest.check(); expect((await captureCinematicCanvas(page.locator('canvas'))).equals(recovered)).toBe(true);
