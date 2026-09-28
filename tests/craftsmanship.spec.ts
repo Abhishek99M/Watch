@@ -115,7 +115,13 @@ test('craftsmanship recovers after cinematic handoff and context loss on mobile'
   await page.getByRole('button', { name: 'Start cinematic view' }).click();
   await page.getByRole('button', { name: 'Exit cinematic view' }).click();
   await page.getByRole('button', { name: 'Inspect case', exact: true }).click();
-  await canvas.evaluate(element => element.dispatchEvent(new Event('webglcontextlost', { cancelable: true })));
+  // Lose the actual context: a synthetic event leaves software-rendered GPU
+  // work alive during retry and does not model a real context loss.
+  await canvas.evaluate(element => {
+    const extension = (element as HTMLCanvasElement).getContext('webgl2')?.getExtension('WEBGL_lose_context');
+    if (!extension) throw new Error('Context-loss simulation is unavailable');
+    extension.loseContext();
+  });
   await expect(page.getByText('3D preview unavailable', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Inspect case', exact: true })).toBeHidden();
   await expect(page.getByRole('heading', { name: 'Character in the details.' })).toBeVisible();

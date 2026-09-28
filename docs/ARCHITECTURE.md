@@ -9,3 +9,10 @@ Keep UI, 3D and checkout responsibilities separate. Lazy-load heavy scenes with 
 Define assembled/exploded transforms in configuration and interpolate from progress 0 to 1. Reassembly must return to the original transforms. Keep storytelling camera state separate from interactive camera controls. Avoid React state updates on every animation frame.
 
 Server code owns validated pricing, inventory, payment creation and webhook verification. Never ship server secrets to clients.
+
+
+Phase 12 configuration is page-scoped React state above the preview load/retry
+boundary. Its material controller owns only the reviewed dial-face assignment;
+assembly, animation and camera controllers retain their existing ownership.
+A global Zustand configuration/cart store remains deferred until cross-route
+consumers exist. No cart or product-data state is introduced in Phase 12.

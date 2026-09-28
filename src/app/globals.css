@@ -196,3 +196,17 @@ button { font: inherit; }
 
 .craftsmanship-caption h3 { font-size: clamp(1.25rem, 2vw, 1.6rem); line-height: 1.3; }
 .craftsmanship-controls button[aria-pressed="true"] { border-color: var(--color-accent); color: var(--color-accent); }
+
+/* Phase 12: native radio choices; material changes are immediate, never animated. */
+.configuration-controls { min-width: 0; border: 1px solid var(--color-rule); padding: clamp(1rem, 3vw, 1.5rem); margin-block: 1rem; }
+.configuration-controls legend { font-family: var(--font-editorial); font-size: 1.4rem; padding-inline: 0.5rem; }
+.configuration-controls p { font-size: var(--text-small); margin-block: 0.5rem; }
+.configuration-options { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+.configuration-option { display: flex; align-items: center; gap: 0.5rem; min-height: 48px; padding: 0.5rem 0.75rem; border: 1px solid var(--color-rule); cursor: pointer; }
+.configuration-option:has(input:checked) { border-color: var(--color-accent); background: var(--color-surface); }
+.configuration-option:has(input:focus-visible) { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+.configuration-option input { accent-color: var(--color-accent); }
+.configuration-option small { display: block; color: var(--color-muted); font-size: 0.7rem; }
+.configuration-swatch { width: 1.1rem; height: 1.1rem; border: 1px solid #8b8b82; border-radius: 50%; flex-shrink: 0; }
+.configuration-summary { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+.configuration-note, .configuration-saved { max-width: 65ch; font-size: var(--text-small); }

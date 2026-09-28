@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { createRoot, type ReconcilerRoot, type RootStore } from '@react-three/fiber';
 import { ACESFilmicToneMapping, Color, Euler, PCFShadowMap, PerspectiveCamera, Spherical, Vector3, WebGLRenderer, type WebGLRenderTarget } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { createWatchConfiguration } from './watch-configuration';
+import type { DialTone } from '@/data/watch-configuration';
 import { loadStudioEnvironment } from './studio-environment';
 import type { AssemblyPreviewHandle } from '@/components/three/assembly-controls';
 import { createV11Assembly } from './v11-assembly';
@@ -18,12 +20,15 @@ import { PlaceholderWatch } from './placeholder-watch';
 import { SceneBoundary } from './scene-boundary';
 import { loadConfiguredWatch, type LoadedWatch } from './model-loader';
 
-export type SceneCanvasProps = { source: 'configured' | 'placeholder'; onReady: (isModel: boolean) => void; onError: () => void; onAssemblyReady?: (controller: AssemblyPreviewHandle | null) => void };
+export type SceneCanvasProps = { dialTone?: DialTone; source: 'configured' | 'placeholder'; onReady: (isModel: boolean) => void; onError: () => void; onAssemblyReady?: (controller: AssemblyPreviewHandle | null) => void };
 
-export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: SceneCanvasProps) {
+export function SceneCanvas({ source, dialTone = 'charcoal', onReady, onError, onAssemblyReady }: SceneCanvasProps) {
   const host = useRef<HTMLDivElement>(null);
   const interaction = useRef<{ reset: () => void; zoom: (factor: number) => void } | null>(null);
   const [interactive, setInteractive] = useState(false);
+  const tone = useRef(dialTone);
+  const appearance = useRef<((value: DialTone) => void) | null>(null);
+  useEffect(() => { tone.current = dialTone; appearance.current?.(dialTone); }, [dialTone]);
   useEffect(() => {
     const container = host.current;
     if (!container) return;
@@ -40,6 +45,7 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
     let controls: OrbitControls | undefined;
     let assembly: ReturnType<typeof createV11Assembly> | undefined;
     let storyProgress: number | null = null;
+    let configuration: ReturnType<typeof createWatchConfiguration> = null;
     let movement: ReturnType<typeof createMovementInspection> = null;
     let craftsmanship: ReturnType<typeof createCraftsmanshipInspection> = null;
     let detail: MovementView | CraftsmanshipView | null = null;
@@ -148,6 +154,12 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
             assembly = createV11Assembly(asset);
             movement = createMovementInspection(asset);
             craftsmanship = createCraftsmanshipInspection(asset);
+            configuration = createWatchConfiguration(asset);
+            configuration?.select(tone.current);
+            appearance.current = value => {
+              if (stopped || failed || !configuration) return;
+              try { configuration.select(value); invalidate(); } catch { fail(); }
+            };
           }
           controls = new OrbitControls(camera, canvas);
           controls.enableDamping = false; controls.enablePan = false; controls.autoRotate = false;
@@ -178,7 +190,7 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
         if (stopped) { root.unmount(); return; }
         store = root.render(<SceneBoundary onError={fail}>{studio ? <primitive object={studio.lights} /> : <SceneLighting studio={Boolean(asset)} />}{asset ? <primitive object={asset.object} /> : <PlaceholderWatch />}</SceneBoundary>);
         resize();
-        if (assembly) onAssemblyReady?.({ craftsmanship: craftsmanship ? { select: selectDetail } : undefined, movement: movement ? {
+        if (assembly) onAssemblyReady?.({ configuration: Boolean(configuration), craftsmanship: craftsmanship ? { select: selectDetail } : undefined, movement: movement ? {
           supported: movement.supported,
           select: selectDetail,
           seek(seconds) { if (!stopped && !failed && storyProgress === null && detail === 'seconds') { movement?.seek(seconds); invalidate(); } },
@@ -215,12 +227,12 @@ export function SceneCanvas({ source, onReady, onError, onAssemblyReady }: Scene
     }
     void initialize();
     return () => {
-      stopped = true; controller.abort(); interaction.current = null;
+      stopped = true; controller.abort(); interaction.current = null; appearance.current = null;
       observer.disconnect(); window.removeEventListener('resize', resize);
       canvas.removeEventListener('webglcontextlost', contextLost); canvas.removeEventListener('keydown', keyboard);
       controls?.removeEventListener('change', invalidate); controls?.dispose();
       if (root) root.unmount(); else renderer?.forceContextLoss();
-      movement?.dispose(); assembly?.dispose(); onAssemblyReady?.(null);
+      configuration?.dispose(); movement?.dispose(); assembly?.dispose(); onAssemblyReady?.(null);
       studio?.dispose(); renderer?.dispose(); asset?.dispose(); environment?.dispose(); canvas.remove();
     };
   }, [source, onReady, onError, onAssemblyReady]);

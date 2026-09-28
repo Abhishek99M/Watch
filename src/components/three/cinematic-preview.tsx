@@ -6,10 +6,12 @@ import type { CraftsmanshipView } from '@/data/craftsmanship';
 import { MovementControls } from './movement-controls';
 import { AssemblyControls } from './assembly-controls';
 import { Button } from '@/components/ui/button';
+import { ConfigurationControls } from './configuration-controls';
+import type { DialTone } from '@/data/watch-configuration';
 import { watchTimeline } from '@/animations/watch-timeline';
 
 /** Native scrolling and CSS sticky keep keyboard, touch and document navigation intact. */
-export function CinematicPreview({ controller, children }: { controller: AssemblyPreviewHandle | null; children: ReactNode }) {
+export function CinematicPreview({ controller, children, dialTone, onDialTone }: { controller: AssemblyPreviewHandle | null; children: ReactNode; dialTone: DialTone; onDialTone: (value: DialTone) => void }) {
   const host = useRef<HTMLDivElement>(null), caption = useRef<HTMLParagraphElement>(null);
   const [active, setActive] = useState(false), [reduced, setReduced] = useState(true);
   const [unavailable, setUnavailable] = useState(false);
@@ -69,8 +71,9 @@ export function CinematicPreview({ controller, children }: { controller: Assembl
           {reduced && <p className="text-muted">Reduced motion is on. Explore the layers with the controls below.</p>}
           {unavailable && <p role="status">Cinematic view is unavailable. Manual exploration is still available.</p>}
         </div>}
+        {controller?.configuration && !running && <ConfigurationControls value={dialTone} onChange={onDialTone} />}
         {controller?.craftsmanship && !running && <div hidden={Boolean(movementView)}><CraftsmanshipControls
-          controller={controller.craftsmanship} view={craft} onView={view => setInspection({ owner: controller, view })} /></div>}
+          controller={controller.craftsmanship} dialTone={dialTone} view={craft} onView={view => setInspection({ owner: controller, view })} /></div>}
         {controller?.movement && !running && <div hidden={Boolean(craft)}><MovementControls controller={controller.movement} reduced={reduced}
           view={movementView} onView={view => setInspection({ owner: controller, view })} /></div>}
       </div>

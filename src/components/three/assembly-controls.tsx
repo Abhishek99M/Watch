@@ -3,7 +3,7 @@ import { useId, useState } from 'react';
 import type { CraftsmanshipView } from '@/data/craftsmanship';
 import { Button } from '@/components/ui/button';
 
-export type AssemblyPreviewHandle = { craftsmanship?: { select: (view: CraftsmanshipView | null) => void }; movement?: { supported: boolean; select: (view: 'movement' | 'seconds' | null) => void; seek: (seconds: number) => void };  setProgress: (value: number) => void; setStoryProgress: (value: number | null) => void };
+export type AssemblyPreviewHandle = { configuration?: boolean; craftsmanship?: { select: (view: CraftsmanshipView | null) => void }; movement?: { supported: boolean; select: (view: 'movement' | 'seconds' | null) => void; seek: (seconds: number) => void };  setProgress: (value: number) => void; setStoryProgress: (value: number | null) => void };
 
 export function AssemblyControls({ controller }: { controller: AssemblyPreviewHandle }) {
   const id = useId();
