@@ -129,7 +129,7 @@ On 2026-09-21, Windows / installed Chrome with SwiftShader:
 
 The initial test server start conflicted with an existing server. Local tests now optionally reuse PLAYWRIGHT_BASE_URL; localhost was required by that server's development-origin policy. Initial new error selectors also matched Next.js's route announcer; they were scoped to the preview error. The corrected targeted and full suites passed. Playwright's Node transpilation emits an upstream Three.js CommonJS deprecation warning; browser success paths have no console errors. The existing Fiber Clock warning remains documented.
 
-At the 2026-09-21 checkpoint, Phase 6 was incomplete because no approved asset was available. That empty-manifest requirement is superseded by the V11 integration below. Follow MODEL_PIPELINE.md to inventory and map the actual asset, review materials/textures, size, scale and orientation, and repeat browser/failure checks before marking âœ…. Physical-device/GPU and screen-reader QA remain pending.
+At the 2026-09-21 checkpoint, Phase 6 was incomplete because no approved asset was available. That empty-manifest requirement is superseded by the V11 integration below. Follow MODEL_PIPELINE.md to inventory and map the actual asset, review materials/textures, size, scale and orientation, and repeat browser/failure checks before marking Ã¢Å“â€¦. Physical-device/GPU and screen-reader QA remain pending.
 
 ## Phase 6 selected-asset integration, 2026-09-24
 
@@ -399,3 +399,32 @@ Production validation on an isolated localhost:43170 server:
 GitHub CI runs all 86 tests in each mode; the PR records its final results.
 Physical-device performance, Safari/Firefox and assistive-technology checks remain
 later release gates.
+
+
+## Phase 12 validation
+
+The full inventory is 93 tests per mode: 78 core, 3 movement, 5 craftsmanship and
+7 configuration. The new configuration suite has its own runner in development
+and production; all existing isolated suites and assertions are retained.
+
+Local production validation on Windows / installed Chrome with SwiftShader:
+- Six configuration tests passed on the initial run: actual GLB material mapping,
+  clone isolation/disposal, native keyboard choices and exact image reset,
+  assembly/movement/craftsmanship/full-cinema handoffs, seven widths with reduced
+  motion and idle rendering, and no-JavaScript/failed/unsupported fallbacks.
+- The remaining recovery case passed in a focused run after characterizing a
+  fresh-context image difference: 44 of 432,216 channel values differed by at
+  most 2/255, all in the unchanged seconds subdial. The cross-context comparison
+  now bounds every interior channel by 2; reset and reselection within either
+  context still require exact equality. No application behavior was changed to
+  accommodate this diagnostic, and no existing test tolerance was loosened.
+- Context-loss retry and static exit/re-entry preserve the page selection; fresh
+  navigation/reload starts at original Charcoal with no automatic 3D activation.
+- Lint, strict types, production build, repository checks, rendering compatibility
+  and all four asset-equivalence tests pass. Dependency audit: zero vulnerabilities.
+- Approved GLB SHA-256 remains
+  19447c6170a22fa537e6c1e337e704e607350d01f8f382a6c41219bdab16e38d.
+- Desktop and mobile captures were reviewed; see configuration-validation/.
+
+GitHub runs all 93 tests in each mode; its PR records final results. Physical-phone,
+Safari/Firefox and assistive-technology checks remain later release gates.

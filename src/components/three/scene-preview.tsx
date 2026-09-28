@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ComponentType } from 'react';
 import Image from 'next/image';
+import { dialTones, type DialTone } from '@/data/watch-configuration';
 import type { AssemblyPreviewHandle } from './assembly-controls';
 import { CinematicPreview } from './cinematic-preview';
 import { StaticWatch } from './static-watch';
@@ -18,7 +19,8 @@ function WatchPoster() {
 const modelCaption = 'Aurel Veil design study. Studio image and live 3D use different lighting; the movement is illustrative.';
 const placeholderCaption = 'Illustrative watch prototype. Design, materials and proportions are placeholders, not product specifications.';
 
-function SceneAttempt({ source, onRetry, onClose, onPlaceholder }: {
+function SceneAttempt({ source, onRetry, onClose, onPlaceholder, dialTone, onDialTone }: {
+  dialTone: DialTone; onDialTone: (value: DialTone) => void;
   source: 'configured' | 'placeholder'; onRetry: () => void; onClose: () => void; onPlaceholder: () => void;
 }) {
   const [Scene, setScene] = useState<ComponentType<SceneCanvasProps> | null>(null);
@@ -49,10 +51,10 @@ function SceneAttempt({ source, onRetry, onClose, onPlaceholder }: {
   }, [onError]);
 
   return <>
-    <CinematicPreview controller={ready && !failed ? assembly : null}>
+    <CinematicPreview controller={ready && !failed ? assembly : null} dialTone={dialTone} onDialTone={onDialTone}>
     <div className="scene-stage">
       {source === 'placeholder' ? <StaticWatch /> : <WatchPoster />}
-      {!failed && Scene && <SceneBoundary onError={onError}><Scene source={source} onReady={onReady} onError={onError} onAssemblyReady={setAssembly} /></SceneBoundary>}
+      {!failed && Scene && <SceneBoundary onError={onError}><Scene source={source} dialTone={dialTone} onReady={onReady} onError={onError} onAssemblyReady={setAssembly} /></SceneBoundary>}
       {!failed && !ready && <p className="scene-status" role="status">Loading 3D preview…</p>}
     </div>
     </CinematicPreview>
@@ -74,11 +76,12 @@ function SceneAttempt({ source, onRetry, onClose, onPlaceholder }: {
 export function ScenePreview() {
   const hydrated = useSyncExternalStore(subscribe, clientSnapshot, serverSnapshot);
   const [enabled, setEnabled] = useState(false);
+  const [dialTone, setDialTone] = useState<DialTone>('charcoal');
   const [attempt, setAttempt] = useState(0);
   const [source, setSource] = useState<'configured' | 'placeholder'>('configured');
   return <figure className="scene-preview" aria-label="Watch preview">
     {enabled
-      ? <SceneAttempt key={attempt} source={source} onRetry={() => setAttempt(value => value + 1)} onClose={() => setEnabled(false)}
+      ? <SceneAttempt key={attempt} source={source} dialTone={dialTone} onDialTone={setDialTone} onRetry={() => setAttempt(value => value + 1)} onClose={() => setEnabled(false)}
         onPlaceholder={() => { setSource('placeholder'); setAttempt(value => value + 1); }} />
       : <>
         <div className="scene-stage"><WatchPoster /></div>
@@ -88,5 +91,10 @@ export function ScenePreview() {
         </div>
         <figcaption className="text-muted">{modelCaption}</figcaption>
       </>}
+    <p className="text-muted configuration-note">The static image shows the original Charcoal design. Dial colour studies are illustrative and previewed only in supported 3D.</p>
+    {dialTone !== 'charcoal' && <div className="configuration-saved">
+      <p>Saved dial choice: {dialTones[dialTone].label} (illustrative). It is retained for this page visit, including 3D retries.</p>
+      {!enabled && <Button variant="quiet" onClick={() => setDialTone('charcoal')}>Reset appearance</Button>}
+    </div>}
   </figure>;
 }

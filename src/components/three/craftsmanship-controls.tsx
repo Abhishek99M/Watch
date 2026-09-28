@@ -1,10 +1,12 @@
 'use client';
+import { dialTones, type DialTone } from '@/data/watch-configuration';
 import { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { craftsmanshipDetails, craftsmanshipViews, type CraftsmanshipView } from '@/data/craftsmanship';
 import type { AssemblyPreviewHandle } from './assembly-controls';
 
-export function CraftsmanshipControls({ controller, view, onView }: {
+export function CraftsmanshipControls({ controller, view, onView, dialTone }: {
+  dialTone: DialTone;
   controller: NonNullable<AssemblyPreviewHandle['craftsmanship']>;
   view: CraftsmanshipView | null; onView: (view: CraftsmanshipView | null) => void;
 }) {
@@ -23,7 +25,9 @@ export function CraftsmanshipControls({ controller, view, onView }: {
     </div>
     {view && <div className="craftsmanship-caption" role="status" aria-live="polite" aria-atomic="true">
       <h3>{craftsmanshipDetails[view].title}</h3>
-      <p>{craftsmanshipDetails[view].description}</p>
+      <p>{view === 'dial' && dialTone !== 'charcoal'
+        ? `Fine radial lines remain visible beneath the ${dialTones[dialTone].label.toLowerCase()} colour study. The champagne-toned markers and hands retain their original appearance.`
+        : craftsmanshipDetails[view].description}</p>
       <p className="text-muted">A close-up of the assembled design study; surrounding parts may extend beyond the frame.</p>
     </div>}
   </fieldset>;

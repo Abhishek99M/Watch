@@ -11,8 +11,8 @@
 - ✅ Phase 8: cinematic scroll timeline (merged via PR #10)
 - ✅ Phase 9: movement scene (implemented and validated)
 - ✅ Phase 10: materials/craftsmanship (merged via PR #12)
-- ✅ Phase 11: narrative reassembly (implemented and validated; awaiting PR review)
-- ⬜ Phase 12: watch configuration
+- ✅ Phase 11: narrative reassembly (merged via PR #13)
+- ✅ Phase 12: watch configuration (implemented and validated; awaiting PR review)
 - ⬜ Phase 13: approved product information
 - ⬜ Phase 14: cart
 - ⬜ Phase 15: server-validated checkout/payment
