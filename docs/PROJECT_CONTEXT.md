@@ -119,3 +119,16 @@ movement/craftsmanship controls retain exclusive ownership and exact restoration
 Phase 10 is merged through PR #12. See REASSEMBLY.md for current timeline timings;
 this supersedes earlier notes that narrative reassembly is pending. Phase 12
 configuration and later product/commerce work remain pending.
+
+
+## Phase 12 implementation
+
+The approved V11 has no authored variant collection. A reviewed textured dial-face
+slot supports original Charcoal and illustrative Midnight blue / Forest green
+colour studies. A single isolated material clone preserves imported textures and
+surface properties; Reset appearance reinstates the exact original assignment.
+The page-local selection survives mode switches and retries without reloading the
+asset or changing assembly, movement or camera ownership. Static fallback clearly
+shows the original appearance, with saved-choice copy. No physical variants,
+prices, inventory or commerce are implied. Phase 11 is merged through PR #13.
+See WATCH_CONFIGURATION.md; Phase 13 and later phases remain pending.
