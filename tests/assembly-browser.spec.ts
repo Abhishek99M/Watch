@@ -56,7 +56,11 @@ test('actual V11 separation reverses visually, survives resize and stays idle un
   await page.locator('canvas').evaluate(canvas=>canvas.dispatchEvent(new Event('webglcontextlost',{cancelable:true})));
   await expect(slider).toHaveCount(0);await page.getByRole('button',{name:'Retry 3D preview'}).click();
   await expect(slider).toHaveValue('0',{timeout:15_000});
-  await page.getByRole('link',{name:'Return home',exact:true}).click();await expect(page.locator('canvas')).toHaveCount(0);
+  await page.getByRole('link',{name:'Return home',exact:true}).click();
+  // Wait for the destination to commit before asserting scene teardown.
+  await expect(page).toHaveURL(/\/$/, { timeout: 20_000 });
+  await expect(page.getByRole('heading', { name: 'A study in time.', exact: true })).toBeVisible();
+  await expect(page.locator('canvas')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 

@@ -144,7 +144,14 @@ test('cinematic inspection holds idle and recovers manual access after context l
   await expect(page.getByRole('slider')).toHaveValue('0', { timeout: 15_000 });
   await page.getByRole('button', { name: 'Start cinematic view' }).click(); await seek(page, 0.5);
   await page.getByRole('link', { name: 'Return home', exact: true }).click();
+  // A client-side Link click can finish before the destination commits. Check
+  // teardown after navigation, not while the previous route is still active.
+  await expect(page).toHaveURL(/\/$/, { timeout: 20_000 });
+  await expect(page.getByRole('heading', { name: 'A study in time.', exact: true })).toBeVisible();
   await expect(page.locator('canvas')).toHaveCount(0);
+  const exitedDraws = await page.evaluate(() => (window as unknown as { cinematicDraws: number }).cinematicDraws);
+  await page.waitForTimeout(350);
+  expect(await page.evaluate(() => (window as unknown as { cinematicDraws: number }).cinematicDraws)).toBe(exitedDraws);
 });
 
 
