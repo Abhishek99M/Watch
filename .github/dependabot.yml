@@ -10,3 +10,10 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    # Revisit when the Next.js lint plugins support these major versions.
+    # Keep compatible patch/minor and security updates eligible.
+    ignore:
+      - dependency-name: eslint
+        versions: [">=10"]
+      - dependency-name: typescript
+        versions: [">=7"]
