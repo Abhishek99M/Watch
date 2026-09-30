@@ -2,7 +2,9 @@ import { captureCanvas } from './canvas-capture';
 import { expect, test, type Page, type Locator } from '@playwright/test';
 
 export async function seek(page: Page, progress: number) {
-  await expect(page.locator('.watch-story')).toHaveAttribute('data-progress', /.+/);
+  // Lazy cinematic modules have a 12-second application deadline. Wait for
+  // that readiness contract before seeking; a fallback still fails this check.
+  await expect(page.locator('.watch-story')).toHaveAttribute('data-progress', /.+/, { timeout: 15_000 });
   await page.locator('.watch-story.is-running').evaluate((element, value) => {
     const top = parseFloat(getComputedStyle(element).getPropertyValue('--story-top'));
     const start = element.getBoundingClientRect().top + scrollY - top;
