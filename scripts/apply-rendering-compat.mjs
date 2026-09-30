@@ -4,9 +4,15 @@ import { createFiberTimer } from './compat/fiber-timer.mjs';
 
 // Temporary, version-checked upstream compatibility fixes. Never filter console output.
 const read = path => fs.readFile(path, 'utf8');
-for (const [name, version] of [['three', '0.186.0'], ['@react-three/fiber', '9.7.0']]) {
+// Both dependency PRs may merge independently; only these reviewed versions
+// share the patch targets below. Content guards still validate every bundle.
+const reviewedVersions = [
+  ['three', ['0.186.0', '0.186.1']],
+  ['@react-three/fiber', ['9.7.0', '9.8.1']],
+];
+for (const [name, versions] of reviewedVersions) {
   const pkg = JSON.parse(await read(`node_modules/${name}/package.json`));
-  assert.equal(pkg.version, version, `Review rendering compatibility fixes before upgrading ${name}`);
+  assert(versions.includes(pkg.version), `Review rendering compatibility fixes before upgrading ${name}`);
 }
 const changes = [];
 function replaceOnce(source, before, after, file) {
@@ -36,4 +42,4 @@ for (const path of ['node_modules/three/src/extras/PMREMGenerator.js', 'node_mod
 }
 // Validate every target before writing any file. Re-running is safe.
 for (const [path, source] of changes) await fs.writeFile(path, source);
-console.log('Applied Timer and PMREM compatibility fixes (Fiber 9.7.0 / Three r186).');
+console.log('Applied reviewed Fiber Timer and Three PMREM compatibility fixes.');
