@@ -165,5 +165,8 @@ test('repeated mount, static view and route exit leave no stale canvases', async
   }
   await page.getByRole('button', { name: 'Load 3D preview' }).click();
   await page.getByRole('link', { name: 'Return home', exact: true }).click();
+  // Wait for the destination to commit before asserting scene teardown.
+  await expect(page).toHaveURL(/\/$/, { timeout: 20_000 });
+  await expect(page.getByRole('heading', { name: 'A study in time.', exact: true })).toBeVisible();
   await expect(page.locator('.scene-stage canvas')).toHaveCount(0);
 });

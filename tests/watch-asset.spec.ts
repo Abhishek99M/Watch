@@ -36,6 +36,9 @@ test('selected V11 loads on seven widths, stays still and can be reopened', asyn
   await page.getByRole('button',{name:'Retry 3D preview'}).click();
   await expect(page.getByText(ready)).toBeVisible({timeout:15_000});
   await page.getByRole('link',{name:'Return home',exact:true}).click();
+  // Wait for the destination to commit before asserting scene teardown.
+  await expect(page).toHaveURL(/\/$/, { timeout: 20_000 });
+  await expect(page.getByRole('heading', { name: 'A study in time.', exact: true })).toBeVisible();
   await expect(page.locator('.scene-stage canvas')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
