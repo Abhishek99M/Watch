@@ -62,3 +62,12 @@ check. Each mode now contains 86 tests: 78 core, 3 movement, 5 craftsmanship.
 Existing assembly and cinematic tests also exercise final restoration, closing
 recovery and idle rendering; no existing assertion or application deadline was
 removed. Movement and craftsmanship still run in fresh isolated processes.
+
+
+## Phase 12 configuration partition
+
+A fourth isolated suite, `PLAYWRIGHT_SUITE=configuration`, contains seven tests.
+Each full mode has 93 tests: 78 core, 3 movement, 5 craftsmanship, 7 configuration.
+The eight development/production browser jobs keep the existing worker count,
+retries, render quality, deadlines and failure artifacts. The required aggregate
+gate still depends on every matrix job. Default local npm test selects all tests.
