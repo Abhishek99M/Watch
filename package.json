@@ -29,7 +29,7 @@
     "@gltf-transform/functions": "^4.5.0",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.3.3",
-    "@types/node": "^26.6.2",
+    "@types/node": "^26.6.3",
     "@types/react": "~19.3",
     "@types/react-dom": "~19.3",
     "@types/three": "^0.186.0",
