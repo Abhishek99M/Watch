@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { SectionHeading } from '@/components/ui/section-heading';
 import { ButtonLink } from '@/components/ui/button';
 import { CraftsmanshipStory } from '@/components/three/craftsmanship-story';
+import { ProductInformation } from '@/components/ui/product-information';
 import { ScenePreview } from '@/components/three/scene-preview';
 export const metadata: Metadata = { title: 'The watch | Watch' };
 export default function WatchPage() {
@@ -11,6 +12,7 @@ export default function WatchPage() {
     </SectionHeading>
     <ScenePreview />
     <CraftsmanshipStory />
+    <ProductInformation />
     <ButtonLink href="/" variant="secondary">Return home</ButtonLink>
   </main>;
 }

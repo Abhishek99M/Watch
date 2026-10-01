@@ -210,3 +210,28 @@ button { font: inherit; }
 .configuration-swatch { width: 1.1rem; height: 1.1rem; border: 1px solid #8b8b82; border-radius: 50%; flex-shrink: 0; }
 .configuration-summary { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
 .configuration-note, .configuration-saved { max-width: 65ch; font-size: var(--text-small); }
+
+/* Phase 13: always-readable editorial information, independent of scene state. */
+.product-information { margin-block: var(--space-section); padding-block: var(--space-12); border-block: 1px solid var(--color-rule); }
+.product-information__heading { max-width: 42rem; margin-bottom: var(--space-12); }
+.product-information h2 { font-family: var(--font-editorial); font-size: clamp(3rem, 7vw, 6rem); font-weight: 400; line-height: 1.1; letter-spacing: -0.04em; margin-block: var(--space-4); }
+.product-information__grid { display: grid; grid-template-columns: 1.15fr 1fr; align-items: start; gap: clamp(2rem, 5vw, 5rem); }
+.product-information__portrait { margin: 0; min-width: 0; }
+.product-information__portrait img { display: block; width: 100%; height: auto; background: #08090b; }
+.product-information__portrait figcaption { max-width: 55ch; color: var(--color-muted); font-size: var(--text-small); margin-top: var(--space-4); }
+.product-information__profile { min-width: 0; }
+.product-information dl { margin-block: var(--space-6); }
+.product-information dl > div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: var(--space-4); padding-block: var(--space-4); border-bottom: 1px solid var(--color-rule); }
+.product-information dt { color: var(--color-ink); }
+.product-information dd { margin: 0; color: var(--color-muted); }
+.product-information__note { max-width: 55ch; font-size: var(--text-small); color: var(--color-muted); }
+.product-information__questions { margin-top: var(--space-12); }
+.product-information details { border-top: 1px solid var(--color-rule); }
+.product-information summary { cursor: pointer; padding: var(--space-6) var(--space-2); font-size: var(--text-lead); }
+.product-information details p { max-width: 70ch; margin: 0 var(--space-2) var(--space-6); color: var(--color-muted); }
+@media (max-width: 760px) {
+  .product-information__grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) {
+  .product-information dl > div { grid-template-columns: 1fr; gap: var(--space-2); }
+}
