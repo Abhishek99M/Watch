@@ -480,3 +480,25 @@ Phase 13 core-suite follow-up: the existing placeholder test selected every figu
 which became ambiguous after adding the editorial image figure. The assertion now
 selects the accessible name Watch preview; the expected placeholder qualification
 is unchanged. The failed core run passed all other 80 tests, including Phase 13.
+
+## Phase 14: demonstration cart
+
+- Lint, type checks, production build, repository checks and npm audit pass (zero vulnerabilities).
+- All 28 focused development tests passed: cart, navigation and product information.
+- All 42 focused production tests passed: those suites plus model loading/recovery.
+- Coverage includes malformed/oversized/untrusted saved data, quantities, store isolation,
+  duplicate adds, reload, removal focus, cross-tab changes, blocked/quota-limited storage,
+  no JavaScript, keyboard controls and seven responsive widths under reduced motion.
+- Development checks caught and corrected duplicate Strict Mode initialization clearing
+  a recovery notice, fallback explanatory text, and an outside-click test target now
+  covered by the mobile menu. Assertions and actual outside-click behavior are retained.
+- Desktop 1440px and mobile 390px production captures were reviewed; see cart-validation/.
+- Rendering compatibility and all four asset-equivalence tests pass. The approved V11
+  SHA256 remains 19447c6170a22fa537e6c1e337e704e607350d01f8f382a6c41219bdab16e38d.
+- Eight new tests join core: 104 total per mode (89 core, 3 movement, 5 craftsmanship,
+  7 configuration). Existing isolated CI suites, workers and timeouts are unchanged.
+
+Cart behavior is demonstrative: no approved saleable product or commercial facts
+exist yet. Server-side commerce remains Phase 15. Physical-device, Safari/Firefox
+and assistive-technology validation remain later gates. Final GitHub results are
+recorded on the Phase 14 PR.

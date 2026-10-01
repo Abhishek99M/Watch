@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 const destinations = [
   { path: '/watch', label: 'The watch', heading: 'A closer look, soon.' },
   { path: '/story', label: 'Our story', heading: 'Every detail has a story.' },
-  { path: '/cart', label: 'Cart', heading: 'Shopping is coming soon.' },
+  { path: '/cart', label: 'Cart', heading: 'Your demo cart.' },
 ];
 
 test('desktop navigation and logo reach each destination with current-page state', async ({ page }) => {
@@ -63,7 +63,7 @@ test('mobile menu closes on navigation, current-route links, outside click and r
   await page.getByRole('navigation', { name: 'Mobile primary' }).getByRole('link', { name: 'Cart', exact: true }).click();
   await expect(menu).toHaveJSProperty('open', false);
   await menu.locator('summary').click();
-  await page.getByRole('heading', { level: 1 }).click();
+  await page.getByRole('heading', { name: 'Your demo cart is empty.' }).click();
   await expect(menu).toHaveJSProperty('open', false);
   await menu.locator('summary').click();
   await page.setViewportSize({ width: 1024, height: 768 });

@@ -21,3 +21,11 @@ Phase 13 product information is a Server Component outside the scene boundary,
 using reviewed editorial data and native HTML disclosures. It neither consumes
 nor changes configuration state: its image/profile are labeled original Charcoal.
 Physical product and commerce data remain absent pending approved sources.
+
+## Phase 14 cart
+
+A provider-scoped Zustand store now supplies the cross-route demo cart and header
+quantity. It stores only a validated version/demo ID/quantity, and hydrates browser
+storage after mount. No server request shares a store instance. Configuration stays
+page-local and does not become a saleable variant. The cart has no pricing authority,
+checkout, payment or inventory logic. See CART.md for persistence and recovery.
