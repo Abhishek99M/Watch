@@ -470,3 +470,8 @@ Physical specifications and commercial facts remain unpublished pending approved
 owner sources, listed in PRODUCT_INFORMATION.md. Browser coverage uses local
 Chrome/SwiftShader; physical-device, Safari/Firefox and assistive-technology QA
 remain later release gates. GitHub check results are recorded on the Phase 13 PR.
+
+Phase 13 CI audit follow-up: Next.js 16.3.5 was flagged by advisory
+GHSA-vcvr-r3jv-pc5j. A targeted 16.3.6 patch clears npm audit (zero vulnerabilities).
+Lint, types, production build and all three focused production tests pass on the
+patched version. Full isolated suites are rerun by GitHub on the updated head.

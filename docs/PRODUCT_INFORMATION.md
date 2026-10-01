@@ -47,3 +47,12 @@ responsive widths under reduced motion with no GLB request; failed model loading
 and return to static view. These lightweight tests join core; movement,
 craftsmanship and configuration stay in their existing isolated CI partitions.
 See TEST_PLAN.md for actual results and product-information-validation for captures.
+
+## CI-required security patch
+
+The initial Phase 13 quality job passed lint/types/assets but failed npm audit on
+Next.js 16.3.5 (GHSA-vcvr-r3jv-pc5j). The targeted update to 16.3.6 is the minimum
+patched version identified by the advisory, rather than a broad dependency update.
+The affected next/og ImageResponse usage is absent from this project; the existing
+security gate still requires a patched dependency. No audit exemption is added.
+Source: https://github.com/advisories/GHSA-vcvr-r3jv-pc5j
