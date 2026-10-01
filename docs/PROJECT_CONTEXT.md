@@ -131,9 +131,9 @@ The page-local selection survives mode switches and retries without reloading th
 asset or changing assembly, movement or camera ownership. Static fallback clearly
 shows the original appearance, with saved-choice copy. No physical variants,
 prices, inventory or commerce are implied. Phase 11 is merged through PR #13.
-See WATCH_CONFIGURATION.md; Phase 13 and later phases remain pending.
+Phase 12 is merged via PR #14. See WATCH_CONFIGURATION.md. Phase 13 is also merged; see the following section.
 
-## Phase 13 implementation
+## Phase 13 implementation (merged via PR #25)
 
 A server-rendered product-information section follows craftsmanship. It presents
 verified observations of the original Aurel Veil digital design with an unchanged
@@ -141,3 +141,12 @@ studio image and native disclosures. Physical specifications, commercial data an
 brand history remain unpublished pending owner-approved sources; the exact missing
 fields and source register are in PRODUCT_INFORMATION.md. Existing configuration
 selections and all scene owners are untouched. Cart/checkout remain later phases.
+
+## Phase 14 implementation
+
+The demonstration cart now supports adding the original Aurel Veil design study,
+bounded quantities, removal, an empty state, cross-route header quantity and validated
+local persistence. Blocked storage uses in-memory state; invalid data is cleared and
+cross-tab changes synchronize. Physical products and pricing are still unapproved,
+so no purchase or checkout claim is made. Dial colour studies remain separate.
+See CART.md. Phase 12 and Phase 13 merge-status corrections are retained.

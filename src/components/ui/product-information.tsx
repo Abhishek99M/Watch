@@ -1,4 +1,5 @@
-﻿import Image from 'next/image';
+import Image from 'next/image';
+import { AddToDemoCart } from '@/features/cart/add-to-demo-cart';
 import { productInformation } from '@/data/product-information';
 
 /** Editorial content stays available independently of JavaScript and the scene. */
@@ -24,6 +25,7 @@ export function ProductInformation() {
         <p className="product-information__note">These details describe the digital design, not physical product specifications.</p>
       </div>
     </div>
+    <AddToDemoCart />
     <div className="product-information__questions">
       <details>
         <summary>About the colour studies</summary>

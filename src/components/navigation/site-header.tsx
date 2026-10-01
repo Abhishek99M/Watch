@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
+import { CartCount, useCart } from '@/features/cart/cart-provider';
 import { NavLink } from '@/components/ui/nav-link';
 
 const destinations = [
@@ -12,8 +13,9 @@ const destinations = [
 ];
 
 function NavigationLinks({ pathname }: { pathname: string }) {
+  const quantity = useCart(state => state.quantity);
   return destinations.map(({ href, label }) =>
-    <NavLink key={href} href={href} current={pathname === href}>{label}</NavLink>
+    <NavLink key={href} href={href} current={pathname === href} aria-label={label} aria-description={href === '/cart' ? quantity + ' demo items' : undefined}>{label}{href === '/cart' && <CartCount />}</NavLink>
   );
 }
 

@@ -12,9 +12,9 @@
 - ✅ Phase 9: movement scene (implemented and validated)
 - ✅ Phase 10: materials/craftsmanship (merged via PR #12)
 - ✅ Phase 11: narrative reassembly (merged via PR #13)
-- ✅ Phase 12: watch configuration (implemented and validated; awaiting PR review)
-- ✅ Phase 13: approved product information (implemented and validated; awaiting PR review)
-- ⬜ Phase 14: cart
+- ✅ Phase 12: watch configuration (merged via PR #14)
+- ✅ Phase 13: approved product information (merged via PR #25)
+- ✅ Phase 14: demonstration cart (implemented and validated; awaiting PR review)
 - ⬜ Phase 15: server-validated checkout/payment
 - ⬜ Phase 16: security hardening
 - ⬜ Phase 17: accessibility
