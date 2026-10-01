@@ -32,6 +32,9 @@ test('product information remains readable across widths and reduced motion with
   const section = page.getByRole('region', { name: sectionName, exact: true });
   for (const width of [320, 375, 390, 768, 1024, 1440, 1920]) {
     await page.setViewportSize({ width, height: 1000 });
+    await section.getByRole('img').scrollIntoViewIfNeeded();
+    await expect.poll(() => section.getByRole('img').evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+    await section.getByRole('img').evaluate((image: HTMLImageElement) => image.decode());
     await section.scrollIntoViewIfNeeded();
     await expect(section.getByRole('heading', { name: sectionName, exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
