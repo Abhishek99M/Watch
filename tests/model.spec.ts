@@ -26,7 +26,7 @@ test('embedded textured GLB loads, labels the model and offers the procedural pl
   expect(errors).toEqual([]);
   await page.getByRole('button', { name: 'View placeholder watch' }).click();
   await expect(page.getByText('3D preview ready. The scene stays still.')).toBeVisible();
-  await expect(page.getByRole('figure')).toContainText('Design, materials and proportions are placeholders');
+  await expect(page.getByRole('figure', { name: 'Watch preview', exact: true })).toContainText('Design, materials and proportions are placeholders');
 });
 
 test('explicit source indices resolve duplicate names and normalize asset scale without flattening transforms', async () => {

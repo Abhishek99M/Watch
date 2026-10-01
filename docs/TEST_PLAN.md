@@ -475,3 +475,8 @@ Phase 13 CI audit follow-up: Next.js 16.3.5 was flagged by advisory
 GHSA-vcvr-r3jv-pc5j. A targeted 16.3.6 patch clears npm audit (zero vulnerabilities).
 Lint, types, production build and all three focused production tests pass on the
 patched version. Full isolated suites are rerun by GitHub on the updated head.
+
+Phase 13 core-suite follow-up: the existing placeholder test selected every figure,
+which became ambiguous after adding the editorial image figure. The assertion now
+selects the accessible name Watch preview; the expected placeholder qualification
+is unchanged. The failed core run passed all other 80 tests, including Phase 13.
