@@ -132,3 +132,12 @@ asset or changing assembly, movement or camera ownership. Static fallback clearl
 shows the original appearance, with saved-choice copy. No physical variants,
 prices, inventory or commerce are implied. Phase 11 is merged through PR #13.
 See WATCH_CONFIGURATION.md; Phase 13 and later phases remain pending.
+
+## Phase 13 implementation
+
+A server-rendered product-information section follows craftsmanship. It presents
+verified observations of the original Aurel Veil digital design with an unchanged
+studio image and native disclosures. Physical specifications, commercial data and
+brand history remain unpublished pending owner-approved sources; the exact missing
+fields and source register are in PRODUCT_INFORMATION.md. Existing configuration
+selections and all scene owners are untouched. Cart/checkout remain later phases.

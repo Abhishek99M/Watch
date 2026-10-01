@@ -16,3 +16,8 @@ boundary. Its material controller owns only the reviewed dial-face assignment;
 assembly, animation and camera controllers retain their existing ownership.
 A global Zustand configuration/cart store remains deferred until cross-route
 consumers exist. No cart or product-data state is introduced in Phase 12.
+
+Phase 13 product information is a Server Component outside the scene boundary,
+using reviewed editorial data and native HTML disclosures. It neither consumes
+nor changes configuration state: its image/profile are labeled original Charcoal.
+Physical product and commerce data remain absent pending approved sources.

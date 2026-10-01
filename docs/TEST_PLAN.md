@@ -449,3 +449,24 @@ pixel equality when Forest green is explicitly selected again in that recovered
 context. Thus saved-state application is verified without any pixel tolerance;
 numerical material identity and other exact reset assertions remain unchanged.
 This supersedes the earlier cross-context bound described above.
+
+## Phase 13: approved product information
+
+- Lint, TypeScript, production build, repository integrity and diff checks passed.
+- Rendering Timer compatibility and all four asset-equivalence tests passed.
+- The approved GLB SHA256 remains 19447c6170a22fa537e6c1e337e704e607350d01f8f382a6c41219bdab16e38d.
+- All three new development tests passed: no-JavaScript keyboard disclosures,
+  seven responsive widths with reduced motion and no model download, and fallback.
+- All 17 focused production tests passed: product information, configuration,
+  numerical assembly and cinematic timeline. This includes exact pixel reset,
+  selection retention through the full narrative, and context-loss recovery.
+- Desktop 1440px and mobile 390px captures were visually reviewed; see
+  product-information-validation/. Original image proportions, readable text,
+  mobile stacking and accessible disclosure labels are retained.
+- The full inventory is 96 tests per mode: 81 core, 3 movement, 5 craftsmanship,
+  7 configuration. Existing isolated development/production CI jobs are unchanged.
+
+Physical specifications and commercial facts remain unpublished pending approved
+owner sources, listed in PRODUCT_INFORMATION.md. Browser coverage uses local
+Chrome/SwiftShader; physical-device, Safari/Firefox and assistive-technology QA
+remain later release gates. GitHub check results are recorded on the Phase 13 PR.
